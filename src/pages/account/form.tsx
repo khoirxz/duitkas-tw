@@ -20,11 +20,12 @@ import {
 import TextField from "@/components/textField";
 import Layout from "@/layouts/layout";
 import { CardIcon, WorkCaseIcon } from "@/assets/icons/outline";
-import { Check, ChevronDown, SlashIcon } from "lucide-react";
+import { Check, ChevronDown, SlashIcon, XIcon } from "lucide-react";
 import bcaImg from "@/assets/account/BCA.svg";
 import bniImg from "@/assets/account/BNI.svg";
 import walletImg from "@/assets/account/wallet-3d.png";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const bankOptions = [
   { value: "cash", label: "Cash", description: "Kode: 000", img: walletImg },
@@ -42,7 +43,7 @@ export default function AccountFormPage() {
 
   return (
     <Layout>
-      <div className="w-full px-1 md:px-5">
+      <div className="w-full p-1 md:p-5 space-y-7">
         <div>
           <Breadcrumb>
             <BreadcrumbList>
@@ -65,7 +66,16 @@ export default function AccountFormPage() {
           </Breadcrumb>
         </div>
 
-        <form className="rounded-2xl shadow p-6 border mt-7 space-y-7">
+        <Alert variant="destructive" className="bg-red-200/50 border-0">
+          <AlertDescription className="flex justify-between items-center">
+            Gagal Menambahkan Akun, Harap Lengkapi Data Yang Dibutuhkan
+            <Button variant="ghost" size="icon">
+              <XIcon className="h-4 w-4 text-red-600" />
+            </Button>
+          </AlertDescription>
+        </Alert>
+
+        <form className="rounded-2xl shadow p-6 border space-y-7">
           <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
             <div className="col-span-1 md:col-span-6">
               <SelectBank currentValue={bank} onChange={setBank} />

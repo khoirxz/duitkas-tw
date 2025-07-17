@@ -184,7 +184,7 @@ export const TableFilter = () => {
             placeholder="cari item disini"
           />
         </div>
-        <Button className="rounded-full w-10 h-10 md:w-auto md:h-auto px-6 py-6 md:px-7 md:py-6 flex flex-row items-center gap-2 bg-yellow-600 text-black">
+        <Button className="rounded-full w-10 h-10 md:w-auto md:h-auto px-6 py-6 md:px-7 md:py-4 flex flex-row items-center gap-2 bg-yellow-600 text-black">
           <span>
             <FilterSolidIcon className="size-5" />
           </span>

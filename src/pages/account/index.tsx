@@ -13,13 +13,14 @@ import {
 import { dataAccount } from "@/services/api";
 import { columns } from "./partials/columns";
 
-import { ChevronRightIcon, ChevronLeftIcon } from "lucide-react";
+import { ChevronRightIcon, ChevronLeftIcon, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function AccountPage() {
   return (
     <Layout>
-      <div className="w-full px-1 md:px-5">
+      <div className="w-full p-1 md:p-5 space-y-7">
         <div className="flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
           <h1 className="font-bold text-xl">Data Akun</h1>
 
@@ -32,6 +33,15 @@ export default function AccountPage() {
             Tambah Akun
           </Button>
         </div>
+
+        <Alert className="bg-green-200/50 border-0">
+          <AlertDescription className="flex justify-between items-center text-green-700">
+            Berhasil Menambahkan Akun "TRANSAKSIONAL"
+            <Button variant="ghost" size="icon">
+              <XIcon className="h-4 w-4 text-green-600" />
+            </Button>
+          </AlertDescription>
+        </Alert>
 
         <div className="mt-7 space-y-10">
           <TableFilter />
