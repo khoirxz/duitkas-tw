@@ -27,12 +27,12 @@ import { Button } from "./ui/button";
 const items = [
   {
     title: "Beranda",
-    url: "#",
+    url: "/admin/dashboard",
     icon: Home,
   },
   {
     title: "Akun",
-    url: "#",
+    url: "/admin/account",
     icon: Inbox,
   },
   {

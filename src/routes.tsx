@@ -1,4 +1,5 @@
-import DashboardPage from "./pages/dashboard";
+import DashboardPage from "@/pages/dashboard";
+import AccountPage from "@/pages/account";
 
 export const router: {
   name: string;
@@ -23,6 +24,17 @@ export const router: {
     parent: false,
     name: "Beranda",
     element: <DashboardPage />,
+    icon: {
+      active: <i className="ri-dashboard-line"></i>,
+      inactive: <i className="ri-dashboard-line"></i>,
+    },
+  },
+  {
+    path: "/admin/account",
+    show: true,
+    parent: false,
+    name: "Akun",
+    element: <AccountPage />,
     icon: {
       active: <i className="ri-dashboard-line"></i>,
       inactive: <i className="ri-dashboard-line"></i>,
