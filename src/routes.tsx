@@ -1,5 +1,6 @@
 import DashboardPage from "@/pages/dashboard";
 import AccountPage from "@/pages/account";
+import AccountFormPage from "./pages/account/form";
 
 export const router: {
   name: string;
@@ -29,6 +30,7 @@ export const router: {
       inactive: <i className="ri-dashboard-line"></i>,
     },
   },
+  // === HALAMAN AKUN / ACCOUNT PAGE ===
   {
     path: "/admin/account",
     show: true,
@@ -39,5 +41,14 @@ export const router: {
       active: <i className="ri-dashboard-line"></i>,
       inactive: <i className="ri-dashboard-line"></i>,
     },
+    children: [
+      {
+        path: "/admin/account/form/add",
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: <AccountFormPage />,
+        show: false,
+        name: "Daftar Transaksi",
+      },
+    ],
   },
 ];
