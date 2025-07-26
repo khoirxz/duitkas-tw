@@ -28,10 +28,13 @@ export default function TransactionChart() {
         <SelectCategory />
       </div>
 
-      <DonutChart />
-      <div className="flex flex-col gap-1">
-        <p className="text-sm">Total Pengeluaran</p>
-        <p className="text-xl font-semibold">Rp. 20.000.000</p>
+      <div className="flex flex-row justify-between gap-4 items-center">
+        <DonutChart />
+
+        <div className="flex flex-col gap-1">
+          <p className="text-sm text-right md:text-left">Total Pengeluaran</p>
+          <p className="text-xl font-semibold">Rp. 20.000.000</p>
+        </div>
       </div>
 
       <div className="space-y-1">

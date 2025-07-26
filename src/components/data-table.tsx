@@ -26,11 +26,17 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { FilterSolidIcon } from "@/assets/icons/solid";
 
+interface TableFilterProps {
+  showRowCount?: boolean;
+  handleModal?: () => void;
+}
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
   pageSize?: number;
   pageIndex?: number;
+  border?: boolean;
 }
 
 const DataTable = <TData, TValue>({
@@ -38,6 +44,7 @@ const DataTable = <TData, TValue>({
   data,
   pageSize = 5,
   pageIndex = 0,
+  border = true,
 }: DataTableProps<TData, TValue>) => {
   // state
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -102,7 +109,8 @@ const DataTable = <TData, TValue>({
             table.getRowModel().rows.map((row) => (
               <TableRow
                 key={row.id}
-                data-state={row.getIsSelected() && "selected"}>
+                data-state={row.getIsSelected() && "selected"}
+                className={cn(border ? " " : "border-none")}>
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id}>
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
@@ -123,58 +131,72 @@ const DataTable = <TData, TValue>({
   );
 };
 
-export const TableFilter = () => {
+export const TableFilter: React.FC<TableFilterProps> = ({
+  showRowCount = true,
+  handleModal,
+}) => {
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>("10");
 
   return (
     <div className="flex flex-row items-center justify-between">
-      <div className="hidden md:flex flex-row gap-3 items-center">
-        <span>Tampilkan</span>
-        <Popover open={open} onOpenChange={setOpen}>
-          <PopoverTrigger asChild className="relative">
-            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-              <input
-                type="text"
-                className="w-12 outline-none"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-              />
-              <button className="flex absolute bg-white right-2">
-                <ChevronDownIcon />
-              </button>
-            </div>
-          </PopoverTrigger>
-          <PopoverContent className="p-0 w-28">
-            <Command>
-              <CommandList>
-                <CommandGroup>
-                  {[10, 20, 30, 40, 50].map((item) => (
-                    <CommandItem
-                      key={item}
-                      onSelect={() => {
-                        setValue(item.toString());
-                        setOpen(false);
-                      }}>
-                      <p>{item}</p>
-                      <Check
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          Number(value) === item ? "opacity-100" : "opacity-0"
-                        )}
-                      />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
-          </PopoverContent>
-        </Popover>
+      {showRowCount && (
+        <div className="hidden md:flex flex-row gap-3 items-center">
+          <span>Tampilkan</span>
+          <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild className="relative">
+              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+                <input
+                  type="text"
+                  className="w-12 outline-none"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+                <button className="flex absolute bg-white right-2">
+                  <ChevronDownIcon />
+                </button>
+              </div>
+            </PopoverTrigger>
+            <PopoverContent className="p-0 w-28">
+              <Command>
+                <CommandList>
+                  <CommandGroup>
+                    {[10, 20, 30, 40, 50].map((item) => (
+                      <CommandItem
+                        key={item}
+                        onSelect={() => {
+                          setValue(item.toString());
+                          setOpen(false);
+                        }}>
+                        <p>{item}</p>
+                        <Check
+                          className={cn(
+                            "ml-auto h-4 w-4",
+                            Number(value) === item ? "opacity-100" : "opacity-0"
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
 
-        <span>data</span>
-      </div>
-      <div className="flex flex-row gap-3 items-center w-full md:w-auto">
-        <div className="flex-1 border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+          <span>data</span>
+        </div>
+      )}
+
+      <div
+        className={
+          cn(showRowCount ? "flex-1 md:flex-0" : "flex-1 justify-between") +
+          " flex flex-row gap-3 items-center w-full md:w-auto"
+        }>
+        <div
+          className={
+            cn(showRowCount ? "flex-1" : "flex-0 ") +
+            " border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center w-f"
+          }>
           <button className="flex bg-white">
             <SearchIcon className="size-4 mr-2" />
           </button>
@@ -184,7 +206,9 @@ export const TableFilter = () => {
             placeholder="cari item disini"
           />
         </div>
-        <Button className="rounded-full w-10 h-10 md:w-auto md:h-auto px-6 py-6 md:px-7 md:py-4 flex flex-row items-center gap-2 bg-yellow-600 text-black">
+        <Button
+          onClick={handleModal}
+          className="rounded-full w-10 h-10 md:w-auto md:h-auto px-6 py-6 md:px-7 md:py-4 flex flex-row items-center gap-2 bg-yellow-600 text-black">
           <span>
             <FilterSolidIcon className="size-5" />
           </span>
