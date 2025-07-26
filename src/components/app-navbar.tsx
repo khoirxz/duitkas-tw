@@ -46,7 +46,7 @@ const AppNavbar: React.FC = () => {
         <img src={logoLight} alt="logo" className="h-9 object-contain" />
       </div>
       <div className="flex flex-row gap-5 h-full items-center">
-        <div className="flex flex-row gap-2">
+        <div className="hidden md:flex flex-row gap-2">
           <button className="bg-white hover:bg-primary/15 p-1 flex flex-col items-center rounded transition-all">
             <HeadphoneIcon className="w-6 h-6" />
           </button>
@@ -55,29 +55,37 @@ const AppNavbar: React.FC = () => {
           </button>
         </div>
 
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="bg-white hover:bg-primary/15 flex flex-row items-center p-1.5 rounded transition-all">
-              <img
-                src={dataLang.find((lang) => lang.value === selectedLang)?.icon}
-                alt={selectedLang}
-                className="w-6 h-6 mr-3"
-              />
+        <div className="hidden md:flex">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="bg-white hover:bg-primary/15 flex flex-row items-center p-1.5 rounded transition-all">
+                <img
+                  src={
+                    dataLang.find((lang) => lang.value === selectedLang)?.icon
+                  }
+                  alt={selectedLang}
+                  className="w-6 h-6 mr-3"
+                />
 
-              <ChevronDown className="w-4 h-4" />
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent>
-            {dataLang.map((lang) => (
-              <DropdownMenuItem
-                key={lang.name}
-                onClick={() => setSelectedLang(lang.value)}>
-                <img src={lang.icon} alt={lang.name} className="w-6 h-6 mr-3" />
-                {lang.name}
-              </DropdownMenuItem>
-            ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
+                <ChevronDown className="w-4 h-4" />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {dataLang.map((lang) => (
+                <DropdownMenuItem
+                  key={lang.name}
+                  onClick={() => setSelectedLang(lang.value)}>
+                  <img
+                    src={lang.icon}
+                    alt={lang.name}
+                    className="w-6 h-6 mr-3"
+                  />
+                  {lang.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
