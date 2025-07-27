@@ -95,7 +95,7 @@ const AppNavbar: React.FC = () => {
                 alt={"profile"}
                 className="h-9 w-9 bg-indigo-400 rounded-full object-contain"
               />
-              <div className="flex flex-col ml-2 items-start">
+              <div className="hidden md:flex flex-col ml-2 items-start">
                 <span className="font-bold">Administrator</span>
                 <span className="text-xs font-domine text-black/60">
                   DEMODEV

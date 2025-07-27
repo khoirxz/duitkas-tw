@@ -35,6 +35,7 @@ import { data } from "./data";
 import { columns } from "./partials/columns";
 import { Badge } from "@/components/ui/badge";
 import { FilterModal } from "@/components/filter-modal";
+import { formatRupiah } from "@/lib/formatMoney";
 
 export default function ReportPage() {
   const [open, setOpen] = useState<boolean>(false);
@@ -45,7 +46,7 @@ export default function ReportPage() {
 
   return (
     <Layout>
-      <div className="w-full p-1 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-7">
         <div className="flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
           <h1 className="font-bold text-xl">Data Akun</h1>
 
@@ -127,14 +128,16 @@ export default function ReportPage() {
                 <SelectCategory />
               </div>
 
-              <div className="flex flex-row justify-between gap-4 items-center">
+              <div className="flex flex-row md:flex-col justify-between gap-4 items-center">
                 <DonutChart />
 
-                <div className="flex flex-col gap-1">
+                <div className="flex flex-col gap-1 justify-start w-full">
                   <p className="text-sm text-right md:text-left">
                     Total Pengeluaran
                   </p>
-                  <p className="text-xl font-semibold">Rp. 20.000.000</p>
+                  <p className="text-lg md:text-xl font-semibold text-right md:text-left">
+                    Rp. 20.000.000
+                  </p>
                 </div>
               </div>
 
@@ -147,17 +150,34 @@ export default function ReportPage() {
                 <div className="space-y-2.5 max-h-[200px] md:max-h-[500px] overflow-y-auto">
                   {Array.from({ length: 15 }).map((_, index) => (
                     <div
-                      className="flex flex-col gap-2 border-b border-[#EFEFEF] py-2"
+                      className="flex flex-row md:flex-col gap-2 border-b border-[#EFEFEF] py-2 items-center "
                       key={index}>
-                      <div className="text-white bg-blue-700 py-1 px-2 rounded-full text-center">
-                        <p className="text-xs font-semibold">Pemasaran</p>
+                      <div className="text-white bg-blue-700 py-1 px-2 rounded-full text-center md:w-full">
+                        <p className="text-xs font-semibold hidden md:block">
+                          Pemasaran
+                        </p>
+                        <span className="block md:hidden w-3 h-5 bg-blue-700"></span>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <p className="text-xs text-zinc-500">1 Transaksi</p>
-                        <p className="font-semibold font-domine text-sm">
-                          Rp. 7.500.000
+
+                      <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between flex-1 md:flex-0 w-full">
+                        <p className="font-semibold block md:hidden text-sm">
+                          Pemasaran
+                        </p>
+                        <p className="text-xs text-zinc-500">
+                          {Math.floor(Math.random() * 20) + 1} Transaksi
+                        </p>
+                        <p className="font-semibold font-domine text-sm hidden md:block">
+                          {formatRupiah(
+                            Math.floor(Math.random() * 9000000) + 100000
+                          )}
                         </p>
                       </div>
+
+                      <p className="font-semibold font-domine text-sm block md:hidden">
+                        {formatRupiah(
+                          Math.floor(Math.random() * 10000000) + 100000
+                        )}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -173,16 +193,24 @@ export default function ReportPage() {
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+function getRandomData(length: number, min: number, max: number) {
+  const arr = [];
+  for (let i = 0; i < length; i++) {
+    arr.push(Math.floor(Math.random() * (max - min + 1)) + min);
+  }
+  return arr;
+}
+
 const dataChart = {
   labels: ["Makan", "Transport", "Hiburan", "Tagihan", "Lainnya"],
   datasets: [
     {
-      data: [60, 20, 10, 3, 7],
+      data: getRandomData(5, 1, 100),
       backgroundColor: ["#2563eb", "#f59e0b", "#15803d", "#bbf7d0", "#cbd5e1"],
       borderColor: "#ffffff",
       borderWidth: 6,
-      borderRadius: 20, // 🟢 Ini dia tumpulnya
-      spacing: 0, // 🟢 Ini jarak antar segmen
+      borderRadius: 20,
+      spacing: 0,
     },
   ],
 };
@@ -272,7 +300,7 @@ function SelectCategory() {
 
 function DonutChart() {
   return (
-    <div className="w-40 h-40 md:mx-auto">
+    <div className="w-36 h-36 md:w-40 md:h-40 md:mx-auto">
       <Doughnut data={dataChart} options={options} />
     </div>
   );

@@ -43,7 +43,7 @@ export default function AccountFormPage() {
 
   return (
     <Layout>
-      <div className="w-full p-1 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-7">
         <div>
           <Breadcrumb>
             <BreadcrumbList>

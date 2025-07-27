@@ -27,7 +27,7 @@ export default function FinancialListPage() {
 
   return (
     <Layout>
-      <div className="w-full p-1 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-7">
         <div className="flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
           <h1 className="font-bold text-xl">Perencanaan Dana</h1>
         </div>
@@ -42,7 +42,7 @@ export default function FinancialListPage() {
         )}
 
         <div className="mt-7 space-y-10">
-          <div className="flex flex-row gap-3 items-center w-full md:w-auto justify-between">
+          <div className="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto justify-between">
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
               <button className="flex bg-white">
                 <SearchIcon className="size-4 mr-2" />

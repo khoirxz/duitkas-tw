@@ -58,7 +58,7 @@ export default function FinancialFormPage() {
 
   return (
     <Layout>
-      <div className="w-full p-1 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-7">
         <div>
           <Breadcrumb>
             <BreadcrumbList>
@@ -86,8 +86,8 @@ export default function FinancialFormPage() {
 
       <form
         onSubmit={handleSubmit}
-        className="md:px-10 py-8 shadow-md border rounded-3xl bg-white flex-row mx-5 mb-5 space-y-10">
-        <div className="flex flex-row gap-10">
+        className="px-3 md:px-10 py-8 shadow-md border rounded-3xl bg-white flex-col md:flex-row mx-5 mb-5 space-y-10">
+        <div className="flex flex-col md:flex-row gap-10">
           <ChangeType
             selectedType={selectedType}
             setSelectedType={setSelectedType}

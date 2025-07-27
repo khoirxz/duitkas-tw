@@ -66,11 +66,11 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:col-span-2 md:row-span-1 md:col-start-2 md:row-start-2">
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4 ">
               <SummaryChart />
             </div>
 
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2 order-first md:order-2">
               <TransactionChart />
             </div>
           </div>

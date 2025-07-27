@@ -8,7 +8,7 @@ import golasImg from "@/assets/financial/goal-trophy.png";
 export default function FinancialPage() {
   return (
     <Layout>
-      <div className="w-full p-1 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-7">
         <div className="flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
           <h1 className="font-bold text-xl">Perencanaan Dana</h1>
 

@@ -7,7 +7,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider className="font-public">
       <AppNavbar />
       <AppSidebar />
-      <main className={`mt-[4.5rem] max-w-[1440px] w-full mx-auto pt-5 px-2`}>
+      <main
+        className={`mt-[4.5rem] max-w-[1440px] w-full mx-auto pt-5 md:px-2`}>
         {children}
       </main>
     </SidebarProvider>

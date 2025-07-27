@@ -16,21 +16,25 @@ import { columns } from "./partials/columns";
 import { ChevronRightIcon, ChevronLeftIcon, XIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Link } from "react-router";
 
 export default function AccountPage() {
   return (
     <Layout>
-      <div className="w-full p-1 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-7">
         <div className="flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
           <h1 className="font-bold text-xl">Data Akun</h1>
 
           <Button
             variant="default"
-            className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700">
-            <span>
-              <AddCircleSolidIcon color="white" />
-            </span>
-            Tambah Akun
+            className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700"
+            asChild>
+            <Link to="/admin/account/form/add">
+              <span>
+                <AddCircleSolidIcon color="white" />
+              </span>
+              Tambah Akun
+            </Link>
           </Button>
         </div>
 
