@@ -1,5 +1,9 @@
+// react
 import { useState } from "react";
+import { useForm, FormProvider, type SubmitHandler } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
+// components
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -15,14 +19,23 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { SlashIcon, RefreshCw, XIcon } from "lucide-react";
-import Layout from "@/layouts/layout";
-
-import budgetImg from "@/assets/financial/chart-3d.png";
-import goalsImg from "@/assets/financial/goal-trophy.png";
 import { Button } from "@/components/ui/button";
+// layouts
+import Layout from "@/layouts/layout";
+// partials
 import FormBudgetPage from "./partials/formBudget";
 import FormGoalsPage from "./partials/formGoals";
+// images and icons
+import { SlashIcon, RefreshCw, XIcon } from "lucide-react";
+import budgetImg from "@/assets/financial/chart-3d.png";
+import goalsImg from "@/assets/financial/goal-trophy.png";
+// hook
+import {
+  budgedSchema,
+  goalSchema,
+  type BudgetFormValues,
+  type GoalFormValues,
+} from "./hook/use-form";
 
 const TYPE_FORM = [
   {
@@ -40,21 +53,32 @@ const TYPE_FORM = [
 ];
 
 export default function FinancialFormPage() {
+  const budgetForm = useForm<BudgetFormValues>({
+    resolver: zodResolver(budgedSchema),
+  });
+  const goalForm = useForm<GoalFormValues>({
+    resolver: zodResolver(goalSchema),
+  });
+
   const [selectedType, setSelectedType] = useState<"budget" | "goals">(
     "budget"
   );
   const [step, setStep] = useState<number>(1);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission logic here
-    if (selectedType === "budget") {
-      setStep(2); // Proceed to next step for budget
-    }
+  const isBudget = selectedType === "budget";
+  const form = isBudget ? budgetForm : goalForm;
 
-    console.log("Form submitted with type:", selectedType);
-    console.log("Current step:", step);
+  const onSubmitBudget: SubmitHandler<BudgetFormValues> = (data) => {
+    console.log("Submit budget form:", data);
   };
+
+  const onSubmitGoals: SubmitHandler<GoalFormValues> = (data) => {
+    console.log("Submit goals form:", data);
+  };
+
+  const handleSubmit = isBudget
+    ? form.handleSubmit(onSubmitBudget)
+    : form.handleSubmit(onSubmitGoals);
 
   return (
     <Layout>
@@ -65,7 +89,7 @@ export default function FinancialFormPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/admin/financial"
-                  className="text-blue-700 text-lg">
+                  className="text-blue-700 text-lg font-semibold">
                   Perencanaan Dana
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -75,7 +99,7 @@ export default function FinancialFormPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/admin/financial/form"
-                  className="text-lg">
+                  className="text-lg font-semibold">
                   Tambah Perencanaan Dana
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -84,43 +108,46 @@ export default function FinancialFormPage() {
         </div>
       </div>
 
-      <form
-        onSubmit={handleSubmit}
-        className="px-3 md:px-10 py-8 shadow-md border rounded-3xl bg-white flex-col md:flex-row mx-5 mb-5 space-y-10">
-        <div className="flex flex-col md:flex-row gap-10">
-          <ChangeType
-            selectedType={selectedType}
-            setSelectedType={setSelectedType}
-            setStep={setStep}
-          />
-          {selectedType === "budget" ? (
-            <FormBudgetPage step={step} />
-          ) : selectedType === "goals" ? (
-            <FormGoalsPage />
-          ) : null}
-        </div>
+      <FormProvider {...form}>
+        <form
+          onSubmit={handleSubmit}
+          className="px-6 md:px-10 py-8 shadow-md border rounded-4xl md:rounded-3xl bg-white flex-col md:flex-row mx-5 mb-5 space-y-10 mt-4">
+          <div className="flex flex-col md:flex-row gap-10">
+            <ChangeType
+              selectedType={selectedType}
+              setSelectedType={setSelectedType}
+              setStep={setStep}
+            />
+            {selectedType === "budget" ? (
+              <FormBudgetPage step={step} />
+            ) : selectedType === "goals" ? (
+              <FormGoalsPage />
+            ) : null}
+          </div>
 
-        <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
-          <Button
-            type="reset"
-            className="bg-white text-indigo-600 flex-1 rounded-full py-5 hover:bg-gray-100">
-            Batal
-          </Button>
-          {selectedType === "budget" && step === 1 ? (
+          <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
             <Button
-              type="submit"
-              className="flex-1 bg-green-600 hover:bg-green-500 text-white rounded-full py-5">
-              Selanjutnya
+              onClick={() => setStep(1)}
+              type="reset"
+              className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 hover:bg-gray-100 w-full">
+              Batal
             </Button>
-          ) : (
-            <Button
-              type="submit"
-              className="flex-1 bg-green-600 hover:bg-green-500 text-white rounded-full py-5">
-              Simpan
-            </Button>
-          )}
-        </div>
-      </form>
+            {selectedType === "budget" && step === 1 ? (
+              <Button
+                type="submit"
+                className="flex-1 bg-green-600 hover:bg-green-500 text-white rounded-full py-3 md:py-5 w-full">
+                Selanjutnya
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="flex-1 bg-green-600 hover:bg-green-500 text-white rounded-full py-3 md:py-5 w-full">
+                Simpan
+              </Button>
+            )}
+          </div>
+        </form>
+      </FormProvider>
     </Layout>
   );
 }
@@ -150,7 +177,7 @@ function ChangeType({
       <img
         src={TYPE_FORM.find((type) => type.value === selectedType)?.img}
         alt="Budget"
-        className="aspect-square w-xs"
+        className="aspect-square w-40 mx-auto md:w-xs"
       />
 
       <p className="font-semibold text-center uppercase">

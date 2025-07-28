@@ -1,3 +1,5 @@
+import { useFormContext } from "react-hook-form";
+// components
 import { GraphIcon, TagIcon } from "@/assets/icons/outline";
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
 import { Button } from "@/components/ui/button";
@@ -8,13 +10,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+// image and icons
 import { Percent, TrashIcon } from "lucide-react";
+import { type BudgetFormValues } from "../hook/use-form";
+import { FormField } from "@/components/ui/form";
 
 interface FormBudgetPageProps {
   step: number;
 }
 
 const FormBudgetPage: React.FC<FormBudgetPageProps> = ({ step }) => {
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext<BudgetFormValues>();
+
   return (
     <div className="flex-1 flex flex-col gap-10 mt-10">
       {step === 1 ? (
@@ -49,10 +60,12 @@ const FormBudgetPage: React.FC<FormBudgetPageProps> = ({ step }) => {
                 <TagIcon className="size-4 mr-3" color="#3B82F6" />
               </button>
               <input
+                {...register("name")}
                 type="text"
                 className="outline-none text-sm"
                 placeholder="Pilih porsi"
               />
+              <span>{errors.name?.message}</span>
             </div>
           </div>
           <div className="flex flex-col gap-3">
@@ -61,19 +74,32 @@ const FormBudgetPage: React.FC<FormBudgetPageProps> = ({ step }) => {
               className="text-sm font-semibold text-zinc-600 uppercase">
               PORSI (PERSENTASE/NOMINAL) <span className="text-red-500">*</span>
             </label>
-            <Select>
-              <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
-                <SelectValue placeholder="Pilih porsi" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="presentase">Persentase</SelectItem>
-                <SelectItem value="nominal">Nominal</SelectItem>
-                <SelectItem value="hybrid">
-                  Hybrid (Persentase & Nominal)
-                </SelectItem>
-              </SelectContent>
-            </Select>
+            <FormField
+              control={control}
+              name="portion"
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}>
+                  <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
+                    <SelectValue placeholder="Pilih porsi" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="percentage">Persentase</SelectItem>
+                    <SelectItem value="nominal">Nominal</SelectItem>
+                    <SelectItem value="hybrid">
+                      Hybrid (Persentase & Nominal)
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+
+            <span className="text-red-500 text-sm">
+              {errors.portion?.message}
+            </span>
           </div>
+          <button type="submit">submit</button>
         </div>
       ) : (
         <FormBudgetAdvanced />
@@ -106,33 +132,36 @@ const FormBudgetAdvanced = () => {
       </div>
 
       {/* Dynamic Form */}
-      <div className="flex flex-row gap-3 items-center mt-2">
-        <div className="relative w-full">
-          <label
-            htmlFor=""
-            className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-            Nama Kategori <span className="text-red-500">*</span>
-          </label>
-          <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-            <button className="flex bg-white">
-              <GraphIcon className="size-4 mr-3" color="#3B82F6" />
-            </button>
-            <input type="text" className="outline-none text-sm" />
+      <div className="flex gap-3 mt-2">
+        <div className="flex-1 flex flex-col md:flex-row gap-3 items-center">
+          <div className="relative w-full">
+            <label
+              htmlFor=""
+              className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+              Nama Kategori <span className="text-red-500">*</span>
+            </label>
+            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+              <button className="flex bg-white">
+                <GraphIcon className="size-4 mr-3" color="#3B82F6" />
+              </button>
+              <input type="text" className="outline-none text-sm" />
+            </div>
+          </div>
+          <div className="relative w-full">
+            <label
+              htmlFor=""
+              className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+              Presentase <span className="text-red-500">*</span>
+            </label>
+            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+              <button className="flex bg-white">
+                <Percent className="size-4 mr-3" color="#3B82F6" />
+              </button>
+              <input type="text" className="outline-none text-sm" />
+            </div>
           </div>
         </div>
-        <div className="relative w-full">
-          <label
-            htmlFor=""
-            className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-            Presentase <span className="text-red-500">*</span>
-          </label>
-          <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-            <button className="flex bg-white">
-              <Percent className="size-4 mr-3" color="#3B82F6" />
-            </button>
-            <input type="text" className="outline-none text-sm" />
-          </div>
-        </div>
+
         <Button
           size={"icon"}
           className="rounded-full bg-red-500 hover:bg-red-600 w-10 h-10">

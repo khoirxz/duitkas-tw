@@ -55,9 +55,13 @@ export const useScroll = () => {
         }}
         className={
           cn(isBottom ? "bottom-3" : "top-3") +
-          " absolute left-1/2 -translate-x-1/2 z-10 pointer-events-none bg-blue-600 text-white hidden md:flex items-center justify-center w-8 h-8 rounded-full"
+          " absolute left-1/2 -translate-x-1/2 z-10 pointer-events-none bg-blue-600 text-white hidden md:flex items-center justify-center w-6 h-6 rounded-full"
         }>
-        {isBottom ? <ChevronDown /> : <ChevronUp />}
+        {isBottom ? (
+          <ChevronDown className="size-4" />
+        ) : (
+          <ChevronUp className="size-4" />
+        )}
       </motion.div>
     );
   };

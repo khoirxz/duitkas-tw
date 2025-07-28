@@ -14,7 +14,7 @@ export default function DebsBalance() {
         </Button>
       </div>
 
-      <div className="relative w-full h-6 bg-blue-100 rounded-2xl overflow-hidden mt-3">
+      <div className="relative w-full h-7 bg-blue-100 rounded-2xl overflow-hidden mt-1">
         <div
           className="absolute top-0 left-0 h-full bg-amber-500"
           style={{ width: "20%", borderRadius: "16px 0 0 16px" }} // Atur radius hanya di kiri

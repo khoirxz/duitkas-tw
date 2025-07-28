@@ -9,9 +9,9 @@ import {
 } from "@/components/ui/pagination";
 import { Button } from "@/components/ui/button";
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import DataTable from "@/components/data-table";
+import DataTable, { TableFilter } from "@/components/data-table";
 import Layout from "@/layouts/layout";
-import { ChevronRightIcon, ChevronLeftIcon, SearchIcon } from "lucide-react";
+import { ChevronRightIcon, ChevronLeftIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { columns } from "./partials/column";
@@ -27,14 +27,26 @@ export default function FinancialListPage() {
 
   return (
     <Layout>
-      <div className="w-full p-3 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
           <h1 className="font-bold text-xl">Perencanaan Dana</h1>
+
+          <Button
+            asChild
+            variant="default"
+            className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700">
+            <Link to="/admin/financial/form/add">
+              <span>
+                <AddCircleSolidIcon color="white" />
+              </span>
+              Tambah Kategori
+            </Link>
+          </Button>
         </div>
 
         {newData.length === 0 && (
-          <div className="text-center">
-            <p className="text-sm">Untuk memulai perencanaan dana.</p>
+          <div className="md:text-center">
+            <p className="text-sm mb-2">Untuk memulai perencanaan dana.</p>
             <p className="font-semibold">
               Silahkan tambahkan kategori terlebih dahulu.
             </p>
@@ -42,29 +54,7 @@ export default function FinancialListPage() {
         )}
 
         <div className="mt-7 space-y-10">
-          <div className="flex flex-col md:flex-row gap-3 items-center w-full md:w-auto justify-between">
-            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-              <button className="flex bg-white">
-                <SearchIcon className="size-4 mr-2" />
-              </button>
-              <input
-                type="text"
-                className="outline-none"
-                placeholder="cari item disini"
-              />
-            </div>
-            <Button
-              asChild
-              variant="default"
-              className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700">
-              <Link to="/admin/financial/form/add">
-                <span>
-                  <AddCircleSolidIcon color="white" />
-                </span>
-                Tambah Kategori
-              </Link>
-            </Button>
-          </div>
+          <TableFilter />
 
           <DataTable columns={columns} data={newData} />
 

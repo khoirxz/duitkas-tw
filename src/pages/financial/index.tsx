@@ -28,25 +28,25 @@ export default function FinancialPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:max-w-4xl md:mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 md:max-w-4xl md:mx-auto">
           <Link
             to="/"
-            className="flex flex-col gap-3 items-center shadow p-5 rounded-3xl border hover:shadow-xl transition-shadow">
+            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-xl transition-shadow">
             <img
               src={budgetImg}
               alt="Budget"
-              className="aspect-square md:w-xs h-50 md:h-auto"
+              className="aspect-square md:w-xs h-40 md:h-auto"
             />
 
             <h2 className="text-lg font-semibold mt-3">Budget</h2>
           </Link>
           <Link
             to="/"
-            className="flex flex-col gap-3 items-center shadow p-5 rounded-3xl border hover:shadow-xl transition-shadow">
+            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-xl transition-shadow">
             <img
               src={golasImg}
               alt="Goals"
-              className="aspect-square md:w-xs h-50 md:h-auto"
+              className="aspect-square md:w-xs h-40 md:h-auto"
             />
 
             <h2 className="text-lg font-semibold mt-3">Goals</h2>
