@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -5,7 +6,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { BookMarkedIcon, CalendarIcon, UploadIcon } from "lucide-react";
+import {
+  BookMarkedIcon,
+  CalendarIcon,
+  UploadIcon,
+  PlusCircleIcon,
+} from "lucide-react";
 
 import placeholderImg from "@/assets/transaction/upload-placeholder.png";
 
@@ -45,14 +51,10 @@ export default function CashFlowForm({ type }: CashFlowFormProps) {
           </label>
           <Select>
             <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
-              <SelectValue placeholder="Pilih porsi" />
+              <SelectValue placeholder="Pilih Kategori" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="presentase">Persentase</SelectItem>
-              <SelectItem value="nominal">Nominal</SelectItem>
-              <SelectItem value="hybrid">
-                Hybrid (Persentase & Nominal)
-              </SelectItem>
+              <SelectItem value="presentase">Administrasi</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -64,14 +66,10 @@ export default function CashFlowForm({ type }: CashFlowFormProps) {
           </label>
           <Select>
             <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
-              <SelectValue placeholder="Pilih porsi" />
+              <SelectValue placeholder="Pilih akun" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="presentase">Persentase</SelectItem>
-              <SelectItem value="nominal">Nominal</SelectItem>
-              <SelectItem value="hybrid">
-                Hybrid (Persentase & Nominal)
-              </SelectItem>
+              <SelectItem value="presentase">Demo</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -79,25 +77,23 @@ export default function CashFlowForm({ type }: CashFlowFormProps) {
           <label
             htmlFor=""
             className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-            jumlah <span className="text-red-500">*</span>
+            tanggal transaksi <span className="text-red-500">*</span>
           </label>
-          <Select>
-            <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
-              <SelectValue placeholder="Pilih porsi" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="presentase">Persentase</SelectItem>
-              <SelectItem value="nominal">Nominal</SelectItem>
-              <SelectItem value="hybrid">
-                Hybrid (Persentase & Nominal)
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+            <button className="flex bg-white">
+              <CalendarIcon className="size-4 mr-3" color="#3B82F6" />
+            </button>
+            <input
+              type="text"
+              className="outline-none text-sm"
+              placeholder="Pilih porsi"
+            />
+          </div>
         </div>
       </div>
 
       <div className="grid md:grid-cols-2 gap-6">
-        <div className="flex flex-col gap-3 relative">
+        <div className="hidden md:flex flex-col gap-3 relative">
           <label
             htmlFor=""
             className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 z-10 rounded-sm">
@@ -138,6 +134,13 @@ export default function CashFlowForm({ type }: CashFlowFormProps) {
             />
           </div>
         </div>
+      </div>
+
+      <div className="relative w-full block md:hidden">
+        <Button className="bg-transparent border border-yellow-300 flex flex-row justify-center items-center gap-2 text-black w-full rounded-full py-6">
+          <PlusCircleIcon className="w-6 h-6 fill-black" color="white" />
+          Unggah nota (opsional)
+        </Button>
       </div>
     </div>
   );

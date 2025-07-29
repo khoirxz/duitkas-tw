@@ -95,7 +95,7 @@ export default function TransactionFormPage() {
           </Button>
         </AlertDescription>
       </Alert>
-      <div className="w-full p-1 md:p-5 space-y-7">
+      <div className="w-full p-3 md:p-5 space-y-7">
         <div>
           <Breadcrumb>
             <BreadcrumbList>
@@ -119,8 +119,8 @@ export default function TransactionFormPage() {
         </div>
       </div>
 
-      <form className="flex flex-col md:px-10 py-8 shadow-md border rounded-3xl bg-white mx-5 mb-5 space-y-10">
-        <div className="flex flex-row gap-10">
+      <form className="flex flex-col px-6 py-8 shadow-md border rounded-3xl bg-white mx-5 mb-5 space-y-10">
+        <div className="flex flex-col md:flex-row gap-14 md:gap-10">
           <ChangeType
             selectedType={selectedType}
             setSelectedType={setSelectedType}
@@ -137,12 +137,12 @@ export default function TransactionFormPage() {
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
             type="reset"
-            className="bg-white text-indigo-600 flex-1 rounded-full py-5 hover:bg-gray-100">
+            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100">
             Batal
           </Button>
           <Button
             type="submit"
-            className="flex-1 bg-blue-600 hover:bg-blue-500 text-white rounded-full py-5">
+            className="flex-1 bg-blue-600 hover:bg-blue-500 text-white rounded-full py-3 md:py-5 w-full">
             Simpan
           </Button>
         </div>
@@ -166,11 +166,11 @@ function ChangeType({ selectedType, setSelectedType }: ChangeTypeProps) {
   };
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 px-6 md:p-0">
       <img
         src={TYPE_FORM.find((type) => type.value === selectedType)?.img}
         alt="Budget"
-        className="aspect-square w-xs"
+        className="aspect-square w-40 mx-auto md:w-xs pt-5 md:pt-0"
       />
 
       <p className="font-semibold text-center uppercase">
@@ -203,7 +203,7 @@ function ChangeType({ selectedType, setSelectedType }: ChangeTypeProps) {
             </VisuallyHidden>
           </DialogHeader>
           <div className="bg-white rounded-b-2xl p-5 space-y-5">
-            <div className="grid gird-cols-1 md:grid-cols-3 gap-2">
+            <div className="grid gird-cols-2 md:grid-cols-3 gap-2">
               {TYPE_FORM.map((type) => (
                 <Link
                   key={type.value}
@@ -220,7 +220,7 @@ function ChangeType({ selectedType, setSelectedType }: ChangeTypeProps) {
                   <img
                     src={type.img}
                     alt={type.label}
-                    className="object-contain aspect-square w-30 h-30"
+                    className="object-contain aspect-square w-20 h-20 md:w-30 md:h-30"
                   />
                   <div className="flex flex-col items-center text-center font-public">
                     <span className="font-semibold uppercase">

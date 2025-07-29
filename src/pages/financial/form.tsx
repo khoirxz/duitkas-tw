@@ -53,6 +53,7 @@ const TYPE_FORM = [
 ];
 
 export default function FinancialFormPage() {
+  // form hooks
   const budgetForm = useForm<BudgetFormValues>({
     resolver: zodResolver(budgedSchema),
   });
@@ -60,18 +61,20 @@ export default function FinancialFormPage() {
     resolver: zodResolver(goalSchema),
   });
 
+  // advanced form for budget
   const [selectedType, setSelectedType] = useState<"budget" | "goals">(
     "budget"
   );
   const [step, setStep] = useState<number>(1);
 
+  // form
   const isBudget = selectedType === "budget";
   const form = isBudget ? budgetForm : goalForm;
 
+  // submit handler
   const onSubmitBudget: SubmitHandler<BudgetFormValues> = (data) => {
     console.log("Submit budget form:", data);
   };
-
   const onSubmitGoals: SubmitHandler<GoalFormValues> = (data) => {
     console.log("Submit goals form:", data);
   };
@@ -134,7 +137,8 @@ export default function FinancialFormPage() {
             </Button>
             {selectedType === "budget" && step === 1 ? (
               <Button
-                type="submit"
+                onClick={() => setStep(2)}
+                type="button"
                 className="flex-1 bg-green-600 hover:bg-green-500 text-white rounded-full py-3 md:py-5 w-full">
                 Selanjutnya
               </Button>
