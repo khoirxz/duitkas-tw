@@ -51,7 +51,7 @@ export default function SummaryChart() {
         },
       },
     },
-    colors: ["#2B63E2", "#EF9E4D"],
+    colors: ["#053EBF", "#F98E25"],
     plotOptions: {
       bar: {
         colors: {
@@ -59,12 +59,12 @@ export default function SummaryChart() {
             {
               from: -1000000,
               to: -1,
-              color: "#EF9E4D", // pengeluaran dominan
+              color: "#F98E25", // pengeluaran dominan
             },
             {
               from: 0,
               to: 1000000,
-              color: "#2B63E2", // pemasukan dominan
+              color: "#053EBF", // pemasukan dominan
             },
           ],
         },

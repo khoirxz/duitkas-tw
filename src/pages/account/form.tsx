@@ -50,7 +50,7 @@ export default function AccountFormPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/account"
-                  className="text-blue-700 text-lg">
+                  className="text-blue-700 text-lg font-semibold">
                   Akun
                 </BreadcrumbLink>
               </BreadcrumbItem>
@@ -58,7 +58,9 @@ export default function AccountFormPage() {
                 <SlashIcon />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink href="/account/form/add" className="text-lg">
+                <BreadcrumbLink
+                  href="/account/form/add"
+                  className="text-lg font-semibold">
                   Tambah Akun
                 </BreadcrumbLink>
               </BreadcrumbItem>
