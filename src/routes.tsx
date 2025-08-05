@@ -8,6 +8,7 @@ import TransactionPage from "@/pages/transaction";
 import TransactionFormPage from "./pages/transaction/form";
 import ReportPage from "@/pages/report";
 import ReportTransactionPage from "@/pages/report/pages/transaction";
+import SettingPage from "@/pages/setting";
 
 import {
   HomeIcon,
@@ -22,6 +23,8 @@ import {
   GraphSolidIcon,
   CalendarSolidIcon,
 } from "./assets/icons/solid";
+import SettingListPage from "./pages/setting/list";
+import LoginPage from "./pages/auth/login";
 
 export const router: {
   name: string;
@@ -40,6 +43,13 @@ export const router: {
     name: string;
   }[];
 }[] = [
+  {
+    path: "/",
+    show: false,
+    parent: false,
+    name: "Login",
+    element: <LoginPage />,
+  },
   {
     path: "/admin/dashboard",
     show: true,
@@ -149,6 +159,26 @@ export const router: {
         element: <ReportPage />,
         show: true,
         path: "/admin/report/cashflow",
+      },
+    ],
+  },
+  // === HALAMAN PENGTURAN / SETTING ===
+  {
+    path: "/admin/settings",
+    show: false,
+    parent: false,
+    name: "Pengaturan",
+    element: <SettingPage />,
+    icon: {
+      active: <CardSolidIcon color="currentColor" />,
+      inactive: <CardIcon color="currentColor" />,
+    },
+    children: [
+      {
+        name: "Daftar pengguna",
+        element: <SettingListPage />,
+        show: false,
+        path: "/admin/settings/users",
       },
     ],
   },

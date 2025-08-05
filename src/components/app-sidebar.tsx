@@ -5,6 +5,7 @@ import { Link } from "react-router";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -20,11 +21,13 @@ import { Button } from "./ui/button";
 import { router } from "@/routes";
 import { useSidebar } from "./hook-sidebar";
 import { cn } from "@/lib/utils";
+import { SecuritySafeSolidIcon } from "@/assets/icons/solid";
+import { SecuritySafeIcon } from "@/assets/icons/outline";
 
 export function AppSidebar() {
   return (
-    <Sidebar className="mt-[4.5rem] pt-5">
-      <SidebarContent>
+    <Sidebar>
+      <SidebarContent className="md:mt-[4.5rem] pt-5">
         <SidebarMenu>
           {router
             .filter((item) => item.show)
@@ -33,6 +36,21 @@ export function AppSidebar() {
             ))}
         </SidebarMenu>
       </SidebarContent>
+      <SidebarFooter className="p-0">
+        <SidebarMenu className="p-0">
+          <Items
+            item={{
+              name: "Konfigurasi Perusahaan",
+              path: "/admin/settings",
+              icon: {
+                active: <SecuritySafeSolidIcon color="currentColor" />,
+                inactive: <SecuritySafeIcon color="currentColor" />,
+              },
+              element: null,
+            }}
+          />
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   );
 }
@@ -95,12 +113,11 @@ function Items({ item }: ItemsProps) {
                       <SidebarMenuSubItem>
                         <Button
                           variant="link"
-                          className="w-full h-full px-3 py-3 rounded-none justify-start">
+                          className="w-full h-full px-3 py-3 rounded-none justify-start text-inherit">
                           <Link
                             to={item.path}
                             className={
-                              cn(childActive && "font-bold text-blue-700") +
-                              " text-sm"
+                              cn(childActive && "text-blue-700") + " text-sm"
                             }>
                             {item.name}
                           </Link>

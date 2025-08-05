@@ -203,7 +203,7 @@ function ChangeType({ selectedType, setSelectedType }: ChangeTypeProps) {
             </VisuallyHidden>
           </DialogHeader>
           <div className="bg-white rounded-b-2xl p-5 space-y-5">
-            <div className="grid gird-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid gird-cols-2 md:grid-cols-3 gap-2 overflow-auto max-h-80 md:max-h-full">
               {TYPE_FORM.map((type) => (
                 <Link
                   key={type.value}

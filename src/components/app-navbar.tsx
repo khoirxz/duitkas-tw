@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { useSidebar } from "./ui/sidebar";
+import { useTheme } from "./theme-provider";
 
 import { ChevronDown } from "lucide-react";
 
@@ -35,6 +36,7 @@ const dataLang: { name: string; value: string; icon: string }[] = [
 const AppNavbar: React.FC = () => {
   const [selectedLang, setSelectedLang] = useState<string>("id");
   const { toggleSidebar } = useSidebar();
+  const { setTheme, theme } = useTheme();
 
   return (
     <nav
@@ -108,7 +110,18 @@ const AppNavbar: React.FC = () => {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                const nextTheme =
+                  theme === "light"
+                    ? "dark"
+                    : theme === "dark"
+                    ? "system"
+                    : "light";
+                setTheme(nextTheme);
+              }}>
+              Theme : {theme}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
