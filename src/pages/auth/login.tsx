@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { EyeIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
 import {
   SelectContent,
   SelectItem,
@@ -81,12 +81,19 @@ export default function LoginPage() {
                 <LockKeyholeIcon className="size-4 mr-3" color="#3B82F6" />
               </button>
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="outline-none text-sm w-full"
                 placeholder="password anda"
               />
-              <button className="flex bg-white" type="button">
-                <EyeIcon className="size-4 ml-3" color="#3B82F6" />
+              <button
+                className="flex bg-white"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? (
+                  <EyeIcon className="size-4 ml-3" color="#3B82F6" />
+                ) : (
+                  <EyeOffIcon className="size-4 ml-3" color="#3B82F6" />
+                )}
               </button>
             </div>
           </div>
