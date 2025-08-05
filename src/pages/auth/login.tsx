@@ -1,12 +1,22 @@
 import { Button } from "@/components/ui/button";
-import { EyeIcon, UserIcon } from "lucide-react";
+import { EyeIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
 import { Link } from "react-router";
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col justify-center">
-      <div className="grid grid-cols-2 shadow-lg rounded-2xl w-full max-w-6xl mx-auto">
-        <form className="p-10 flex flex-col gap-4">
+    <div
+      className="min-h-screen flex flex-col justify-center p-10"
+      style={{
+        backgroundImage: "url('/auth/art.png')",
+        backgroundRepeat: "repeat",
+        backgroundPosition: "top left",
+        backgroundSize: "250px 250px",
+        // reduce opacity
+        opacity: 0.9,
+      }}>
+      <div className="grid grid-cols-1 md:grid-cols-2 shadow-lg rounded-2xl w-full max-w-6xl mx-auto bg-white">
+        <form className="p-10 flex flex-col gap-6">
+          <img src="/logo.svg" alt="logo" className="h-20 mx-auto" />
           <div className="flex flex-col gap-2">
             <label
               htmlFor=""
@@ -52,7 +62,7 @@ export default function LoginPage() {
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
               <button className="flex bg-white">
-                <UserIcon className="size-4 mr-3" color="#3B82F6" />
+                <LockKeyholeIcon className="size-4 mr-3" color="#3B82F6" />
               </button>
               <input
                 type="password"
@@ -73,7 +83,10 @@ export default function LoginPage() {
             </Link>
           </p>
         </form>
-        <h1>Hero image</h1>
+        <div className="hidden md:block relative m-5">
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-100 to-blue-300 rounded-2xl z-10"></div>
+          <img src="/auth/artwork.png" alt="Login" className="z-20 relative" />
+        </div>
       </div>
     </div>
   );
