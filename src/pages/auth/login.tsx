@@ -1,8 +1,24 @@
+import { useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { EyeIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
-import { Link } from "react-router";
+import {
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+  Select,
+} from "@/components/ui/select";
 
 export default function LoginPage() {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [signupPage, setSignupPage] = useState<boolean>(false);
+
+  // handle change page to signup
+  const handleChangePage = () => {
+    setSignupPage(!signupPage);
+  };
+
   return (
     <div
       className="min-h-screen flex flex-col justify-center p-10"
@@ -17,6 +33,7 @@ export default function LoginPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 shadow-lg rounded-2xl w-full max-w-6xl mx-auto bg-white">
         <form className="p-10 flex flex-col gap-6">
           <img src="/logo.svg" alt="logo" className="h-20 mx-auto" />
+
           <div className="flex flex-col gap-2">
             <label
               htmlFor=""
@@ -34,6 +51,7 @@ export default function LoginPage() {
               </span>
             </div>
           </div>
+
           <div className="flex flex-col gap-2">
             <label
               htmlFor=""
@@ -49,11 +67,9 @@ export default function LoginPage() {
                 className="outline-none text-sm w-full"
                 placeholder="username anda"
               />
-              <span className="absolute right-4 text-sm text-gray-400">
-                identitas perusahaan/akun
-              </span>
             </div>
           </div>
+
           <div className="flex flex-col gap-2">
             <label
               htmlFor=""
@@ -75,17 +91,94 @@ export default function LoginPage() {
             </div>
           </div>
 
+          {signupPage && (
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor=""
+                className="text-sm font-semibold text-zinc-600 uppercase">
+                email <span className="text-red-500">*</span>
+              </label>
+              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
+                <button className="flex bg-white">
+                  <UserIcon className="size-4 mr-3" color="#3B82F6" />
+                </button>
+                <input
+                  type="text"
+                  className="outline-none text-sm w-full"
+                  placeholder="email yang dapat dihubungi"
+                />
+              </div>
+            </div>
+          )}
+
+          {signupPage && (
+            <div className="flex flex-col gap-2">
+              <label
+                htmlFor=""
+                className="text-sm font-semibold text-zinc-600 uppercase">
+                nomor <span className="text-red-500">*</span>
+              </label>
+              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
+                <button className="flex bg-white mr-3 text-xs">+62</button>
+                <input
+                  type="text"
+                  className="outline-none text-sm w-full"
+                  placeholder="nomor yang dapat dihubungi"
+                />
+              </div>
+            </div>
+          )}
+
+          {signupPage && (
+            <div className="flex flex-col gap-3">
+              <label
+                htmlFor=""
+                className="text-sm font-semibold text-zinc-600 uppercase">
+                Mengetahui duitkas dari <span className="text-red-500">*</span>
+              </label>
+              <Select>
+                <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
+                  <SelectValue placeholder="Pilih" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="percentage">Sosial media</SelectItem>
+                  <SelectItem value="nominal">Teman</SelectItem>
+                  <SelectItem value="hybrid">
+                    Google, Facebook, Instagram
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           <Button className="w-full rounded-full py-6 uppercase">Masuk</Button>
-          <p className="font-domine text-center text-sm">
-            Belum punya akun ?{" "}
-            <Link to="/auth/register" className="text-blue-600 underline">
-              Daftar disini
-            </Link>
-          </p>
+          {signupPage ? (
+            <p className="font-domine text-center text-sm">
+              Sudah punya akun ?{" "}
+              <span
+                onClick={handleChangePage}
+                className="text-blue-600 underline">
+                Daftar disini
+              </span>
+            </p>
+          ) : (
+            <p className="font-domine text-center text-sm">
+              Belum punya akun ?{" "}
+              <span
+                onClick={handleChangePage}
+                className="text-blue-600 underline">
+                Daftar disini
+              </span>
+            </p>
+          )}
         </form>
         <div className="hidden md:block relative m-5">
           <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-blue-100 to-blue-300 rounded-2xl z-10"></div>
-          <img src="/auth/artwork.png" alt="Login" className="z-20 relative" />
+          <img
+            src={signupPage ? "/auth/signup.png" : "/auth/artwork.png"}
+            alt="Login"
+            className="z-20 relative"
+          />
         </div>
       </div>
     </div>
