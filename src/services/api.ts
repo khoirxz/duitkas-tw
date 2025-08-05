@@ -1,3 +1,5 @@
+export const BASE_API = "https://fin.duitkas.com/api/v2/";
+
 export const dataAccount: {
   id: number;
   vo: number;

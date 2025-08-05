@@ -9,6 +9,8 @@ import TransactionFormPage from "./pages/transaction/form";
 import ReportPage from "@/pages/report";
 import ReportTransactionPage from "@/pages/report/pages/transaction";
 import SettingPage from "@/pages/setting";
+import LoginPage from "./pages/auth/login";
+import SignUpPage from "./pages/auth/signup";
 
 import {
   HomeIcon,
@@ -24,7 +26,6 @@ import {
   CalendarSolidIcon,
 } from "./assets/icons/solid";
 import SettingListPage from "./pages/setting/list";
-import LoginPage from "./pages/auth/login";
 
 export const router: {
   name: string;
@@ -49,6 +50,13 @@ export const router: {
     parent: false,
     name: "Login",
     element: <LoginPage />,
+  },
+  {
+    path: "/auth/signup",
+    show: false,
+    parent: false,
+    name: "Sign Up",
+    element: <SignUpPage />,
   },
   {
     path: "/admin/dashboard",
