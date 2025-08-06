@@ -2,12 +2,16 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
 import { Link } from "react-router";
 import { BASE_API } from "@/services/api";
+import type { ResponseProps } from "@/types/response";
+import type { LoginSuccessResponse } from "@/types/auth";
+import { toast } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 
 const loginFormSchema = z.object({
   identity: z.string().nonempty("Wajib diisi"),
@@ -32,14 +36,47 @@ export default function LoginPage() {
   });
   // state
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
   // handle submit
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     try {
-      const response = await axios.post(BASE_API + "login", data);
+      const formData = new FormData();
 
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      formData.append("identitas", data.identity); // identity
+      formData.append("username", data.username); // username
+      formData.append("password", data.password); // password
+
+      const { data: response } = await axios.post<LoginSuccessResponse>(
+        BASE_API + "login",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      toast.success("Login berhasil!", {
+        description: `Selamat datang, ${response.data.perusahaan.nama_direktur}`,
+        position: "top-center",
+        duration: 1500,
+        icon: "🚀",
+      });
+      // console.log(response);
+    } catch (e) {
+      const error = e as AxiosError;
+      interface ErrResponseProps extends ResponseProps {
+        data: null;
+      }
+      const errorData = error.response?.data as ErrResponseProps | undefined;
+
+      if (errorData) {
+        toast.error(errorData.message, {
+          position: "top-center",
+          duration: 1500,
+          icon: "🤚",
+        });
+      }
     }
   };
 
@@ -57,7 +94,7 @@ export default function LoginPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 shadow-lg md:rounded-2xl w-full max-w-6xl mx-auto bg-white">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="p-5 md:p-10 flex flex-col gap-6">
+          className="p-5 md:p-10 flex flex-col gap-6 min-h-screen md:min-h-auto">
           <img src="/logo.svg" alt="logo" className="h-20 mx-auto" />
 
           <div className="flex flex-col gap-2">
@@ -147,7 +184,9 @@ export default function LoginPage() {
             )}
           </div>
 
-          <Button className="w-full rounded-full py-6 uppercase" type="submit">
+          <Button
+            className="w-full rounded-full py-6 uppercase cursor-pointer"
+            type="submit">
             Masuk
           </Button>
 
@@ -168,6 +207,8 @@ export default function LoginPage() {
           />
         </div>
       </div>
+
+      <Toaster richColors={true} />
     </div>
   );
 }

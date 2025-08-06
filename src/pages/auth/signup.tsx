@@ -76,12 +76,13 @@ export default function SignUpPage() {
 
           <div className="flex flex-col gap-2">
             <label
-              htmlFor=""
+              htmlFor="identity"
               className="text-sm font-semibold text-zinc-600 uppercase">
               Identitas akun <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
               <input
+                id="identity"
                 {...register("identity")}
                 type="text"
                 className="outline-none text-sm w-full"
@@ -102,7 +103,7 @@ export default function SignUpPage() {
 
           <div className="flex flex-col gap-2">
             <label
-              htmlFor=""
+              htmlFor="username"
               className="text-sm font-semibold text-zinc-600 uppercase">
               username <span className="text-red-500">*</span>
             </label>
@@ -111,6 +112,7 @@ export default function SignUpPage() {
                 <UserIcon className="size-4 mr-3" color="#3B82F6" />
               </button>
               <input
+                id="username"
                 {...register("username")}
                 type="text"
                 className="outline-none text-sm w-full"
@@ -126,7 +128,7 @@ export default function SignUpPage() {
 
           <div className="flex flex-col gap-2">
             <label
-              htmlFor=""
+              htmlFor="password"
               className="text-sm font-semibold text-zinc-600 uppercase">
               Kata sandi <span className="text-red-500">*</span>
             </label>
@@ -135,6 +137,7 @@ export default function SignUpPage() {
                 <LockKeyholeIcon className="size-4 mr-3" color="#3B82F6" />
               </button>
               <input
+                id="password"
                 {...register("password")}
                 type={showPassword ? "text" : "password"}
                 className="outline-none text-sm w-full"
@@ -160,7 +163,7 @@ export default function SignUpPage() {
 
           <div className="flex flex-col gap-2">
             <label
-              htmlFor=""
+              htmlFor="email"
               className="text-sm font-semibold text-zinc-600 uppercase">
               email <span className="text-red-500">*</span>
             </label>
@@ -169,6 +172,7 @@ export default function SignUpPage() {
                 <UserIcon className="size-4 mr-3" color="#3B82F6" />
               </button>
               <input
+                id="email"
                 {...register("email")}
                 type="text"
                 className="outline-none text-sm w-full"
@@ -184,13 +188,14 @@ export default function SignUpPage() {
 
           <div className="flex flex-col gap-2">
             <label
-              htmlFor=""
+              htmlFor="phone"
               className="text-sm font-semibold text-zinc-600 uppercase">
               nomor <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
               <button className="flex bg-white mr-3 text-xs">+62</button>
               <input
+                id="phone"
                 {...register("phone")}
                 type="text"
                 className="outline-none text-sm w-full"
@@ -209,9 +214,7 @@ export default function SignUpPage() {
             name="source"
             render={({ field }) => (
               <div className="flex flex-col gap-3">
-                <label
-                  htmlFor=""
-                  className="text-sm font-semibold text-zinc-600 uppercase">
+                <label className="text-sm font-semibold text-zinc-600 uppercase">
                   Mengetahui duitkas dari
                 </label>
                 <Select
