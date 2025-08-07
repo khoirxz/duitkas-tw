@@ -1,4 +1,22 @@
-export const BASE_API = "https://fin.duitkas.com/api/v2/";
+import axios from "axios";
+import { useAuthStore } from "@/store/useAuth";
+
+export const BASE_API = "/api";
+
+export const api = axios.create({
+  baseURL: BASE_API,
+  headers: {
+    "Content-Type": "multipart/form-data",
+  },
+});
+
+api.interceptors.request.use((config) => {
+  const token = useAuthStore.getState().token;
+  if (token) {
+    config.headers["X-API-KEY"] = token;
+  }
+  return config;
+});
 
 export const dataAccount: {
   id: number;

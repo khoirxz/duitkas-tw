@@ -2,8 +2,17 @@ import { Button } from "@/components/ui/button";
 
 import { UpSquareIcon, ChevronRightIcon } from "@/assets/icons/outline";
 import { GraphSolidIcon, AddSquareSolidIcon } from "@/assets/icons/solid";
+import { formatRupiah } from "@/lib/formatMoney";
 
-export default function ActualBalance() {
+interface ActualBalanceProps {
+  data: {
+    pemasukan_bulan_ini: number;
+    pengeluaran_bulan_ini: number;
+    prosentase: number;
+  };
+}
+
+export default function ActualBalance({ data }: ActualBalanceProps) {
   return (
     <div className="bg-blue-700 text-white p-5 rounded-2xl h-full flex flex-col justify-between">
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-3">
@@ -25,7 +34,9 @@ export default function ActualBalance() {
             <p>Total Pemasukan</p>
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">
-            <span className="font-domine text-sm">Rp 10.000.000</span>
+            <span className="font-domine text-sm">
+              {formatRupiah(data.pemasukan_bulan_ini)}
+            </span>
             <ChevronRightIcon className="w-4 h-4" color="white" />
           </button>
         </div>
@@ -35,7 +46,9 @@ export default function ActualBalance() {
             <p>Total Pemasukan</p>
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">
-            <span className="font-domine text-sm">Rp 190.000.000</span>
+            <span className="font-domine text-sm">
+              {formatRupiah(data.pengeluaran_bulan_ini)}
+            </span>
             <ChevronRightIcon className="w-4 h-4" color="white" />
           </button>
         </div>

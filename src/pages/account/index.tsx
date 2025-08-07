@@ -1,7 +1,6 @@
+import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 
-import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import Layout from "@/layouts/layout";
 import DataTable, { TableFilter } from "@/components/data-table";
 import {
   Pagination,
@@ -9,16 +8,19 @@ import {
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
-
-import { dataAccount } from "@/services/api";
-import { columns } from "./partials/columns";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { cn } from "@/lib/utils";
 
 import { ChevronRightIcon, ChevronLeftIcon, XIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Link } from "react-router";
+import Layout from "@/layouts/layout";
+import { columns } from "./components/columns";
+
+import { AddCircleSolidIcon } from "@/assets/icons/solid";
+import { useAccount } from "./hooks/useAccount";
 
 export default function AccountPage() {
+  const { isLoading, data } = useAccount();
+
   return (
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-7">
@@ -49,11 +51,25 @@ export default function AccountPage() {
 
         <div className="mt-7 space-y-10">
           <TableFilter />
-          <DataTable columns={columns} data={dataAccount} />
+
+          {isLoading ? (
+            <div className="w-full animate-pulse">
+              <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
+            </div>
+          ) : (
+            <DataTable
+              border={false}
+              columns={columns}
+              data={data?.data.akun || []}
+            />
+          )}
 
           <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
             <div>
-              <p>Menampilkan 1 - 10 dari 10</p>
+              <p>
+                Menampilkan 1 - {data?.data.akun.length} dari{" "}
+                {data?.data.akun.length}
+              </p>
             </div>
             <div>
               <Pagination>

@@ -1,7 +1,21 @@
 import { ChevronRightIcon } from "@/assets/icons/outline";
 import { Button } from "@/components/ui/button";
+import type { DashboardProps } from "../types/dashboard";
+import { formatRupiah } from "@/lib/formatMoney";
 
-export default function DebsBalance() {
+interface DebsBalanceProps {
+  data: {
+    total_hutang: DashboardProps["data"]["total_hutang"];
+    total_piutang: DashboardProps["data"]["total_piutang"];
+  };
+}
+
+export default function DebsBalance({ data }: DebsBalanceProps) {
+  // Hitung total keseluruhan
+  const total = data.total_hutang + data.total_piutang;
+
+  // Gunakan kondisi untuk menghindari pembagian dengan nol jika totalnya 0.
+  const incomePercentage = total > 0 ? (data.total_hutang / total) * 100 : 0;
   return (
     <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col justify-between">
       <div className="flex flex-row justify-between items-center">
@@ -17,7 +31,10 @@ export default function DebsBalance() {
       <div className="relative w-full h-7 bg-blue-100 rounded-2xl overflow-hidden mt-1">
         <div
           className="absolute top-0 left-0 h-full bg-amber-500"
-          style={{ width: "20%", borderRadius: "16px 0 0 16px" }} // Atur radius hanya di kiri
+          style={{
+            width: `${incomePercentage}%`,
+            borderRadius: "16px 0 0 16px",
+          }} // Atur radius hanya di kiri
         ></div>
       </div>
 
@@ -28,7 +45,9 @@ export default function DebsBalance() {
             <p className="text-sm">Total Hutang</p>
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">
-            <span className="font-domine font-bold">Rp 20.000.000</span>
+            <span className="font-domine font-bold">
+              {formatRupiah(data.total_hutang)}
+            </span>
           </button>
         </div>
         <div className="flex flex-row justify-between items-center border-t border-[#EFEFEF] py-2.5">
@@ -37,7 +56,9 @@ export default function DebsBalance() {
             <p className="text-sm">Total Piutang</p>
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">
-            <span className="font-domine font-bold">Rp 180.000.000</span>
+            <span className="font-domine font-bold">
+              {formatRupiah(data.total_piutang)}
+            </span>
           </button>
         </div>
       </div>

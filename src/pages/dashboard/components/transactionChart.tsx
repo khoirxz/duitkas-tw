@@ -21,6 +21,20 @@ import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 
 import useScroll from "@/hooks/use-scroll";
+// import type { DashboardProps } from "../types/dashboard";
+
+// interface TransactionChartProps {
+//   data: {
+//     pemasukan: {
+//       pemasukan_bulan_ini: DashboardProps["data"]["pemasukan_bulan_ini"];
+//       data: DashboardProps["data"]["pemasukan_terbaru"];
+//     };
+//     pengeluaran: {
+//       pengeluaran_bulan_ini: DashboardProps["data"]["pengeluaran_bulan_ini"];
+//       data: DashboardProps["data"]["pengeluaran_terbaru"];
+//     };
+//   };
+// }
 
 export default function TransactionChart() {
   const { scrollRef, scrollPosition, handleScroll, ScrollIndicator } =

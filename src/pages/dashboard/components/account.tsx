@@ -3,8 +3,14 @@ import useScroll from "@/hooks/use-scroll";
 
 import { ChevronRightIcon } from "@/assets/icons/outline";
 import { AnimatePresence } from "motion/react";
+import type { DashboardProps } from "../types/dashboard";
+import { formatRupiah } from "@/lib/formatMoney";
 
-export default function Account() {
+interface AccountProps {
+  data: DashboardProps["data"]["all_bank"];
+}
+
+export default function Account({ data }: AccountProps) {
   const { scrollRef, scrollPosition, handleScroll, ScrollIndicator } =
     useScroll();
 
@@ -20,42 +26,59 @@ export default function Account() {
         </Button>
       </div>
 
-      <div className="relative md:h-[750px]">
-        <div
-          className="flex md:flex-col gap-6 overflow-auto h-[240px] md:h-full snap-x snap-mandatory relative scroll-smooth no-scrollbar::-webkit-scrollbar no-scrollbar"
-          ref={scrollRef}
-          onScroll={handleScroll}>
-          {Array.from({ length: 8 }).map((_, index) => (
-            <AccountItem key={index} />
-          ))}
-        </div>
-        <AnimatePresence>
-          {(scrollPosition === "top" || scrollPosition === "middle") && (
-            <ScrollIndicator position="bottom" vertical={true} />
-          )}
+      {data.length >= 0 && data !== null ? (
+        <div className="relative md:h-[750px]">
+          <div
+            className="flex md:flex-col gap-6 overflow-auto h-[240px] md:h-full snap-x snap-mandatory relative scroll-smooth no-scrollbar::-webkit-scrollbar no-scrollbar"
+            ref={scrollRef}
+            onScroll={handleScroll}>
+            {data.map((data, index) => (
+              <AccountItem key={index} data={data} />
+            ))}
+          </div>
+          <AnimatePresence>
+            {(scrollPosition === "top" || scrollPosition === "middle") && (
+              <ScrollIndicator position="bottom" vertical={true} />
+            )}
 
-          {(scrollPosition === "bottom" || scrollPosition === "middle") && (
-            <ScrollIndicator position="top" vertical={true} />
-          )}
-        </AnimatePresence>
-      </div>
+            {(scrollPosition === "bottom" || scrollPosition === "middle") && (
+              <ScrollIndicator position="top" vertical={true} />
+            )}
+          </AnimatePresence>
+        </div>
+      ) : null}
     </div>
   );
 }
 
-const AccountItem = () => {
+interface AccountItemProps {
+  data: DashboardProps["data"]["all_bank"][0];
+}
+
+const AccountItem: React.FC<AccountItemProps> = ({ data }) => {
+  // Hitung total keseluruhan
+  const total = data.total_pemasukan + data.total_pengeluaran;
+
+  // Gunakan kondisi untuk menghindari pembagian dengan nol jika totalnya 0.
+  const incomePercentage = total > 0 ? (data.total_pemasukan / total) * 100 : 0;
+
   return (
     <div className="flex flex-col gap-3.5 w-full shrink-0 snap-start">
-      <p>BNI - Kas</p>
+      <p>
+        {data.nama_bank} - {data.atas_nama}
+      </p>
       <div className="flex flex-row justify-between text-2xl font-bold">
         <span>Rp.</span>
-        <span>1.000.000</span>
+        <span>{formatRupiah(data.saldo_awal)}</span>
       </div>
       <div>
         <div className="relative w-full h-6 bg-amber-500 rounded-2xl overflow-hidden mt-3">
           <div
             className="absolute top-0 left-0 h-full bg-blue-700"
-            style={{ width: "20%", borderRadius: "16px 0 0 16px" }} // Atur radius hanya di kiri
+            style={{
+              width: `${incomePercentage}%`,
+              borderRadius: "16px 0 0 16px",
+            }} // Atur radius hanya di kiri
           ></div>
         </div>
       </div>
@@ -67,7 +90,7 @@ const AccountItem = () => {
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">
             <span className="font-domine font-semibold text-sm">
-              Rp 20.000.000
+              {formatRupiah(data.total_pemasukan)}
             </span>
           </button>
         </div>
@@ -78,7 +101,7 @@ const AccountItem = () => {
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">
             <span className="font-domine font-semibold text-sm">
-              Rp 180.000.000
+              {formatRupiah(data.total_pengeluaran)}
             </span>
           </button>
         </div>

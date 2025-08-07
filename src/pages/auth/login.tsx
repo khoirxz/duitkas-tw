@@ -2,16 +2,19 @@ import { useState } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import axios, { AxiosError } from "axios";
-
-import { Button } from "@/components/ui/button";
-import { EyeIcon, EyeOffIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
+import { AxiosError } from "axios";
 import { Link } from "react-router";
-import { BASE_API } from "@/services/api";
+
+import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { Toaster } from "@/components/ui/sonner";
+import { EyeIcon, EyeOffIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
+
+import { useAuthStore } from "@/store/useAuth";
 import type { ResponseProps } from "@/types/response";
 import type { LoginSuccessResponse } from "@/types/auth";
-import { toast } from "sonner";
-import { Toaster } from "@/components/ui/sonner";
+
+import { api } from "@/services/api";
 
 const loginFormSchema = z.object({
   identity: z.string().nonempty("Wajib diisi"),
@@ -36,7 +39,6 @@ export default function LoginPage() {
   });
   // state
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
   // handle submit
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     try {
@@ -46,22 +48,27 @@ export default function LoginPage() {
       formData.append("username", data.username); // username
       formData.append("password", data.password); // password
 
-      const { data: response } = await axios.post<LoginSuccessResponse>(
-        BASE_API + "login",
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
+      const { data: response } = await api.post<LoginSuccessResponse>(
+        "login",
+        formData
       );
-
+      useAuthStore.getState().setAuth(response.data.token, {
+        name: response.data.perusahaan.nama_direktur,
+        company: response.data.perusahaan.id_perusahaan,
+        role: response.data.user.role,
+        id: response.data.user.id_user,
+      });
       toast.success("Login berhasil!", {
         description: `Selamat datang, ${response.data.perusahaan.nama_direktur}`,
         position: "top-center",
         duration: 1500,
         icon: "🚀",
       });
+      // redirect to dashboard after 2 seconds
+      // todo: refactor soon using react router
+      setTimeout(() => {
+        window.location.href = "/admin/dashboard";
+      }, 2000);
       // console.log(response);
     } catch (e) {
       const error = e as AxiosError;

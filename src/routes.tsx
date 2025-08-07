@@ -26,6 +26,7 @@ import {
   CalendarSolidIcon,
 } from "./assets/icons/solid";
 import SettingListPage from "./pages/setting/list";
+import { ProtectedRouter } from "./components/protected-router";
 
 export const router: {
   name: string;
@@ -63,7 +64,11 @@ export const router: {
     show: true,
     parent: false,
     name: "Beranda",
-    element: <DashboardPage />,
+    element: (
+      <ProtectedRouter>
+        <DashboardPage />
+      </ProtectedRouter>
+    ),
     icon: {
       active: <HomeSolidIcon color="currentColor" />,
       inactive: <HomeIcon color="currentColor" />,
@@ -75,7 +80,11 @@ export const router: {
     show: true,
     parent: false,
     name: "Akun",
-    element: <AccountPage />,
+    element: (
+      <ProtectedRouter>
+        <AccountPage />
+      </ProtectedRouter>
+    ),
     icon: {
       active: <CardSolidIcon color="currentColor" />,
       inactive: <CardIcon color="currentColor" />,
@@ -84,7 +93,11 @@ export const router: {
       {
         path: "/admin/account/form/add",
         // lazy: () => import('./pages/dashboard/index.tsx'),
-        element: <AccountFormPage />,
+        element: (
+          <ProtectedRouter>
+            <AccountFormPage />
+          </ProtectedRouter>
+        ),
         show: false,
         name: "Daftar Transaksi",
       },
@@ -96,7 +109,11 @@ export const router: {
     show: true,
     parent: false,
     name: "Perencanaan Dana",
-    element: <FinancialPage />,
+    element: (
+      <ProtectedRouter>
+        <FinancialPage />
+      </ProtectedRouter>
+    ),
     icon: {
       active: <GraphSolidIcon color="currentColor" />,
       inactive: <GraphIcon color="currentColor" />,
@@ -104,14 +121,22 @@ export const router: {
     children: [
       {
         path: "/admin/financial/list",
-        element: <FinancialListPage />,
+        element: (
+          <ProtectedRouter>
+            <FinancialListPage />
+          </ProtectedRouter>
+        ),
         show: false,
         name: "Perencanaan Dana",
       },
       {
         path: "/admin/financial/form",
         // lazy: () => import('./pages/dashboard/index.tsx'),
-        element: <FinancialFormPage />,
+        element: (
+          <ProtectedRouter>
+            <FinancialFormPage />
+          </ProtectedRouter>
+        ),
         show: false,
         name: "Daftar Transaksi",
       },
@@ -123,7 +148,11 @@ export const router: {
     show: true,
     parent: false,
     name: "Transaksi",
-    element: <TransactionPage />,
+    element: (
+      <ProtectedRouter>
+        <TransactionPage />
+      </ProtectedRouter>
+    ),
     icon: {
       active: <CalendarSolidIcon color="currentColor" />,
       inactive: <CalendarIcon color="currentColor" />,
@@ -132,7 +161,11 @@ export const router: {
       {
         path: "/admin/transaction/form",
         // lazy: () => import('./pages/dashboard/index.tsx'),
-        element: <TransactionFormPage />,
+        element: (
+          <ProtectedRouter>
+            <TransactionFormPage />
+          </ProtectedRouter>
+        ),
         show: false,
         name: "Form Transaksi",
       },
@@ -144,7 +177,11 @@ export const router: {
     show: true,
     parent: true,
     name: "Laporan",
-    element: <ReportPage />,
+    element: (
+      <ProtectedRouter>
+        <ReportPage />
+      </ProtectedRouter>
+    ),
     icon: {
       active: <AttachmentIcon color="currentColor" />,
       inactive: <AttachmentIcon color="currentColor" />,
@@ -152,19 +189,31 @@ export const router: {
     children: [
       {
         name: "Laporan Keuangan",
-        element: <ReportPage />,
+        element: (
+          <ProtectedRouter>
+            <ReportPage />
+          </ProtectedRouter>
+        ),
         show: true,
         path: "/admin/report/financial",
       },
       {
         name: "Nota/Bukti Transaksi",
-        element: <ReportTransactionPage />,
+        element: (
+          <ProtectedRouter>
+            <ReportTransactionPage />
+          </ProtectedRouter>
+        ),
         show: true,
         path: "/admin/report/transaction",
       },
       {
         name: "Arus kas",
-        element: <ReportPage />,
+        element: (
+          <ProtectedRouter>
+            <ReportPage />
+          </ProtectedRouter>
+        ),
         show: true,
         path: "/admin/report/cashflow",
       },
@@ -176,7 +225,11 @@ export const router: {
     show: false,
     parent: false,
     name: "Pengaturan",
-    element: <SettingPage />,
+    element: (
+      <ProtectedRouter>
+        <SettingPage />
+      </ProtectedRouter>
+    ),
     icon: {
       active: <CardSolidIcon color="currentColor" />,
       inactive: <CardIcon color="currentColor" />,
@@ -184,7 +237,11 @@ export const router: {
     children: [
       {
         name: "Daftar pengguna",
-        element: <SettingListPage />,
+        element: (
+          <ProtectedRouter>
+            <SettingListPage />
+          </ProtectedRouter>
+        ),
         show: false,
         path: "/admin/settings/users",
       },

@@ -4,20 +4,12 @@ import { formatRupiah } from "@/lib/formatMoney";
 import { DeleteSolidIcon, EditSolidIcon } from "@/assets/icons/solid";
 import { SwapIcon } from "@/assets/icons/outline";
 import { Button } from "@/components/ui/button";
+import type { AccountProps } from "../types/account";
 
-interface TableProps {
-  id: number;
-  vo: number;
-  name: string;
-  nameAccount: string;
-  admin: number;
-  amount: number;
-}
-
-export const columns: ColumnDef<TableProps>[] = [
+export const columns: ColumnDef<AccountProps["data"]["akun"]["0"]>[] = [
   {
     header: () => <span className="text-center px-3">No</span>,
-    accessorKey: "id",
+    accessorKey: "no",
     cell: ({ row }) => (
       <span className="text-center px-3">{row.index + 1}</span>
     ),
@@ -47,10 +39,10 @@ export const columns: ColumnDef<TableProps>[] = [
     },
     cell: ({ row }) => (
       <span className="text-right inline-block w-full">
-        {row.getValue("vo")}
+        {row.getValue("nomor_rekening")}
       </span>
     ),
-    accessorKey: "vo",
+    accessorKey: "nomor_rekening",
   },
   {
     header: ({ column }) => {
@@ -66,7 +58,7 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "name",
+    accessorKey: "atas_nama",
   },
   {
     header: ({ column }) => {
@@ -82,7 +74,7 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "nameAccount",
+    accessorKey: "nama_akun",
   },
   {
     header: ({ column }) => {
@@ -98,12 +90,12 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "admin",
+    accessorKey: "administrasi",
     cell: ({ row }) => {
-      const amount = row.getValue<number>("admin");
+      const amount = row.getValue<number>("administrasi");
       return (
         <span className="text-right inline-block w-full">
-          {formatRupiah(amount, { useDot: true })}
+          {formatRupiah(Number(amount), { useDot: true })}
         </span>
       );
     },
@@ -122,12 +114,12 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "amount",
+    accessorKey: "saldo_awal",
     cell: ({ row }) => {
-      const amount = row.getValue<number>("amount");
+      const amount = row.getValue<number>("saldo_awal");
       return (
         <span className="text-right inline-block w-full">
-          {formatRupiah(amount, { useDot: true })}
+          {formatRupiah(Number(amount), { useDot: true })}
         </span>
       );
     },
