@@ -16,6 +16,12 @@ export const useCreateAccount = () => {
   });
 };
 
+export const useUpdateAccount = () => {
+  return useMutation({
+    mutationFn: (formData: FormData) => postAccount(formData),
+  });
+};
+
 export const useBanks = () => {
   return useQuery({
     queryKey: ["banks"],

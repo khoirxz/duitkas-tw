@@ -1,4 +1,5 @@
 import { type ColumnDef } from "@tanstack/react-table";
+import { Link } from "react-router";
 
 import { formatRupiah } from "@/lib/formatMoney";
 import { DeleteSolidIcon, EditSolidIcon } from "@/assets/icons/solid";
@@ -133,13 +134,18 @@ export const columns: ColumnDef<AccountProps["data"]["akun"]["0"]>[] = [
       );
     },
     id: "actions",
-    cell: () => {
+    cell: ({ row }) => {
+      const id = row.original.id_akun_bank;
+
       return (
         <div className="flex flex-row items-center w-full gap-2 justify-center">
           <Button
             size="icon"
-            className="bg-amber-400 hover:bg-amber-400/80 rounded-full">
-            <EditSolidIcon width={16} height={16} color="#fff" />
+            className="bg-amber-400 hover:bg-amber-400/80 rounded-full"
+            asChild>
+            <Link to={"form/edit/" + id}>
+              <EditSolidIcon width={16} height={16} color="#fff" />
+            </Link>
           </Button>
           <Button
             size="icon"

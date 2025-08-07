@@ -99,7 +99,18 @@ export const router: {
           </ProtectedRouter>
         ),
         show: false,
-        name: "Daftar Transaksi",
+        name: "Form tambah akun",
+      },
+      {
+        path: "/admin/account/form/edit/:id",
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <AccountFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Form edit akun",
       },
     ],
   },

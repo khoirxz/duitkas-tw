@@ -2,6 +2,8 @@ import { useState } from "react";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { AxiosError } from "axios";
+import { Link, useParams } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,9 +28,12 @@ import { Check, ChevronDown, SlashIcon, XIcon } from "lucide-react";
 
 import Layout from "@/layouts/layout";
 import { CardIcon, WorkCaseIcon } from "@/assets/icons/outline";
-import { useBanks, useCreateAccount } from "./hooks/useAccount";
+import {
+  useBanks,
+  useCreateAccount,
+  useUpdateAccount,
+} from "./hooks/useAccount";
 import type { ResponseProps } from "@/types/response";
-import type { AxiosError } from "axios";
 
 const formSchema = z.object({
   id_bank: z.string().min(1, { message: "Bank harus diisi" }),
@@ -40,7 +45,13 @@ const formSchema = z.object({
 });
 
 export default function AccountFormPage() {
-  const { mutate, isSuccess, isError } = useCreateAccount();
+  const { id } = useParams();
+  const {
+    mutate: postAccount,
+    isSuccess: postSuccess,
+    isError: postError,
+  } = useCreateAccount();
+  const { mutate: updateAccount } = useUpdateAccount();
   const {
     control,
     register,
@@ -62,6 +73,10 @@ export default function AccountFormPage() {
     try {
       const formData = new FormData();
 
+      if (id) {
+        formData.append("id_akun_bank", id); // id_akun_bank
+      }
+
       formData.append("id_bank", data.id_bank); // id_bank
       formData.append("nomor_rekening", data.number_account); // number_account
       formData.append("nama_akun", data.name_account); // name_account
@@ -69,7 +84,11 @@ export default function AccountFormPage() {
       formData.append("administrasi", data.admin); // admin
       formData.append("saldo_awal", data.amount); // amount
 
-      mutate(formData);
+      if (id) {
+        updateAccount(formData);
+      } else {
+        postAccount(formData);
+      }
     } catch (e) {
       const error = e as AxiosError;
       interface ErrResponseProps extends ResponseProps {
@@ -91,26 +110,24 @@ export default function AccountFormPage() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  href="/account"
-                  className="text-blue-700 text-lg font-semibold">
-                  Akun
+                  className="text-blue-700 text-lg font-semibold"
+                  asChild>
+                  <Link to="/admin/account">Akun</Link>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
                 <SlashIcon />
               </BreadcrumbSeparator>
               <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/account/form/add"
-                  className="text-lg font-semibold">
-                  Tambah Akun
+                <BreadcrumbLink className="text-lg font-semibold">
+                  {id ? "Edit Akun" : "Tambah Akun"}
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
 
-        {isSuccess && (
+        {postSuccess && (
           <Alert variant="destructive" className="bg-green-200/50 border-0">
             <AlertDescription className="flex justify-between items-center">
               Berhasil Menambahkan Akun
@@ -120,7 +137,7 @@ export default function AccountFormPage() {
             </AlertDescription>
           </Alert>
         )}
-        {isError && (
+        {postError && (
           <Alert variant="destructive" className="bg-red-200/50 border-0">
             <AlertDescription className="flex justify-between items-center">
               Gagal Menambahkan Akun, Harap Lengkapi Data Yang Dibutuhkan
