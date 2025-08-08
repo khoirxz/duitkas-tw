@@ -26,11 +26,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { FilterSolidIcon } from "@/assets/icons/solid";
 
-interface TableFilterProps {
-  showRowCount?: boolean;
-  handleModal?: () => void;
-}
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
@@ -131,12 +126,30 @@ const DataTable = <TData, TValue>({
   );
 };
 
+interface TableFilterProps {
+  showRowCount?: boolean;
+  handleModal?: () => void;
+  setLimit?: (value: number) => void;
+  setPage?: (value: number) => void;
+  setSearch?: (value: string) => void;
+}
+
 export const TableFilter: React.FC<TableFilterProps> = ({
   showRowCount = true,
   handleModal,
+  setLimit,
+  // setPage,
+  setSearch,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
+
   const [value, setValue] = useState<string>("10");
+
+  useEffect(() => {
+    if (setLimit) {
+      setLimit(parseInt(value));
+    }
+  }, [value, setLimit]);
 
   return (
     <div className="flex flex-row items-center justify-between">
@@ -201,14 +214,15 @@ export const TableFilter: React.FC<TableFilterProps> = ({
             <SearchIcon className="size-4 mr-2" />
           </button>
           <input
+            onChange={(e) => setSearch?.(e.target.value)}
             type="text"
             className="outline-none"
-            placeholder="cari item disini"
+            placeholder="cari nama disini"
           />
         </div>
         <Button
           onClick={handleModal}
-          className="rounded-full w-10 h-10 md:w-auto md:h-auto px-6 py-6 md:px-7 md:py-4 flex flex-row items-center gap-2 bg-yellow-600 text-black">
+          className="rounded-full w-10 h-10 md:w-auto md:h-auto px-6 py-6 md:px-7 md:py-4 flex flex-row items-center gap-2 bg-yellow-600 hover:bg-yellow-700 text-black">
           <span>
             <FilterSolidIcon className="size-5" />
           </span>

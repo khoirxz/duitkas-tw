@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 
@@ -19,7 +20,10 @@ import { AddCircleSolidIcon } from "@/assets/icons/solid";
 import { useAccount } from "./hooks/useAccount";
 
 export default function AccountPage() {
-  const { isLoading, data } = useAccount();
+  const [search, setSearch] = useState<string>("");
+  const [limit, setLimit] = useState<number>(10);
+  const [page, setPage] = useState<number>(0);
+  const { isLoading, data } = useAccount(search, page, limit);
 
   return (
     <Layout>
@@ -50,7 +54,11 @@ export default function AccountPage() {
         </Alert>
 
         <div className="mt-7 space-y-10">
-          <TableFilter />
+          <TableFilter
+            setSearch={setSearch}
+            setLimit={setLimit}
+            setPage={setPage}
+          />
 
           {isLoading ? (
             <div className="w-full animate-pulse">

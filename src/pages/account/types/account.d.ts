@@ -1,12 +1,14 @@
-import type { ResponseProps } from "@/types/response";
+import type { ResponseProps, PaginationProps } from "@/types/response";
 
 // Respon dari pengambilan semua data
 export interface AccountProps extends ResponseProps {
   error: boolean;
   message: string;
-  data: {
-    akun: Akun[];
-  };
+  data: Data;
+}
+
+export interface Data extends PaginationProps {
+  akun: Akun[];
 }
 
 export interface Akun {

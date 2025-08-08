@@ -14,7 +14,7 @@ import { useAuthStore } from "@/store/useAuth";
 import type { ResponseProps } from "@/types/response";
 import type { LoginSuccessResponse } from "@/types/auth";
 
-import { api } from "@/services/api";
+import { apiAuth } from "@/services/api";
 
 const loginFormSchema = z.object({
   identity: z.string().nonempty("Wajib diisi"),
@@ -48,7 +48,7 @@ export default function LoginPage() {
       formData.append("username", data.username); // username
       formData.append("password", data.password); // password
 
-      const { data: response } = await api.post<LoginSuccessResponse>(
+      const { data: response } = await apiAuth.post<LoginSuccessResponse>(
         "login",
         formData
       );

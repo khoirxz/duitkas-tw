@@ -2,8 +2,22 @@ import { api } from "@/services/api";
 import type { AccountProps } from "../types/account";
 import type { BankProps } from "../types/bank";
 
-export const fetchAccount = async (): Promise<AccountProps> => {
-  const response = await api.get("bank/all-akun", {});
+export const fetchAccount = async ({
+  search,
+  page,
+  limit,
+}: {
+  search: string;
+  page: number;
+  limit: number;
+}): Promise<AccountProps> => {
+  const response = await api.get("bank/all-akun", {
+    params: {
+      search: search,
+      page: page,
+      limit: limit,
+    },
+  });
   return response.data;
 };
 

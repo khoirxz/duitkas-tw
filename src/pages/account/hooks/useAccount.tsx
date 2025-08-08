@@ -2,10 +2,14 @@ import { useQuery, useMutation } from "@tanstack/react-query";
 import { fetchAccount, postAccount } from "../services/accountApi";
 import { fetchBanks } from "../services/accountApi";
 
-export const useAccount = () => {
+export const useAccount = (
+  search: string,
+  page: number = 1,
+  limit: number = 10
+) => {
   return useQuery({
-    queryKey: ["account"],
-    queryFn: () => fetchAccount(),
+    queryKey: ["account", search, page, limit],
+    queryFn: () => fetchAccount({ search, page, limit }),
     staleTime: 1000 * 60 * 5,
   });
 };
