@@ -1,5 +1,5 @@
 // protected-router.tsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "@/store/useAuth";
 
@@ -11,9 +11,19 @@ export const ProtectedRouter = ({
   const navigate = useNavigate();
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  if (!isAuthenticated) {
-    navigate("/");
-  }
+  const [loading, setLoading] = useState<boolean>(true);
 
-  return <>{children}</>;
+  useEffect(() => {
+    // Cek autentikasi tanpa delay agar tidak flicker
+    if (!isAuthenticated) {
+      navigate("/", { replace: true });
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated, navigate]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  return children;
 };
