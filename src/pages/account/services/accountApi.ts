@@ -1,7 +1,9 @@
 import { api } from "@/services/api";
 import type { AccountProps } from "../types/account";
 import type { BankProps } from "../types/bank";
+import type { ResponseProps } from "@/types/response";
 
+// ambil semua data akun
 export const fetchAccount = async ({
   search,
   page,
@@ -20,7 +22,7 @@ export const fetchAccount = async ({
   });
   return response.data;
 };
-
+// tambah akun
 export const postAccount = async (
   formData: FormData
 ): Promise<AccountProps> => {
@@ -29,7 +31,7 @@ export const postAccount = async (
   });
   return response.data;
 };
-
+// update akun
 export const updateAccount = async (
   formData: FormData
 ): Promise<AccountProps> => {
@@ -38,7 +40,21 @@ export const updateAccount = async (
   });
   return response.data;
 };
-
+// delete akun
+export const deteleAccount = async (
+  formData: FormData
+): Promise<
+  ResponseProps & {
+    data: {
+      status: string;
+      message: string;
+    };
+  }
+> => {
+  const response = await api.post("bank/hapus", formData);
+  return response.data;
+};
+// ambil semua bank
 export const fetchBanks = async (): Promise<BankProps> => {
   const response = await api.get("bank/all-bank", {});
   return response.data;

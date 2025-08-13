@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import useScroll from "@/hooks/use-scroll";
+import useScroll from "@/components/use-scroll";
 
 import { ChevronRightIcon } from "@/assets/icons/outline";
 import { AnimatePresence } from "motion/react";

@@ -1,8 +1,12 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { fetchAccount, postAccount } from "../services/accountApi";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  fetchAccount,
+  postAccount,
+  deteleAccount,
+} from "../services/accountApi";
 import { fetchBanks } from "../services/accountApi";
 
-export const useAccount = (
+export const useFetchAccount = (
   search: string,
   page: number = 1,
   limit: number = 10
@@ -23,6 +27,16 @@ export const useCreateAccount = () => {
 export const useUpdateAccount = () => {
   return useMutation({
     mutationFn: (formData: FormData) => postAccount(formData),
+  });
+};
+
+export const useDeleteAccount = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (formData: FormData) => deteleAccount(formData),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["account"] });
+    },
   });
 };
 

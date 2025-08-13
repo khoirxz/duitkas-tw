@@ -2,28 +2,23 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 
-import DataTable, { TableFilter } from "@/components/data-table";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-} from "@/components/ui/pagination";
+import DataTable, {
+  PaginationTable,
+  TableFilter,
+} from "@/components/data-table";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { cn } from "@/lib/utils";
-
-import { ChevronRightIcon, ChevronLeftIcon, XIcon } from "lucide-react";
+import { XIcon } from "lucide-react";
 import Layout from "@/layouts/layout";
 import { columns } from "./components/columns";
 
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import { useAccount } from "./hooks/useAccount";
+import { useFetchAccount } from "./hooks/useAccount";
 
 export default function AccountPage() {
   const [search, setSearch] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
-  const { isLoading, data } = useAccount(search, page, limit);
+  const { isLoading, data } = useFetchAccount(search, page, limit);
 
   return (
     <Layout>
@@ -54,11 +49,7 @@ export default function AccountPage() {
         </Alert>
 
         <div className="mt-7 space-y-10">
-          <TableFilter
-            setSearch={setSearch}
-            setLimit={setLimit}
-            setPage={setPage}
-          />
+          <TableFilter setSearch={setSearch} setLimit={setLimit} />
 
           {isLoading ? (
             <div className="w-full animate-pulse">
@@ -72,49 +63,12 @@ export default function AccountPage() {
             />
           )}
 
-          <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
-            <div>
-              <p>
-                Menampilkan 1 - {data?.data.akun.length} dari{" "}
-                {data?.data.akun.length}
-              </p>
-            </div>
-            <div>
-              <Pagination>
-                <PaginationContent className="space-x-3">
-                  <PaginationItem>
-                    <Button
-                      size="icon"
-                      className="rounded-full bg-blue-600 hover:bg-blue-500">
-                      <ChevronLeftIcon />
-                    </Button>
-                  </PaginationItem>
-                  <PaginationItem className="space-x-1">
-                    {Array.from({ length: 5 }).map((_, index) => (
-                      <PaginationLink
-                        key={index}
-                        href="#"
-                        className={
-                          cn(
-                            index === 0 &&
-                              `bg-blue-600 text-white hover:bg-blue-500`
-                          ) + " rounded-full"
-                        }>
-                        {index + 1}
-                      </PaginationLink>
-                    ))}
-                  </PaginationItem>
-                  <PaginationItem>
-                    <Button
-                      size="icon"
-                      className="rounded-full bg-blue-600 hover:bg-blue-500">
-                      <ChevronRightIcon />
-                    </Button>
-                  </PaginationItem>
-                </PaginationContent>
-              </Pagination>
-            </div>
-          </div>
+          <PaginationTable
+            limit={limit}
+            page={page}
+            setPage={setPage}
+            total={data?.data.total || 0}
+          />
         </div>
       </div>
     </Layout>

@@ -3,14 +3,11 @@ import { Link, useSearchParams } from "react-router";
 
 import Layout from "@/layouts/layout";
 
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-} from "@/components/ui/pagination";
-import { columns, type TableProps } from "./partials/columns";
-import DataTable, { TableFilter } from "@/components/data-table";
+import { columns } from "./partials/columns";
+import DataTable, {
+  PaginationTable,
+  TableFilter,
+} from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
@@ -21,26 +18,25 @@ import {
 } from "@/components/ui/breadcrumb";
 
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import { ChevronRightIcon, ChevronLeftIcon, SlashIcon } from "lucide-react";
+import { SlashIcon } from "lucide-react";
 import incomeImg from "@/assets/transaction/pemasukan.png";
 import expenseImg from "@/assets/transaction/pengeluaran.png";
 import transferImg from "@/assets/transaction/pindahdana.png";
 import debtImg from "@/assets/transaction/hutang.png";
 import creditImg from "@/assets/transaction/piutang.png";
-import { cn } from "@/lib/utils";
 
-import { data } from "./data";
+import { useFetchTransaction } from "./hooks/useTransaction";
 
 export default function TransactionPage() {
+  const [search, setSearch] = useState<string>("");
+  const [limit, setLimit] = useState<number>(10);
+  const [page, setPage] = useState<number>(1);
+
   const [searchParams] = useSearchParams({ get: ["add"] });
-  const [newData, setNewData] = useState<TableProps[]>(data);
+
   const pageState = Boolean(Number(searchParams.get("add")));
 
-  const tonggleData = () => {
-    setNewData((prevData) => (prevData.length === data.length ? [] : data));
-  };
-
-  console.log();
+  const { data: transactions } = useFetchTransaction(search, page, limit);
 
   return (
     <Layout>
@@ -70,7 +66,7 @@ export default function TransactionPage() {
             <h1 className="font-bold text-xl">Data Transaksi</h1>
           )}
 
-          {newData.length !== 0 && !pageState && (
+          {transactions?.data.transaksi.length !== 0 && !pageState && (
             <Button
               asChild
               variant="default"
@@ -85,7 +81,7 @@ export default function TransactionPage() {
           )}
         </div>
 
-        {newData.length === 0 ? (
+        {transactions?.data.transaksi.length === 0 ? (
           <div className="text-center">
             <p className="text-sm">Belum ada transaksi saat ini.</p>
             <p className="font-semibold">
@@ -101,64 +97,35 @@ export default function TransactionPage() {
           )
         )}
 
-        {newData.length <= 0 ? (
+        {transactions?.data.transaksi &&
+        transactions?.data.transaksi.length <= 0 &&
+        search === "" ? (
           <ShowMenu />
         ) : pageState ? (
           <ShowMenu />
         ) : (
           <div className="mt-7 space-y-10">
-            <TableFilter />
+            <TableFilter
+              setSearch={setSearch}
+              setLimit={setLimit}
+              limit={limit}
+            />
 
-            <DataTable columns={columns} data={newData} />
+            <DataTable
+              pageSize={limit}
+              border={false}
+              columns={columns}
+              data={transactions?.data.transaksi || []}
+            />
 
-            <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
-              <div>
-                <p>Menampilkan 1 - 10 dari 10</p>
-              </div>
-              <div>
-                <Pagination>
-                  <PaginationContent className="space-x-3">
-                    <PaginationItem>
-                      <Button
-                        size="icon"
-                        className="rounded-full bg-blue-600 hover:bg-blue-500">
-                        <ChevronLeftIcon />
-                      </Button>
-                    </PaginationItem>
-                    <PaginationItem className="space-x-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <PaginationLink
-                          key={index}
-                          href="#"
-                          className={
-                            cn(
-                              index === 0 &&
-                                `bg-blue-600 text-white hover:bg-blue-500`
-                            ) + " rounded-full"
-                          }>
-                          {index + 1}
-                        </PaginationLink>
-                      ))}
-                    </PaginationItem>
-                    <PaginationItem>
-                      <Button
-                        size="icon"
-                        className="rounded-full bg-blue-600 hover:bg-blue-500">
-                        <ChevronRightIcon />
-                      </Button>
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-            </div>
+            <PaginationTable
+              limit={limit}
+              page={page}
+              setPage={setPage}
+              total={transactions?.data.total || 0}
+            />
           </div>
         )}
-      </div>
-
-      <div className="fixed bottom-0 right-0 bg-primary p-4 shadow-md">
-        <Button onClick={tonggleData} className="ml-2">
-          Toggle Data
-        </Button>
       </div>
     </Layout>
   );

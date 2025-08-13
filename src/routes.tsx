@@ -27,6 +27,7 @@ import {
 } from "./assets/icons/solid";
 import SettingListPage from "./pages/setting/list";
 import { ProtectedRouter } from "./components/protected-router";
+import IncomeFormPage from "./pages/transaction/pages/income/form";
 
 export const router: {
   name: string;
@@ -179,6 +180,61 @@ export const router: {
         ),
         show: false,
         name: "Form Transaksi",
+      },
+      {
+        path: "/admin/transaction/form/income",
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <IncomeFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Form Transaksi Pemasukan",
+      },
+      {
+        path: "/admin/transaction/form/expense",
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <TransactionFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Form Transaksi Pengeluaran",
+      },
+      {
+        path: "/admin/transaction/form/transfer",
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <TransactionFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Form Transaksi Pindah Dana",
+      },
+      {
+        path: "/admin/transaction/form/debt", // hutang
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <TransactionFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Form Transaksi Pindah Dana",
+      },
+      {
+        path: "/admin/transaction/form/credit", // piutang
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <TransactionFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Form Transaksi Pindah Dana",
       },
     ],
   },

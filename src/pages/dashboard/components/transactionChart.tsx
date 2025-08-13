@@ -20,7 +20,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
 
-import useScroll from "@/hooks/use-scroll";
+import useScroll from "@/components/use-scroll";
 // import type { DashboardProps } from "../types/dashboard";
 
 // interface TransactionChartProps {

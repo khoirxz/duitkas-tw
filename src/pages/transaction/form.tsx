@@ -24,9 +24,9 @@ import incomeImg from "@/assets/transaction/pemasukan.png";
 import expenseImg from "@/assets/transaction/pengeluaran.png";
 import transferImg from "@/assets/transaction/pindahdana.png";
 import TransferForm from "./partials/transferForm";
-import CashFlowForm from "./partials/cashFlowForm";
-import debtImg from "@/assets/transaction/hutang.png";
 import creditImg from "@/assets/transaction/piutang.png";
+import debtImg from "@/assets/transaction/hutang.png";
+import CashFlowForm from "./partials/cashFlowForm";
 import DebtForm from "./partials/debtForm";
 
 type TypeFormProps = {
