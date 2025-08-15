@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocation } from "react-router";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -19,14 +17,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import {
-  BookMarkedIcon,
-  CalendarIcon,
-  UploadIcon,
-  PlusCircleIcon,
-  SlashIcon,
-  XIcon,
-} from "lucide-react";
+import { BookMarkedIcon, CalendarIcon, SlashIcon } from "lucide-react";
 import {
   Popover,
   PopoverContent,
@@ -35,38 +26,19 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 
 import Layout from "@/layouts/layout";
-import placeholderImg from "@/assets/transaction/upload-placeholder.png";
+
 import ModalType from "../../partials/modalType";
 import { useCategory } from "../../hooks/useCategory";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
-import { useCreateTransaction } from "../../hooks/useTransaction";
+import { FormErrorSummary } from "@/components/FormErrorSummary";
 
 const formSchema = z.object({
   date: z.string().nonempty("Tanggal TransaksiWajib diisi"),
-  id_category: z.string().nonempty("Kategori wajib diisi"),
-  id_account: z.string().nonempty("Pilih akun"),
+  id_bank_sender: z.string().nonempty("Kategori wajib diisi"),
+  id_bank_receiver: z.string().nonempty("Pilih akun"),
   amount: z.string().nonempty("Jumlah nominal wajib diisi"),
+  tax: z.string().nonempty("Jumlah pajak wajib diisi"),
   note: z.string().optional().nullable(),
-  file: z
-    .any()
-    .transform((val) => (val instanceof FileList ? val[0] : val))
-    .refine(
-      (file) => {
-        // optional -> kalau gak ada file, lolos
-        if (!file) return true;
-
-        // Pastikan file adalah File
-        if (!(file instanceof File)) return false;
-
-        // Max size 1MB (1 * 1024 * 1024 bytes)
-        return file.size <= 1 * 1024 * 1024;
-      },
-      {
-        message: "Ukuran file maksimal 1MB",
-      }
-    )
-    .optional()
-    .nullable(),
 });
 
 export default function TransferFormPage() {
@@ -79,17 +51,14 @@ export default function TransferFormPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       date: "",
-      id_category: "",
-      id_account: "",
+      id_bank_sender: "",
+      id_bank_receiver: "",
       amount: "",
       note: "",
-      file: null,
+      tax: "",
     },
   });
-  const { pathname } = useLocation();
-  const type = pathname.split("/").pop();
 
-  const { mutate } = useCreateTransaction();
   const { data: category, isLoading: isLoadingCategory } = useCategory({
     type: "pemasukan",
   });
@@ -102,39 +71,20 @@ export default function TransferFormPage() {
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
 
-    if (data.file) {
-      formData.append("bukti", data.file); // file
-    }
-
     formData.append("tanggal", data.date); // date
-    formData.append("id_kategori", data.id_category); // id_category
-    formData.append("id_akun_bank", data.id_account); // id_account
+    formData.append("id_bank_asal", data.id_bank_sender); // id_bank_sender
+    formData.append("id_bank_tujuan", data.id_bank_receiver); // id_bank_receiver
     formData.append("jumlah", data.amount); // amount
+    formData.append("pajak", data.tax); // tax
     formData.append("keterangan", data.note || ""); // note
 
-    mutate(formData);
+    // mutate(formData);
     console.log(data);
   };
 
-  console.log(type);
-
   return (
     <Layout>
-      {errors && (
-        <Alert variant="destructive" className="bg-red-200/50 border-0">
-          <AlertDescription className="flex justify-between items-center">
-            {/* {errors.file && errors.file.message} */}
-            {errors.amount && errors.amount.message}
-            {errors.date && errors.date.message}
-            {errors.id_account && errors.id_account.message}
-            {errors.id_category && errors.id_category.message}
-            {errors.note && errors.note.message}
-            <Button variant="ghost" size="icon" className="hover:bg-red-300">
-              <XIcon className="h-4 w-4 text-red-600" />
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
+      <FormErrorSummary errors={errors} firstOnly />
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
           <Breadcrumb>
@@ -162,7 +112,7 @@ export default function TransferFormPage() {
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col px-6 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
+        className="flex flex-col px-12 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
           <ModalType />
 
@@ -217,22 +167,20 @@ export default function TransferFormPage() {
               </Popover>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="relative w-full">
                 {isLoadingCategory ? (
-                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                    <span className="text-sm">Loading...</span>
-                  </div>
+                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-blue-300 animate-pulse h-12"></div>
                 ) : (
                   <Controller
                     control={control}
-                    name="id_category"
+                    name="id_bank_sender"
                     render={({ field }) => (
                       <>
                         <label
-                          htmlFor="id_category"
+                          htmlFor="id_bank_sender"
                           className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                          kategori <span className="text-red-500">*</span>
+                          akun asal <span className="text-red-500">*</span>
                         </label>
                         <Select
                           onValueChange={field.onChange}
@@ -257,19 +205,17 @@ export default function TransferFormPage() {
               </div>
               <div className="relative w-full">
                 {isLoadingAccount ? (
-                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                    <span className="text-sm">Loading...</span>
-                  </div>
+                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-blue-300 animate-pulse h-12"></div>
                 ) : (
                   <Controller
                     control={control}
-                    name="id_account"
+                    name="id_bank_receiver"
                     render={({ field }) => (
                       <>
                         <label
-                          htmlFor="id_account"
+                          htmlFor="id_bank_receiver"
                           className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                          akun digunakan <span className="text-red-500">*</span>
+                          akun tujuan <span className="text-red-500">*</span>
                         </label>
                         <Select
                           onValueChange={field.onChange}
@@ -292,67 +238,56 @@ export default function TransferFormPage() {
                   />
                 )}
               </div>
-              <div className="relative w-full">
-                <label
-                  htmlFor="amount"
-                  className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                  Jumlah <span className="text-red-500">*</span>
-                </label>
-                <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                  <span className="flex bg-white mr-3 text-sm">Rp.</span>
-                  <input
-                    {...register("amount", { required: true })}
-                    type="number"
-                    className="outline-none text-sm w-full"
-                    placeholder="Jumlah"
-                  />
-                </div>
+            </div>
+
+            <div className="relative w-full">
+              <label
+                htmlFor="amount"
+                className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                Jumlah <span className="text-red-500">*</span>
+              </label>
+              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+                <span className="flex bg-white mr-3 text-sm text-blue-500">
+                  Rp.
+                </span>
+                <input
+                  {...register("amount", { required: true })}
+                  type="number"
+                  className="outline-none text-sm w-full"
+                  placeholder="Jumlah"
+                />
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="hidden md:flex flex-col gap-3 relative">
-                <label
-                  htmlFor="file"
-                  className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 z-10 rounded-sm">
-                  BUKTI/NOTA <span className="text-red-500">*</span>
-                </label>
+            <div className="relative w-full">
+              <label
+                htmlFor="text"
+                className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                Biaya transfer <span className="text-red-500">*</span>
+              </label>
+              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+                <span className="flex bg-white mr-3 text-sm text-blue-500">
+                  Rp.
+                </span>
                 <input
-                  {...register("file")}
-                  type="file"
-                  id="file"
-                  accept="image/png, image/jpeg, image/jpg"
-                  className="hidden"
+                  id="tax"
+                  {...register("tax", { required: true })}
+                  type="number"
+                  className="outline-none text-sm w-full"
+                  placeholder="Jumlah"
                 />
-                <div className="relative flex-1 h-full text-white">
-                  <div className="w-full h-48 relative">
-                    <img
-                      src={placeholderImg}
-                      alt="Placeholder"
-                      className="w-full h-full object-cover rounded-lg object-top"
-                    />
-                    <div className="absolute inset-0 bg-black opacity-75 rounded-lg"></div>
-                  </div>
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full flex flex-col items-center gap-2">
-                    <UploadIcon />
-                    <p className="text-sm font-semibold">
-                      Klik untuk memilih file yang akan diunggah
-                    </p>
-                    <p className="text-xs text-zinc-400">
-                      Maksimal ukuran 1MB (*.png, *.jpg, *.jpeg)
-                    </p>
-                  </div>
-                </div>
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 gap-6">
               <div className="flex flex-col gap-3">
                 <label
                   htmlFor="note"
                   className="text-sm font-semibold text-zinc-600 uppercase">
                   KETERANGAN <span className="text-red-500">*</span>
                 </label>
-                <div className="relative h-40 pb-3 border border-zinc-300 rounded-2xl pl-12 pr-3">
-                  <BookMarkedIcon className="absolute top-3 left-3" />
+                <div className="relative h-40 pb-3 border border-zinc-300 rounded-xl pl-12 pr-3">
+                  <BookMarkedIcon className="absolute top-3 left-3.5 size-5" />
                   <textarea
                     id="note"
                     {...register("note", { required: true })}
@@ -362,20 +297,13 @@ export default function TransferFormPage() {
                 </div>
               </div>
             </div>
-
-            <div className="relative w-full block md:hidden">
-              <Button className="bg-transparent border border-yellow-300 flex flex-row justify-center items-center gap-2 text-black w-full rounded-full py-6">
-                <PlusCircleIcon className="w-6 h-6 fill-black" color="white" />
-                Unggah nota (opsional)
-              </Button>
-            </div>
           </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
             type="reset"
-            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100">
+            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
             Batal
           </Button>
           <Button

@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <AppNavbar />
       <AppSidebar />
       <main
-        className={`mt-[4.5rem] max-w-[1440px] w-full mx-auto pt-5 md:px-2`}>
+        className={`mt-[4.5rem] max-w-[1440px] w-full mx-auto pt-5 md:px-2 bg-[#F7FAFC]`}>
         {children}
       </main>
       <Toaster />

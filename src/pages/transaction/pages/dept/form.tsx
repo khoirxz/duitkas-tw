@@ -3,7 +3,6 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocation } from "react-router";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -25,7 +24,6 @@ import {
   UploadIcon,
   PlusCircleIcon,
   SlashIcon,
-  XIcon,
 } from "lucide-react";
 import {
   Popover,
@@ -70,12 +68,9 @@ const formSchema = z.object({
 });
 
 export default function DebtFormPage() {
-  const {
-    register,
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<z.infer<typeof formSchema>>({
+  const { register, control, handleSubmit } = useForm<
+    z.infer<typeof formSchema>
+  >({
     resolver: zodResolver(formSchema),
     defaultValues: {
       date: "",
@@ -120,21 +115,6 @@ export default function DebtFormPage() {
 
   return (
     <Layout>
-      {errors && (
-        <Alert variant="destructive" className="bg-red-200/50 border-0">
-          <AlertDescription className="flex justify-between items-center">
-            {/* {errors.file && errors.file.message} */}
-            {errors.amount && errors.amount.message}
-            {errors.date && errors.date.message}
-            {errors.id_account && errors.id_account.message}
-            {errors.id_category && errors.id_category.message}
-            {errors.note && errors.note.message}
-            <Button variant="ghost" size="icon" className="hover:bg-red-300">
-              <XIcon className="h-4 w-4 text-red-600" />
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
           <Breadcrumb>
@@ -167,54 +147,107 @@ export default function DebtFormPage() {
           <ModalType />
 
           <div className="flex flex-col flex-1 space-y-7 pt-4">
-            <div className="relative w-full">
-              <label
-                htmlFor=""
-                className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                tanggal transaksi <span className="text-red-500">*</span>
-              </label>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div className="relative w-full">
+                <label
+                  htmlFor=""
+                  className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                  tanggal transaksi <span className="text-red-500">*</span>
+                </label>
 
-              <Popover>
-                <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                  <PopoverTrigger asChild>
-                    <button className="flex bg-white">
-                      <CalendarIcon className="size-4 mr-3" color="#3B82F6" />
-                    </button>
-                  </PopoverTrigger>
-                  <Controller
-                    control={control}
-                    name="date"
-                    render={({ field }) => (
-                      <>
-                        <span className="text-sm">
-                          {field.value
-                            ? new Intl.DateTimeFormat("id-ID", {
-                                year: "numeric",
-                                month: "long",
-                                day: "2-digit",
-                              }).format(new Date(field.value))
-                            : "Pilih Tanggal"}
-                        </span>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar
-                            mode="single"
-                            selected={
-                              field.value ? new Date(field.value) : undefined
-                            }
-                            onSelect={(date) =>
-                              field.onChange(date ? date.toISOString() : "")
-                            }
-                            disabled={(date) =>
-                              date > new Date() || date < new Date("1900-01-01")
-                            }
-                            captionLayout="dropdown"
-                          />
-                        </PopoverContent>
-                      </>
-                    )}
-                  />
-                </div>
-              </Popover>
+                <Popover>
+                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+                    <PopoverTrigger asChild>
+                      <button className="flex bg-white">
+                        <CalendarIcon className="size-4 mr-3" color="#3B82F6" />
+                      </button>
+                    </PopoverTrigger>
+                    <Controller
+                      control={control}
+                      name="date"
+                      render={({ field }) => (
+                        <>
+                          <span className="text-sm">
+                            {field.value
+                              ? new Intl.DateTimeFormat("id-ID", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "2-digit",
+                                }).format(new Date(field.value))
+                              : "Pilih Tanggal"}
+                          </span>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={
+                                field.value ? new Date(field.value) : undefined
+                              }
+                              onSelect={(date) =>
+                                field.onChange(date ? date.toISOString() : "")
+                              }
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date("1900-01-01")
+                              }
+                              captionLayout="dropdown"
+                            />
+                          </PopoverContent>
+                        </>
+                      )}
+                    />
+                  </div>
+                </Popover>
+              </div>
+              <div className="relative w-full">
+                <label
+                  htmlFor=""
+                  className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                  tanggal transaksi <span className="text-red-500">*</span>
+                </label>
+
+                <Popover>
+                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+                    <PopoverTrigger asChild>
+                      <button className="flex bg-white">
+                        <CalendarIcon className="size-4 mr-3" color="#3B82F6" />
+                      </button>
+                    </PopoverTrigger>
+                    <Controller
+                      control={control}
+                      name="date"
+                      render={({ field }) => (
+                        <>
+                          <span className="text-sm">
+                            {field.value
+                              ? new Intl.DateTimeFormat("id-ID", {
+                                  year: "numeric",
+                                  month: "long",
+                                  day: "2-digit",
+                                }).format(new Date(field.value))
+                              : "Pilih Tanggal"}
+                          </span>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={
+                                field.value ? new Date(field.value) : undefined
+                              }
+                              onSelect={(date) =>
+                                field.onChange(date ? date.toISOString() : "")
+                              }
+                              disabled={(date) =>
+                                date > new Date() ||
+                                date < new Date("1900-01-01")
+                              }
+                              captionLayout="dropdown"
+                            />
+                          </PopoverContent>
+                        </>
+                      )}
+                    />
+                  </div>
+                </Popover>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
@@ -269,7 +302,7 @@ export default function DebtFormPage() {
                         <label
                           htmlFor="id_account"
                           className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                          akun digunakan <span className="text-red-500">*</span>
+                          akun penerima <span className="text-red-500">*</span>
                         </label>
                         <Select
                           onValueChange={field.onChange}
@@ -296,7 +329,7 @@ export default function DebtFormPage() {
                 <label
                   htmlFor="amount"
                   className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                  Jumlah <span className="text-red-500">*</span>
+                  mitra <span className="text-red-500">*</span>
                 </label>
                 <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
                   <span className="flex bg-white mr-3 text-sm">Rp.</span>
@@ -307,6 +340,25 @@ export default function DebtFormPage() {
                     placeholder="Jumlah"
                   />
                 </div>
+              </div>
+            </div>
+
+            <div className="relative w-full">
+              <label
+                htmlFor="amount"
+                className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                Jumlah <span className="text-red-500">*</span>
+              </label>
+              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+                <span className="flex bg-white mr-3 text-sm text-blue-500">
+                  Rp.
+                </span>
+                <input
+                  {...register("amount", { required: true })}
+                  type="number"
+                  className="outline-none text-sm w-full"
+                  placeholder="Jumlah"
+                />
               </div>
             </div>
 

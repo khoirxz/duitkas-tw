@@ -2,12 +2,16 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   postTransaction,
   fetchAllTransaction,
+  type typeTransaction,
 } from "../services/transactionApi";
 
-export const useCreateTransaction = () => {
+export const useCreateTransaction = ({
+  type,
+}: {
+  type: typeTransaction["type"];
+}) => {
   return useMutation({
-    mutationFn: (formData: FormData) =>
-      postTransaction(formData, { type: "pemasukan" }),
+    mutationFn: (formData: FormData) => postTransaction(formData, { type }),
   });
 };
 

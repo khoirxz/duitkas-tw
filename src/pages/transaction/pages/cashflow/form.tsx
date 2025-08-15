@@ -3,7 +3,6 @@ import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useLocation } from "react-router";
 
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -25,7 +24,6 @@ import {
   UploadIcon,
   PlusCircleIcon,
   SlashIcon,
-  XIcon,
 } from "lucide-react";
 import {
   Popover,
@@ -40,6 +38,7 @@ import ModalType from "../../partials/modalType";
 import { useCategory } from "../../hooks/useCategory";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { useCreateTransaction } from "../../hooks/useTransaction";
+import { FormErrorSummary } from "@/components/FormErrorSummary";
 
 const formSchema = z.object({
   date: z.string().nonempty("Tanggal TransaksiWajib diisi"),
@@ -87,9 +86,11 @@ export default function CashflowFormPage() {
     },
   });
   const { pathname } = useLocation();
-  const type = pathname.split("/").pop();
+  const type = pathname.split("/").pop() as "expense" | "income";
 
-  const { mutate } = useCreateTransaction();
+  const { mutate } = useCreateTransaction({
+    type: type === "income" ? "pemasukan" : "pengeluaran",
+  });
   const { data: category, isLoading: isLoadingCategory } = useCategory({
     type: "pemasukan",
   });
@@ -120,21 +121,7 @@ export default function CashflowFormPage() {
 
   return (
     <Layout>
-      {errors && (
-        <Alert variant="destructive" className="bg-red-200/50 border-0">
-          <AlertDescription className="flex justify-between items-center">
-            {/* {errors.file && errors.file.message} */}
-            {errors.amount && errors.amount.message}
-            {errors.date && errors.date.message}
-            {errors.id_account && errors.id_account.message}
-            {errors.id_category && errors.id_category.message}
-            {errors.note && errors.note.message}
-            <Button variant="ghost" size="icon" className="hover:bg-red-300">
-              <XIcon className="h-4 w-4 text-red-600" />
-            </Button>
-          </AlertDescription>
-        </Alert>
-      )}
+      <FormErrorSummary errors={errors} firstOnly />
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
           <Breadcrumb>
@@ -162,7 +149,7 @@ export default function CashflowFormPage() {
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col px-6 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
+        className="flex flex-col px-12 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
           <ModalType />
 
@@ -220,9 +207,7 @@ export default function CashflowFormPage() {
             <div className="grid md:grid-cols-3 gap-6">
               <div className="relative w-full">
                 {isLoadingCategory ? (
-                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                    <span className="text-sm">Loading...</span>
-                  </div>
+                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-blue-300 animate-pulse h-12"></div>
                 ) : (
                   <Controller
                     control={control}
@@ -257,9 +242,7 @@ export default function CashflowFormPage() {
               </div>
               <div className="relative w-full">
                 {isLoadingAccount ? (
-                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                    <span className="text-sm">Loading...</span>
-                  </div>
+                  <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-blue-300 animate-pulse h-12"></div>
                 ) : (
                   <Controller
                     control={control}
@@ -375,7 +358,7 @@ export default function CashflowFormPage() {
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
             type="reset"
-            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100">
+            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
             Batal
           </Button>
           <Button
