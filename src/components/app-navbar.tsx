@@ -12,6 +12,8 @@ import { useTheme } from "./theme-provider";
 
 import { ChevronDown } from "lucide-react";
 
+import { useAuthStore } from "@/store/useAuth";
+
 import { HeadphoneIcon, MenuFriesIcon } from "@/assets/icons/outline";
 import { HelpIcon } from "@/assets/icons/solid";
 
@@ -37,6 +39,8 @@ const AppNavbar: React.FC = () => {
   const [selectedLang, setSelectedLang] = useState<string>("id");
   const { toggleSidebar } = useSidebar();
   const { setTheme, theme } = useTheme();
+
+  const { logout } = useAuthStore();
 
   return (
     <nav
@@ -122,6 +126,7 @@ const AppNavbar: React.FC = () => {
               }}>
               Theme : {theme}
             </DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>Keluar</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

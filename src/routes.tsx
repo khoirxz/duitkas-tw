@@ -5,12 +5,13 @@ import FinancialPage from "@/pages/financial";
 import FinancialListPage from "@/pages/financial/list";
 import FinancialFormPage from "@/pages/financial/form";
 import TransactionPage from "@/pages/transaction";
-import TransactionFormPage from "./pages/transaction/form";
 import ReportPage from "@/pages/report";
 import ReportTransactionPage from "@/pages/report/pages/transaction";
 import SettingPage from "@/pages/setting";
 import LoginPage from "./pages/auth/login";
 import SignUpPage from "./pages/auth/signup";
+import CashflowFormPage from "./pages/transaction/pages/cashflow/form";
+import SettingListPage from "./pages/setting/list";
 
 import {
   HomeIcon,
@@ -25,9 +26,9 @@ import {
   GraphSolidIcon,
   CalendarSolidIcon,
 } from "./assets/icons/solid";
-import SettingListPage from "./pages/setting/list";
 import { ProtectedRouter } from "./components/protected-router";
-import IncomeFormPage from "./pages/transaction/pages/income/form";
+import TransferFormPage from "./pages/transaction/pages/transfer/form";
+import DebtFormPage from "./pages/transaction/pages/dept/form";
 
 export const router: {
   name: string;
@@ -171,22 +172,11 @@ export const router: {
     },
     children: [
       {
-        path: "/admin/transaction/form",
-        // lazy: () => import('./pages/dashboard/index.tsx'),
-        element: (
-          <ProtectedRouter>
-            <TransactionFormPage />
-          </ProtectedRouter>
-        ),
-        show: false,
-        name: "Form Transaksi",
-      },
-      {
         path: "/admin/transaction/form/income",
         // lazy: () => import('./pages/dashboard/index.tsx'),
         element: (
           <ProtectedRouter>
-            <IncomeFormPage />
+            <CashflowFormPage />
           </ProtectedRouter>
         ),
         show: false,
@@ -197,7 +187,7 @@ export const router: {
         // lazy: () => import('./pages/dashboard/index.tsx'),
         element: (
           <ProtectedRouter>
-            <TransactionFormPage />
+            <CashflowFormPage />
           </ProtectedRouter>
         ),
         show: false,
@@ -208,7 +198,7 @@ export const router: {
         // lazy: () => import('./pages/dashboard/index.tsx'),
         element: (
           <ProtectedRouter>
-            <TransactionFormPage />
+            <TransferFormPage />
           </ProtectedRouter>
         ),
         show: false,
@@ -219,7 +209,7 @@ export const router: {
         // lazy: () => import('./pages/dashboard/index.tsx'),
         element: (
           <ProtectedRouter>
-            <TransactionFormPage />
+            <DebtFormPage />
           </ProtectedRouter>
         ),
         show: false,
@@ -230,7 +220,7 @@ export const router: {
         // lazy: () => import('./pages/dashboard/index.tsx'),
         element: (
           <ProtectedRouter>
-            <TransactionFormPage />
+            <DebtFormPage />
           </ProtectedRouter>
         ),
         show: false,

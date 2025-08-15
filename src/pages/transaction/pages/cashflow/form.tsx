@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useLocation } from "react-router";
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -35,7 +36,7 @@ import { Calendar } from "@/components/ui/calendar";
 
 import Layout from "@/layouts/layout";
 import placeholderImg from "@/assets/transaction/upload-placeholder.png";
-import ModalType from "../../partials/ModalType";
+import ModalType from "../../partials/modalType";
 import { useCategory } from "../../hooks/useCategory";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { useCreateTransaction } from "../../hooks/useTransaction";
@@ -66,10 +67,9 @@ const formSchema = z.object({
     )
     .optional()
     .nullable(),
-  //   file: z.any().optional().nullable(),
 });
 
-export default function IncomeFormPage() {
+export default function CashflowFormPage() {
   const {
     register,
     control,
@@ -86,6 +86,8 @@ export default function IncomeFormPage() {
       file: null,
     },
   });
+  const { pathname } = useLocation();
+  const type = pathname.split("/").pop();
 
   const { mutate } = useCreateTransaction();
   const { data: category, isLoading: isLoadingCategory } = useCategory({
@@ -113,6 +115,8 @@ export default function IncomeFormPage() {
     mutate(formData);
     console.log(data);
   };
+
+  console.log(type);
 
   return (
     <Layout>

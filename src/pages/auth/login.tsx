@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { AxiosError } from "axios";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -39,6 +39,14 @@ export default function LoginPage() {
   });
   // state
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const navigate = useNavigate();
+  // useEffect
+  useEffect(() => {
+    // jika user sudah login, redirect ke dashboard
+    if (useAuthStore.getState().isAuthenticated) {
+      navigate("/admin/dashboard", { replace: true });
+    }
+  });
   // handle submit
   const onSubmit = async (data: z.infer<typeof loginFormSchema>) => {
     try {
