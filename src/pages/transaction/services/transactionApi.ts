@@ -7,7 +7,7 @@ export type typeCategory = {
 };
 
 export type typeTransaction = {
-  type: "pemasukan" | "pengeluaran" | "hutang" | "piutang";
+  type: "pemasukan" | "pengeluaran" | "hutang" | "piutang" | "transfer";
 };
 
 export const fetchAllTransaction = async ({

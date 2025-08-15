@@ -82,9 +82,11 @@ export default function DebtFormPage() {
     },
   });
   const { pathname } = useLocation();
-  const type = pathname.split("/").pop();
+  const type = pathname.split("/").pop() as "debt" | "credit";
 
-  const { mutate } = useCreateTransaction();
+  const { mutate } = useCreateTransaction({
+    type: type === "debt" ? "hutang" : "piutang",
+  });
   const { data: category, isLoading: isLoadingCategory } = useCategory({
     type: "pemasukan",
   });

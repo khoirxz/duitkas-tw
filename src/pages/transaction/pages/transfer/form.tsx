@@ -30,6 +30,7 @@ import Layout from "@/layouts/layout";
 import ModalType from "../../partials/modalType";
 import { useCategory } from "../../hooks/useCategory";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
+import { useCreateTransaction } from "../../hooks/useTransaction";
 import { FormErrorSummary } from "@/components/FormErrorSummary";
 
 const formSchema = z.object({
@@ -59,6 +60,9 @@ export default function TransferFormPage() {
     },
   });
 
+  const { mutate } = useCreateTransaction({
+    type: "transfer",
+  });
   const { data: category, isLoading: isLoadingCategory } = useCategory({
     type: "pemasukan",
   });
@@ -78,7 +82,7 @@ export default function TransferFormPage() {
     formData.append("pajak", data.tax); // tax
     formData.append("keterangan", data.note || ""); // note
 
-    // mutate(formData);
+    mutate(formData);
     console.log(data);
   };
 

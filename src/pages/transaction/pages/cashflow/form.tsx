@@ -121,7 +121,7 @@ export default function CashflowFormPage() {
 
   return (
     <Layout>
-      <FormErrorSummary errors={errors} firstOnly />
+      <FormErrorSummary errors={errors} firstOnly={false} />
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
           <Breadcrumb>

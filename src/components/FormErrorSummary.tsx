@@ -1,45 +1,79 @@
 import * as React from "react";
-import type { FieldErrors, FieldError } from "react-hook-form";
+import type { FieldErrors } from "react-hook-form";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { XIcon } from "lucide-react";
 
-/** Ambil semua pesan error secara rekursif */
-function extractErrorMessages<T extends Record<string, unknown>>(
+/** Utils */
+const IGNORED_KEYS = new Set(["ref", "type", "types", "name", "message"]);
+
+function isPlainObject(v: unknown): v is Record<string, unknown> {
+  return Object.prototype.toString.call(v) === "[object Object]";
+}
+
+function isTraversable(v: unknown): v is Record<string, unknown> | unknown[] {
+  // Hanya array atau plain object
+  if (Array.isArray(v)) return true;
+  if (!isPlainObject(v)) return false;
+
+  // Hindari DOM/react/kelas lain (Date, Map, Set, RegExp, dll)
+  const tag = Object.prototype.toString.call(v);
+  if (tag !== "[object Object]") return false;
+
+  // Hindari kemungkinan React element
+  if ((v as { $$typeof?: unknown }).$$typeof) return false;
+
+  // Hindari DOM Node secara heuristik
+  const maybeNode = v as { nodeType?: unknown; ownerDocument?: unknown };
+  if (
+    typeof maybeNode.nodeType === "number" ||
+    typeof maybeNode.ownerDocument === "object"
+  ) {
+    return false;
+  }
+
+  return true;
+}
+
+/** Ekstrak semua pesan error tanpa masuk ke sirkular */
+export function ExtractErrorMessages<T extends Record<string, unknown>>(
   errors: FieldErrors<T>
 ): string[] {
   const messages: string[] = [];
 
-  const walk = (obj: FieldErrors<T> | FieldError | undefined): void => {
+  const walk = (obj: unknown): void => {
     if (!obj) return;
 
-    // Jika ini adalah error langsung (ada message)
-    if ("message" in obj && obj.message) {
-      messages.push(String(obj.message));
+    // Jika object memiliki "message"
+    if (isPlainObject(obj) && typeof obj.message !== "undefined") {
+      const m = obj.message;
+      if (typeof m === "string") messages.push(m);
+      else if (m != null) messages.push(String(m));
     }
 
-    // Jika punya multiple types
-    if ("types" in obj && obj.types) {
+    // Jika object memiliki "types"
+    if (isPlainObject(obj) && isPlainObject(obj.types)) {
       Object.values(obj.types).forEach((m) => {
-        if (m) messages.push(String(m));
+        if (m != null) messages.push(String(m));
       });
     }
 
-    // Loop semua key child (termasuk array index)
-    Object.values(obj).forEach((value) => {
-      if (Array.isArray(value)) {
-        value.forEach((item) => {
-          walk(item as FieldErrors<T> | FieldError | undefined);
-        });
-      } else if (typeof value === "object" && value !== null) {
-        walk(value as FieldErrors<T> | FieldError | undefined);
+    // Traverse ke child yang aman
+    if (Array.isArray(obj)) {
+      obj.forEach((item) => isTraversable(item) && walk(item));
+      return;
+    }
+
+    if (isPlainObject(obj)) {
+      for (const [key, value] of Object.entries(obj)) {
+        if (IGNORED_KEYS.has(key)) continue; // cegah turun ke ref/dll
+        if (isTraversable(value)) walk(value);
       }
-    });
+    }
   };
 
   walk(errors);
 
-  // Hapus duplikat & kosong
   return Array.from(new Set(messages)).filter(Boolean);
 }
 
@@ -56,7 +90,7 @@ export function FormErrorSummary<T extends Record<string, unknown>>({
 }: FormErrorSummaryProps<T>) {
   const [dismissed, setDismissed] = React.useState(false);
 
-  const msgs = React.useMemo(() => extractErrorMessages(errors), [errors]);
+  const msgs = React.useMemo(() => ExtractErrorMessages(errors), [errors]);
 
   React.useEffect(() => {
     if (msgs.length > 0) setDismissed(false);
