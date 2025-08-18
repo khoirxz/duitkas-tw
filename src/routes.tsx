@@ -1,17 +1,25 @@
 import DashboardPage from "@/pages/dashboard";
 import AccountPage from "@/pages/account";
 import AccountFormPage from "@/pages/account/form";
+// financial pages
 import FinancialPage from "@/pages/financial";
 import FinancialListPage from "@/pages/financial/list";
-import FinancialFormPage from "@/pages/financial/form";
+import BudgetFormPage from "@/pages/financial/pages/budget/form";
+import GoalFormPage from "@/pages/financial/pages/goal/form";
+// transaction pages
 import TransactionPage from "@/pages/transaction";
+import TransferFormPage from "@/pages/transaction/pages/transfer/form";
+import DebtFormPage from "@/pages/transaction/pages/dept/form";
+import CashflowFormPage from "@/pages/transaction/pages/cashflow/form";
+// report pages
 import ReportPage from "@/pages/report";
 import ReportTransactionPage from "@/pages/report/pages/transaction";
+// setting pages
 import SettingPage from "@/pages/setting";
-import LoginPage from "./pages/auth/login";
-import SignUpPage from "./pages/auth/signup";
-import CashflowFormPage from "./pages/transaction/pages/cashflow/form";
-import SettingListPage from "./pages/setting/list";
+import SettingListPage from "@/pages/setting/list";
+
+import LoginPage from "@/pages/auth/login";
+import SignUpPage from "@/pages/auth/signup";
 
 import {
   HomeIcon,
@@ -27,8 +35,6 @@ import {
   CalendarSolidIcon,
 } from "./assets/icons/solid";
 import { ProtectedRouter } from "./components/protected-router";
-import TransferFormPage from "./pages/transaction/pages/transfer/form";
-import DebtFormPage from "./pages/transaction/pages/dept/form";
 
 export const router: {
   name: string;
@@ -143,11 +149,22 @@ export const router: {
         name: "Perencanaan Dana",
       },
       {
-        path: "/admin/financial/form",
+        path: "/admin/financial/form/budget",
         // lazy: () => import('./pages/dashboard/index.tsx'),
         element: (
           <ProtectedRouter>
-            <FinancialFormPage />
+            <BudgetFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Daftar Transaksi",
+      },
+      {
+        path: "/admin/financial/form/goals",
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <GoalFormPage />
           </ProtectedRouter>
         ),
         show: false,

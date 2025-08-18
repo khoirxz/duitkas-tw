@@ -34,13 +34,14 @@ import { Calendar } from "@/components/ui/calendar";
 
 import Layout from "@/layouts/layout";
 import placeholderImg from "@/assets/transaction/upload-placeholder.png";
-import ModalType from "../../partials/modalType";
+import ModalType from "../../components/modalType";
 import { useCategory } from "../../hooks/useCategory";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { useCreateTransaction } from "../../hooks/useTransaction";
 
 const formSchema = z.object({
   date: z.string().nonempty("Tanggal TransaksiWajib diisi"),
+  date_due: z.string().nonempty("Tanggal Jatuh Tempo wajib diisi"),
   id_category: z.string().nonempty("Kategori wajib diisi"),
   id_account: z.string().nonempty("Pilih akun"),
   amount: z.string().nonempty("Jumlah nominal wajib diisi"),
@@ -74,6 +75,7 @@ export default function DebtFormPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       date: "",
+      date_due: "",
       id_category: "",
       id_account: "",
       amount: "",
@@ -113,8 +115,6 @@ export default function DebtFormPage() {
     console.log(data);
   };
 
-  console.log(type);
-
   return (
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-7">
@@ -149,7 +149,7 @@ export default function DebtFormPage() {
           <ModalType />
 
           <div className="flex flex-col flex-1 space-y-7 pt-4">
-            <div className="grid md:grid-cols-2 gap-4">
+            <div className="grid md:grid-cols-2 gap-6">
               <div className="relative w-full">
                 <label
                   htmlFor=""
@@ -204,7 +204,7 @@ export default function DebtFormPage() {
                 <label
                   htmlFor=""
                   className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                  tanggal transaksi <span className="text-red-500">*</span>
+                  tanggal jatuh tempo <span className="text-red-500">*</span>
                 </label>
 
                 <Popover>
@@ -216,7 +216,7 @@ export default function DebtFormPage() {
                     </PopoverTrigger>
                     <Controller
                       control={control}
-                      name="date"
+                      name="date_due"
                       render={({ field }) => (
                         <>
                           <span className="text-sm">

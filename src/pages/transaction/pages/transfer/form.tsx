@@ -27,7 +27,7 @@ import { Calendar } from "@/components/ui/calendar";
 
 import Layout from "@/layouts/layout";
 
-import ModalType from "../../partials/modalType";
+import ModalType from "../../components/modalType";
 import { useCategory } from "../../hooks/useCategory";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { useCreateTransaction } from "../../hooks/useTransaction";

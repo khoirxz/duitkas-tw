@@ -3,7 +3,7 @@ import { Link, useSearchParams } from "react-router";
 
 import Layout from "@/layouts/layout";
 
-import { columns } from "./partials/columns";
+import { columns } from "./components/columns";
 import DataTable, {
   PaginationTable,
   TableFilter,

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "./ui/button";
 import { useSidebar } from "./ui/sidebar";
-import { useTheme } from "./theme-provider";
+import { useTheme, type Theme } from "./theme-provider";
 
 import { ChevronDown } from "lucide-react";
 
@@ -21,6 +21,7 @@ import logoLight from "@/assets/navbar/LogoLight.svg";
 import idLang from "@/assets/navbar/id.png";
 import enLang from "@/assets/navbar/en.png";
 import profileImg from "@/assets/navbar/profile.png";
+import { cn } from "@/lib/utils";
 
 const dataLang: { name: string; value: string; icon: string }[] = [
   {
@@ -32,6 +33,24 @@ const dataLang: { name: string; value: string; icon: string }[] = [
     name: "English",
     value: "en",
     icon: enLang,
+  },
+];
+
+const themes: { name: string; value: Theme; color: string }[] = [
+  {
+    name: "Light",
+    value: "light",
+    color: "#f9f9f9",
+  },
+  {
+    name: "Dark",
+    value: "dark",
+    color: "#1f1f1f",
+  },
+  {
+    name: "System",
+    value: "system",
+    color: "#1f1f1f",
   },
 ];
 
@@ -124,9 +143,23 @@ const AppNavbar: React.FC = () => {
                     : "light";
                 setTheme(nextTheme);
               }}>
-              Theme : {theme}
+              Theme :
+              {themes.map((theme) => (
+                <span
+                  key={theme.value}
+                  className={cn(
+                    themes.find((t) => t.value === theme.value)?.name ===
+                      theme.name
+                      ? "border-primary border-2"
+                      : "border-transparent",
+                    "border-2 h-4 w-4 rounded-full cursor-pointer"
+                  )}
+                  style={{ backgroundColor: theme.color }}></span>
+              ))}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={logout}>Keluar</DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>
+              {themes.find((t) => t.value === theme)?.name}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

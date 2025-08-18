@@ -30,7 +30,7 @@ export default function FinancialPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 md:max-w-4xl md:mx-auto">
           <Link
-            to="/"
+            to="/admin/financial/form/budget"
             className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow">
             <img
               src={budgetImg}
@@ -41,7 +41,7 @@ export default function FinancialPage() {
             <h2 className="text-lg font-semibold mt-3">Budget</h2>
           </Link>
           <Link
-            to="/"
+            to="/admin/financial/form/goals"
             className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow">
             <img
               src={golasImg}

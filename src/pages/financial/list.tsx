@@ -14,7 +14,7 @@ import Layout from "@/layouts/layout";
 import { ChevronRightIcon, ChevronLeftIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import { columns } from "./partials/column";
+import { columns } from "./components/columns";
 import { data, type TableProps } from "./data";
 
 export default function FinancialListPage() {

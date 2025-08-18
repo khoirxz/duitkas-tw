@@ -43,7 +43,7 @@ export default function ActualBalance({ data }: ActualBalanceProps) {
         <div className="flex flex-row justify-between">
           <div className="flex flex-row items-center gap-2">
             <span className="h-2.5 w-6 bg-[#EF9E4D] rounded-full"></span>
-            <p>Total Pemasukan</p>
+            <p>Total Pengeluaran</p>
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">
             <span className="font-domine text-sm">
