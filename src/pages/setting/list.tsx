@@ -18,7 +18,7 @@ import { cn } from "@/lib/utils";
 
 import Layout from "@/layouts/layout";
 import { SlashIcon } from "lucide-react";
-import { OfficeColumns, UserColumns } from "./partials/columns";
+import { OfficeColumns, UserColumns } from "./components/columns";
 import { OfficesData, UsersData } from "./data";
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
 

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { XIcon, FilterIcon } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import TextField from "./textField";
+import { TextField } from "./textField";
 import { WorkCaseIcon } from "@/assets/icons/outline";
 import { Button as SButton } from "./ui/button";
 
