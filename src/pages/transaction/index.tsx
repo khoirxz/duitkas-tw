@@ -36,7 +36,11 @@ export default function TransactionPage() {
 
   const pageState = Boolean(Number(searchParams.get("add")));
 
-  const { data: transactions } = useFetchTransaction(search, page, limit);
+  const { data: transactions, isLoading } = useFetchTransaction(
+    search,
+    page,
+    limit
+  );
 
   return (
     <Layout>
@@ -111,12 +115,18 @@ export default function TransactionPage() {
               limit={limit}
             />
 
-            <DataTable
-              pageSize={limit}
-              border={false}
-              columns={columns}
-              data={transactions?.data.transaksi || []}
-            />
+            {isLoading ? (
+              <div className="w-full animate-pulse">
+                <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
+              </div>
+            ) : (
+              <DataTable
+                pageSize={limit}
+                border={false}
+                columns={columns}
+                data={transactions?.data.transaksi || []}
+              />
+            )}
 
             <PaginationTable
               limit={limit}
@@ -136,33 +146,33 @@ function ShowMenu() {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 my-10">
       <Link
         to={"/admin/transaction/form/income"}
-        className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5">
+        className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 bg-white">
         <img src={incomeImg} alt="Income" className="aspect-square w-xs" />
 
         <p className="font-semibold uppercase">Pemasukan</p>
       </Link>
       <Link
         to={"/admin/transaction/form/expense"}
-        className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5">
+        className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 bg-white">
         <img src={expenseImg} alt="Expense" className="aspect-square w-xs" />
         <p className="font-semibold uppercase">Pengeluaran</p>
       </Link>
       <Link
         to={"/admin/transaction/form/transfer"}
-        className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 col-span-2 md:col-span-1">
+        className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 col-span-2 md:col-span-1 bg-white">
         <img src={transferImg} alt="Transfer" className="aspect-square w-xs" />
         <p className="font-semibold uppercase">Pindah dana</p>
       </Link>
       <div className="grid grid-cols-2 md:grid-cols-1 items-center gap-2 col-span-2 md:col-span-1 ">
         <Link
           to={"/admin/transaction/form/debt"}
-          className="flex flex-col items-center justify-between gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 h-full">
+          className="flex flex-col items-center justify-between gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 h-full bg-white">
           <img src={debtImg} alt="Transfer" className="aspect-square md:h-20" />
           <p className="font-semibold uppercase">Hutang</p>
         </Link>
         <Link
           to={"/admin/transaction/form/credit"}
-          className="flex flex-col items-center justify-between gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 h-full">
+          className="flex flex-col items-center justify-between gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 h-full bg-white">
           <img
             src={creditImg}
             alt="Transfer"

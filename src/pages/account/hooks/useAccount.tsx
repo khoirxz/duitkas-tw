@@ -18,9 +18,13 @@ export const useFetchAccount = (
   });
 };
 
-export const useCreateAccount = () => {
+export const useCreateAccount = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}) => {
   return useMutation({
     mutationFn: (formData: FormData) => postAccount(formData),
+    ...options,
   });
 };
 

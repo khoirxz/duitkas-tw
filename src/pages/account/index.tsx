@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from "react-router";
+import { Link, useLocation } from "react-router";
 import { Button } from "@/components/ui/button";
 
 import DataTable, {
@@ -15,10 +15,15 @@ import { AddCircleSolidIcon } from "@/assets/icons/solid";
 import { useFetchAccount } from "./hooks/useAccount";
 
 export default function AccountPage() {
+  // alert state management
+  const [alertVisible, setAlertVisible] = useState<boolean>(true);
+  // State management for search, limit, and page
   const [search, setSearch] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(0);
   const { isLoading, data } = useFetchAccount(search, page, limit);
+  const location = useLocation();
+  const state = location.state as { success?: boolean; message?: string };
 
   return (
     <Layout>
@@ -39,14 +44,19 @@ export default function AccountPage() {
           </Button>
         </div>
 
-        <Alert className="bg-green-200/50 border-0">
-          <AlertDescription className="flex justify-between items-center text-green-700">
-            Berhasil Menambahkan Akun "TRANSAKSIONAL"
-            <Button variant="ghost" size="icon">
-              <XIcon className="h-4 w-4 text-green-600" />
-            </Button>
-          </AlertDescription>
-        </Alert>
+        {state?.success && alertVisible && (
+          <Alert className="bg-green-200/50 border-0">
+            <AlertDescription className="flex justify-between items-center text-green-700">
+              <span>{state.message}</span>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setAlertVisible(false)}>
+                <XIcon className="h-4 w-4 text-green-600" />
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
 
         <div className="mt-7 space-y-10">
           <TableFilter setSearch={setSearch} setLimit={setLimit} />

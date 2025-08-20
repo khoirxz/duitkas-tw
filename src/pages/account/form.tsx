@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
-import { Link, useParams } from "react-router";
+import { Link, useParams, useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -45,17 +45,11 @@ const formSchema = z.object({
 });
 
 export default function AccountFormPage() {
-  const { id } = useParams();
-  const {
-    mutate: postAccount,
-    isSuccess: postSuccess,
-    isError: postError,
-  } = useCreateAccount();
-  const { mutate: updateAccount } = useUpdateAccount();
   const {
     control,
     register,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -68,6 +62,20 @@ export default function AccountFormPage() {
       amount: "",
     },
   });
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const { mutate: postAccount, isError: postError } = useCreateAccount({
+    onSuccess: () => {
+      navigate("/admin/account", {
+        replace: true,
+        state: {
+          success: true,
+          message: `Berhasil menambahkan akun ${getValues("name_account")}`,
+        },
+      });
+    },
+  });
+  const { mutate: updateAccount } = useUpdateAccount();
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -127,16 +135,6 @@ export default function AccountFormPage() {
           </Breadcrumb>
         </div>
 
-        {postSuccess && (
-          <Alert variant="destructive" className="bg-green-200/50 border-0">
-            <AlertDescription className="flex justify-between items-center">
-              Berhasil Menambahkan Akun
-              <Button variant="ghost" size="icon">
-                <Check className="h-4 w-4 text-green-600" />
-              </Button>
-            </AlertDescription>
-          </Alert>
-        )}
         {postError && (
           <Alert variant="destructive" className="bg-red-200/50 border-0">
             <AlertDescription className="flex justify-between items-center">

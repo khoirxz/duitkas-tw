@@ -1,3 +1,4 @@
+import TextField from "@/components/textField";
 import { Button } from "@/components/ui/button";
 import Layout from "@/layouts/layout";
 import { MailIcon, MapPin, User2Icon } from "lucide-react";
@@ -18,7 +19,7 @@ export default function SettingPage() {
           </Button>
         </div>
 
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-8 py-10 px-8 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl">
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-8 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white">
           <div className="relative w-full col-span-2">
             <label
               htmlFor=""
@@ -35,39 +36,21 @@ export default function SettingPage() {
             </div>
           </div>
           <div className="relative w-full col-span-2">
-            <label
-              htmlFor=""
-              className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 rounded-sm z-10">
-              Nama pemilik akun <span className="text-red-500">*</span>
-            </label>
-            <div className="border border-zinc-300 rounded-full px-5.5 py-3 flex flex-row items-center relative">
-              <button className="flex mr-2">
-                <User2Icon className="size-4" color="#3B82F6" />
-              </button>
-              <input
-                type="text"
-                className="outline-none text-sm"
-                placeholder="umay halim"
-              />
-            </div>
+            <TextField
+              compact
+              label="Nama pemilik akun"
+              placeholder="umay halim"
+              icon={<User2Icon className="size-4" color="#3B82F6" />}
+            />
           </div>
 
           <div className="relative w-full">
-            <label
-              htmlFor=""
-              className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 rounded-sm z-10">
-              email <span className="text-red-500">*</span>
-            </label>
-            <div className="border border-zinc-300 rounded-full px-5.5 py-3 flex flex-row items-center relative">
-              <button className="flex mr-2">
-                <MailIcon className="size-4" color="#3B82F6" />
-              </button>
-              <input
-                type="text"
-                className="outline-none text-sm"
-                placeholder="demos@duitkas.com"
-              />
-            </div>
+            <TextField
+              compact
+              label="email"
+              placeholder="demos@duitkas.com"
+              icon={<MailIcon className="size-4" color="#3B82F6" />}
+            />
           </div>
           <div className="relative w-full">
             <label

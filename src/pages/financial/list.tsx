@@ -35,7 +35,7 @@ export default function FinancialListPage() {
             asChild
             variant="default"
             className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700">
-            <Link to="/admin/financial/form">
+            <Link to="/admin/financial">
               <span>
                 <AddCircleSolidIcon color="white" />
               </span>

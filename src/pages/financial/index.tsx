@@ -31,7 +31,7 @@ export default function FinancialPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 md:max-w-4xl md:mx-auto">
           <Link
             to="/admin/financial/form/budget"
-            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow">
+            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white">
             <img
               src={budgetImg}
               alt="Budget"
@@ -42,7 +42,7 @@ export default function FinancialPage() {
           </Link>
           <Link
             to="/admin/financial/form/goals"
-            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow">
+            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white">
             <img
               src={golasImg}
               alt="Goals"
