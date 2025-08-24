@@ -6,6 +6,9 @@ import {
   postUserSettings,
   putUserSettings,
   fetchOfficeSettings,
+  postOfficeSettings,
+  fetchOfficeDetailSettings,
+  putOfficeSettings,
 } from "../services/settingApi";
 
 export const useSetting = () => {
@@ -58,5 +61,34 @@ export const useFetchOfficeSettings = () => {
     queryKey: ["officeSettings"],
     queryFn: () => fetchOfficeSettings(),
     staleTime: 1000 * 60 * 5, // 5 minutes
+  });
+};
+
+export const useCreateOfficeSettings = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}) => {
+  return useMutation({
+    mutationFn: (formData: FormData) => postOfficeSettings(formData),
+    ...options,
+  });
+};
+
+export const useFetchOfficeDetailSettings = (id: string) => {
+  return useQuery({
+    queryKey: ["officeDetailSettings", id],
+    queryFn: () => fetchOfficeDetailSettings(id),
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    enabled: !!id, // only run the query if id is provided
+  });
+};
+
+export const useUpdateOfficeSettings = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}) => {
+  return useMutation({
+    mutationFn: (formData: FormData) => putOfficeSettings(formData),
+    ...options,
   });
 };

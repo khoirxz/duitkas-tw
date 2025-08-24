@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,19 +17,13 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/components/ui/select";
-import {
-  CommandDialog,
-  CommandGroup,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/textField";
-import { Check, ChevronDown, SlashIcon, GlobeIcon } from "lucide-react";
+import { SlashIcon, GlobeIcon } from "lucide-react";
+import CustomSelect from "@/components/select";
 
 import Layout from "@/layouts/layout";
 import { WorkCaseIcon } from "@/assets/icons/outline";
-import { cn } from "@/lib/utils";
 
 import {
   useFetchOfficeSettings,
@@ -135,7 +129,7 @@ export default function SettingUserFormPage() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  href="/admin/settings/general"
+                  href="/admin/settings/users"
                   className="text-blue-700 font-semibold text-lg">
                   Tambah data pengguna
                 </BreadcrumbLink>
@@ -262,78 +256,3 @@ export default function SettingUserFormPage() {
     </Layout>
   );
 }
-
-interface OptionType {
-  value: string;
-  label: string;
-}
-
-interface CustomSelectProps {
-  value: string;
-  multiple?: boolean;
-  onChange: (value: string) => void;
-  data: OptionType[];
-  title?: string;
-}
-
-const CustomSelect: React.FC<CustomSelectProps> = ({
-  title,
-  value,
-  onChange,
-  data,
-  multiple = false,
-}) => {
-  const [open, setOpen] = useState<boolean>(false);
-
-  return (
-    <>
-      <span className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 rounded-sm z-10">
-        {title} <span className="text-red-500">*</span>
-      </span>
-      <Button
-        onClick={() => setOpen(true)}
-        type="button"
-        className="w-full rounded-full max-h-10 bg-white text-black border border-blue-400/40 h-auto py-2.5 px-4.5 hover:bg-zinc-300">
-        <div className="flex items-center gap-2 w-full">
-          <span className="aspect-square flex items-center">
-            <WorkCaseIcon className="size-5 mr-1" color="#2B63E2" />
-          </span>
-
-          <span className="flex-1 text-left">
-            {value
-              ? options.find((item) => item.value === value)?.label
-              : "Pilih"}
-          </span>
-          <ChevronDown />
-        </div>
-      </Button>
-      <CommandDialog open={open} onOpenChange={setOpen}>
-        <CommandList>
-          <CommandGroup heading="Silahkan pilih item dibawah ini">
-            {data.map((option) => (
-              <CommandItem
-                key={option.value}
-                value={option.value}
-                onSelect={(currentValue) => {
-                  onChange(currentValue);
-                  if (!multiple) {
-                    setOpen(false);
-                  }
-                }}>
-                <div className="flex items-center">
-                  <span>{option.label}</span>
-                </div>
-                <Check
-                  className={cn(
-                    "ml-auto h-4 w-4",
-                    value === option.value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </CommandDialog>
-    </>
-  );
-};

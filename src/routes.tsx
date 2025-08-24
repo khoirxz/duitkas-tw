@@ -36,6 +36,7 @@ import {
 } from "./assets/icons/solid";
 import { ProtectedRouter } from "./components/protected-router";
 import SettingUserFormPage from "./pages/setting/pages/user/form";
+import SettingOfficeFormPage from "./pages/setting/pages/office/form";
 
 export const router: {
   name: string;
@@ -339,6 +340,26 @@ export const router: {
         ),
         show: false,
         path: "/admin/settings/users/form/:id",
+      },
+      {
+        name: "Tambah Kantor",
+        element: (
+          <ProtectedRouter>
+            <SettingOfficeFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        path: "/admin/settings/offices/form",
+      },
+      {
+        name: "Update Kantor",
+        element: (
+          <ProtectedRouter>
+            <SettingOfficeFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        path: "/admin/settings/offices/form/:id",
       },
     ],
   },

@@ -81,3 +81,13 @@ export interface OfficeSettingsProps {
     date_update: string;
   }[];
 }
+
+export interface OfficeDetailSettingsProps {
+  id_kantor: string;
+  nama: string;
+  kode: string;
+  tipe: string;
+  id_perusahaan: string;
+  date_add: string;
+  date_update: string;
+}

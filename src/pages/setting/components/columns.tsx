@@ -1,8 +1,6 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { DeleteSolidIcon, EditSolidIcon } from "@/assets/icons/solid";
 import { SwapIcon } from "@/assets/icons/outline";
-import { Button } from "@/components/ui/button";
 
 import type { OfficeSettingsProps, UserSettingProps } from "../types/setting";
 import ActionCell from "@/components/ActionCell";
@@ -65,21 +63,10 @@ export const OfficeColumns: ColumnDef<OfficeSettingsProps["data"]["0"]>[] = [
       );
     },
     id: "actions",
-    cell: () => {
-      return (
-        <div className="flex flex-row items-center w-full gap-2 justify-center">
-          <Button
-            size="icon"
-            className="bg-amber-400 hover:bg-amber-400/80 rounded-full">
-            <EditSolidIcon width={16} height={16} color="#fff" />
-          </Button>
-          <Button
-            size="icon"
-            className="bg-red-500 hover:bg-red-500/80 rounded-full">
-            <DeleteSolidIcon width={16} height={16} color="#fff" />
-          </Button>
-        </div>
-      );
+    cell: ({ row }) => {
+      const id = row.original.id_kantor;
+
+      return <ActionCell id={id} linkEdit="/admin/settings/offices/form" />;
     },
   },
 ];
