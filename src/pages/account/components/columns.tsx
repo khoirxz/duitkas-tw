@@ -4,7 +4,7 @@ import { formatRupiah } from "@/lib/formatMoney";
 import { SwapIcon } from "@/assets/icons/outline";
 
 import type { AccountProps } from "../types/account";
-import ActionCell from "./ActionCell";
+import ActionCell from "../../../components/ActionCell";
 
 export const columns: ColumnDef<AccountProps["data"]["akun"]["0"]>[] = [
   {
@@ -134,9 +134,9 @@ export const columns: ColumnDef<AccountProps["data"]["akun"]["0"]>[] = [
     },
     id: "actions",
     cell: ({ row }) => {
-      const id = row.original.id_akun_bank;
+      const id = row.original.id_akun_bank as unknown as string;
 
-      return <ActionCell id={id} />;
+      return <ActionCell id={id} linkEdit="/admin/account/form/edit/" />;
     },
   },
 ];

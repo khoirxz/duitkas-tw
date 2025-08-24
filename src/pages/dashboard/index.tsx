@@ -104,7 +104,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:col-span-2 md:row-span-1 md:col-start-2 md:row-start-2">
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4 ">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4 bg-white">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full border rounded-2xl p-3">
                   <div className="animate-pulse w-full h-full border-primary bg-gray-200 rounded-2xl"></div>
@@ -114,7 +114,7 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2 order-first md:order-2">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2 order-first md:order-2 bg-white">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full border rounded-2xl p-3">
                   <div className="animate-pulse w-full h-full border-primary bg-gray-200 rounded-2xl"></div>

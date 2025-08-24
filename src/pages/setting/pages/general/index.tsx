@@ -18,11 +18,18 @@ import { cn } from "@/lib/utils";
 
 import Layout from "@/layouts/layout";
 import { SlashIcon } from "lucide-react";
-import { OfficeColumns, UserColumns } from "./components/columns";
-import { OfficesData, UsersData } from "./data";
-import { AddCircleSolidIcon } from "@/assets/icons/solid";
+import { OfficeColumns, UserColumns } from "../../components/columns";
 
-export default function SettingListPage() {
+import { AddCircleSolidIcon } from "@/assets/icons/solid";
+import {
+  useFetchUserSettings,
+  useFetchOfficeSettings,
+} from "../../hooks/useSetting";
+import { Link } from "react-router";
+
+export default function SettingGeneralPage() {
+  const { data: userData } = useFetchUserSettings();
+
   return (
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-7">
@@ -32,8 +39,8 @@ export default function SettingListPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/admin/financial"
-                  className="text-blue-700 text-lg font-semibold">
-                  Perencanaan Dana
+                  className="text-blue-700 font-semibold text-lg">
+                  Konfigurasi Perusahaan
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
@@ -42,25 +49,27 @@ export default function SettingListPage() {
               <BreadcrumbItem>
                 <BreadcrumbLink
                   href="/admin/financial/form"
-                  className="text-lg font-semibold">
-                  Tambah Perencanaan Dana
+                  className="font-normal text-lg">
+                  Data Akun
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
           </Breadcrumb>
         </div>
 
-        <div className="md:text-center">
-          <p className="text-sm mb-2">Untuk menggunakan duitkas.</p>
-          <p className="font-semibold">Silahkan tambahkan akun pengguna.</p>
-        </div>
+        {userData?.data.user.length === 0 && (
+          <div className="md:text-center">
+            <p className="text-sm mb-2">Untuk menggunakan duitkas.</p>
+            <p className="font-semibold">Silahkan tambahkan akun pengguna.</p>
+          </div>
+        )}
 
         <div className="mt-7 space-y-10">
           <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
-            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center w-f">
-              <button className="flex bg-white">
+            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white">
+              <span className="flex bg-white">
                 <SearchIcon className="size-4 mr-2" />
-              </button>
+              </span>
               <input
                 type="text"
                 className="outline-none"
@@ -68,19 +77,20 @@ export default function SettingListPage() {
               />
             </div>
 
-            <Button className="rounded-full h-10 w-32  md:h-auto px-10  py-6 md:px-7 md:py-4 flex flex-row items-center gap-2">
-              <AddCircleSolidIcon
-                className="size-5 fill-white"
-                color="inherit"
-              />{" "}
-              Tambah
+            <Button
+              asChild
+              className="rounded-full h-10 w-32  md:h-auto px-10  py-6 md:px-7 md:py-4 flex flex-row items-center gap-2">
+              <Link to="/admin/settings/offices/form">
+                <AddCircleSolidIcon
+                  className="size-5 fill-white"
+                  color="inherit"
+                />{" "}
+                Tambah
+              </Link>
             </Button>
           </div>
-          <DataTable
-            columns={OfficeColumns}
-            data={OfficesData}
-            border={false}
-          />
+
+          <OfficeTable />
 
           <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
             <div>
@@ -126,7 +136,7 @@ export default function SettingListPage() {
 
         <div className="mt-20 space-y-10">
           <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
-            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center w-f">
+            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white">
               <button className="flex bg-white">
                 <SearchIcon className="size-4 mr-2" />
               </button>
@@ -137,15 +147,19 @@ export default function SettingListPage() {
               />
             </div>
 
-            <Button className="rounded-full h-10 w-32  md:h-auto px-10  py-6 md:px-7 md:py-4 flex flex-row items-center gap-2">
-              <AddCircleSolidIcon
-                className="size-5 fill-white"
-                color="inherit"
-              />{" "}
-              Tambah
+            <Button
+              asChild
+              className="rounded-full h-10 w-32  md:h-auto px-10  py-6 md:px-7 md:py-4 flex flex-row items-center gap-2">
+              <Link to="/admin/settings/users/form">
+                <AddCircleSolidIcon
+                  className="size-5 fill-white"
+                  color="inherit"
+                />{" "}
+                Tambah
+              </Link>
             </Button>
           </div>
-          <DataTable columns={UserColumns} data={UsersData} border={false} />
+          <UserTable />
 
           <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
             <div>
@@ -192,3 +206,43 @@ export default function SettingListPage() {
     </Layout>
   );
 }
+
+const OfficeTable = () => {
+  const { data, isLoading } = useFetchOfficeSettings();
+
+  return (
+    <div className="mt-7 space-y-10">
+      {isLoading ? (
+        <div className="w-full animate-pulse">
+          <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
+        </div>
+      ) : (
+        <DataTable
+          border={false}
+          columns={OfficeColumns}
+          data={data?.data || []}
+        />
+      )}
+    </div>
+  );
+};
+
+const UserTable = () => {
+  const { data, isLoading } = useFetchUserSettings();
+
+  return (
+    <div className="mt-7 space-y-10">
+      {isLoading ? (
+        <div className="w-full animate-pulse">
+          <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
+        </div>
+      ) : (
+        <DataTable
+          border={false}
+          columns={UserColumns}
+          data={data?.data.user || []}
+        />
+      )}
+    </div>
+  );
+};

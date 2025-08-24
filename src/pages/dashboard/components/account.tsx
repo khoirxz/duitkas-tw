@@ -15,7 +15,7 @@ export default function Account({ data }: AccountProps) {
     useScroll();
 
   return (
-    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:justify-between">
+    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:justify-between bg-white">
       <div className="flex flex-row justify-between items-center">
         <p className="font-semibold">Akun</p>
 

@@ -44,17 +44,18 @@ export const TextField: React.FC<TextFieldProps> = ({
           cn(
             props.disabled
               ? "cursor-not-allowed bg-gray-200 border-gray-200"
-              : "cursor-pointer border-blue-400/40"
+              : "border-blue-400/40"
           ) +
-          " flex flex-row items-center gap-2 rounded-full border px-4.5 py-2.5"
+          " flex flex-row items-center gap-2 rounded-full border px-4.5 py-2.5 h-10"
         }>
-        {icon && icon}
+        <span className="aspect-square flex items-center">{icon && icon}</span>
         <input
           {...props}
           placeholder={placeholder}
           className={
-            cn(props.disabled ? "cursor-not-allowed" : "cursor-pointer") +
-            " w-full outline-none font-normal text-sm"
+            cn(props.disabled ? "cursor-not-allowed" : "") +
+            " w-full outline-none font-normal text-sm" +
+            ` ${props.className}`
           }
         />
       </div>

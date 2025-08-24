@@ -2,9 +2,15 @@ import { Link } from "react-router";
 import { DeleteSolidIcon, EditSolidIcon } from "@/assets/icons/solid";
 import { Button } from "@/components/ui/button";
 
-import { useDeleteAccount } from "../hooks/useAccount";
+import { useDeleteAccount } from "../pages/account/hooks/useAccount";
 
-export default function ActionCell({ id }: { id: number }) {
+export default function ActionCell({
+  id,
+  linkEdit,
+}: {
+  id: string;
+  linkEdit?: string;
+}) {
   const { mutate: deleteAccount } = useDeleteAccount();
 
   const handleDelete = () => {
@@ -20,7 +26,7 @@ export default function ActionCell({ id }: { id: number }) {
         size="icon"
         className="bg-amber-400 hover:bg-amber-400/80 rounded-full"
         asChild>
-        <Link to={"form/edit/" + id}>
+        <Link to={`${linkEdit ? linkEdit + `/${id}` : "#"}`}>
           <EditSolidIcon width={16} height={16} color="#fff" />
         </Link>
       </Button>

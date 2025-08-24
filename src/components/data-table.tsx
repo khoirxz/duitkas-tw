@@ -105,7 +105,7 @@ const DataTable = <TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody>
+        <TableBody className="bg-white">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow
@@ -218,11 +218,11 @@ export const TableFilter: React.FC<TableFilterProps> = ({
         <div
           className={
             cn(showRowCount ? "flex-1" : "flex-0 ") +
-            " border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center w-f"
+            " border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white"
           }>
-          <button className="flex bg-white">
+          <span className="flex">
             <SearchIcon className="size-4 mr-2" />
-          </button>
+          </span>
           <input
             onChange={(e) => setSearch?.(e.target.value)}
             type="text"

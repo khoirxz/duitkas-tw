@@ -4,9 +4,10 @@ import { DeleteSolidIcon, EditSolidIcon } from "@/assets/icons/solid";
 import { SwapIcon } from "@/assets/icons/outline";
 import { Button } from "@/components/ui/button";
 
-import { type OfficesTableProps, type UsersTableProps } from "../data";
+import type { OfficeSettingsProps, UserSettingProps } from "../types/setting";
+import ActionCell from "@/components/ActionCell";
 
-export const OfficeColumns: ColumnDef<OfficesTableProps>[] = [
+export const OfficeColumns: ColumnDef<OfficeSettingsProps["data"]["0"]>[] = [
   {
     header: () => <span className="text-center px-3">No</span>,
     accessorKey: "id",
@@ -37,7 +38,7 @@ export const OfficeColumns: ColumnDef<OfficesTableProps>[] = [
         </div>
       );
     },
-    accessorKey: "name",
+    accessorKey: "nama",
   },
   {
     header: ({ column }) => {
@@ -53,7 +54,7 @@ export const OfficeColumns: ColumnDef<OfficesTableProps>[] = [
         </div>
       );
     },
-    accessorKey: "type",
+    accessorKey: "tipe",
   },
   {
     header: () => {
@@ -83,7 +84,7 @@ export const OfficeColumns: ColumnDef<OfficesTableProps>[] = [
   },
 ];
 
-export const UserColumns: ColumnDef<UsersTableProps>[] = [
+export const UserColumns: ColumnDef<UserSettingProps["data"]["user"]["0"]>[] = [
   {
     header: () => <span className="text-center px-3">No</span>,
     accessorKey: "id",
@@ -146,7 +147,7 @@ export const UserColumns: ColumnDef<UsersTableProps>[] = [
         </div>
       );
     },
-    accessorKey: "access",
+    accessorKey: "kode",
   },
   {
     header: ({ column }) => {
@@ -162,7 +163,7 @@ export const UserColumns: ColumnDef<UsersTableProps>[] = [
         </div>
       );
     },
-    accessorKey: "office",
+    accessorKey: "nama_kantor",
   },
   {
     header: () => {
@@ -173,21 +174,10 @@ export const UserColumns: ColumnDef<UsersTableProps>[] = [
       );
     },
     id: "actions",
-    cell: () => {
-      return (
-        <div className="flex flex-row items-center w-full gap-2 justify-center">
-          <Button
-            size="icon"
-            className="bg-amber-400 hover:bg-amber-400/80 rounded-full">
-            <EditSolidIcon width={16} height={16} color="#fff" />
-          </Button>
-          <Button
-            size="icon"
-            className="bg-red-500 hover:bg-red-500/80 rounded-full">
-            <DeleteSolidIcon width={16} height={16} color="#fff" />
-          </Button>
-        </div>
-      );
+    cell: ({ row }) => {
+      const id = row.original.id_user;
+
+      return <ActionCell id={id} linkEdit="/admin/settings/users/form" />;
     },
   },
 ];

@@ -16,7 +16,7 @@ import ReportPage from "@/pages/report";
 import ReportTransactionPage from "@/pages/report/pages/transaction";
 // setting pages
 import SettingPage from "@/pages/setting";
-import SettingListPage from "@/pages/setting/list";
+import SettingGeneralPage from "./pages/setting/pages/general";
 
 import LoginPage from "@/pages/auth/login";
 import SignUpPage from "@/pages/auth/signup";
@@ -35,6 +35,7 @@ import {
   CalendarSolidIcon,
 } from "./assets/icons/solid";
 import { ProtectedRouter } from "./components/protected-router";
+import SettingUserFormPage from "./pages/setting/pages/user/form";
 
 export const router: {
   name: string;
@@ -313,11 +314,31 @@ export const router: {
         name: "Daftar pengguna",
         element: (
           <ProtectedRouter>
-            <SettingListPage />
+            <SettingGeneralPage />
           </ProtectedRouter>
         ),
         show: false,
         path: "/admin/settings/users",
+      },
+      {
+        name: "Tambah pengguna",
+        element: (
+          <ProtectedRouter>
+            <SettingUserFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        path: "/admin/settings/users/form",
+      },
+      {
+        name: "Update pengguna",
+        element: (
+          <ProtectedRouter>
+            <SettingUserFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        path: "/admin/settings/users/form/:id",
       },
     ],
   },
