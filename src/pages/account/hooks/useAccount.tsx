@@ -1,10 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchAccount,
+  fetchDetailAccount,
   postAccount,
   deteleAccount,
 } from "../services/accountApi";
 import { fetchBanks } from "../services/accountApi";
+import type { AccountProps } from "../types/account";
+import type { ResponseProps } from "@/types/response";
 
 export const useFetchAccount = (
   search: string,
@@ -15,6 +18,18 @@ export const useFetchAccount = (
     queryKey: ["account", search, page, limit],
     queryFn: () => fetchAccount({ search, page, limit }),
     staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useFetchDetailAccount = (id: string) => {
+  return useQuery<
+    ResponseProps & { data: AccountProps["data"]["akun"]["0"] | null }
+  >({
+    queryKey: ["detailAccount", id],
+    queryFn: () => fetchDetailAccount(id),
+    staleTime: 1000 * 60 * 5,
+    enabled: !!id,
+    initialData: undefined,
   });
 };
 

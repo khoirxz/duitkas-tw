@@ -31,6 +31,14 @@ export const postAccount = async (
   });
   return response.data;
 };
+export const fetchDetailAccount = async (
+  id: string
+): Promise<
+  ResponseProps & { data: AccountProps["data"]["akun"]["0"] | null }
+> => {
+  const response = await api.get(`bank/detail/${id}`);
+  return response.data;
+};
 // update akun
 export const updateAccount = async (
   formData: FormData

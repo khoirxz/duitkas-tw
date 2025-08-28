@@ -136,7 +136,7 @@ export const columns: ColumnDef<AccountProps["data"]["akun"]["0"]>[] = [
     cell: ({ row }) => {
       const id = row.original.id_akun_bank as unknown as string;
 
-      return <ActionCell id={id} linkEdit="/admin/account/form/edit/" />;
+      return <ActionCell id={id} linkEdit="/admin/account/form/edit" />;
     },
   },
 ];

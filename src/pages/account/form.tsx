@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -30,6 +30,7 @@ import Layout from "@/layouts/layout";
 import { CardIcon, WorkCaseIcon } from "@/assets/icons/outline";
 import {
   useBanks,
+  useFetchDetailAccount,
   useCreateAccount,
   useUpdateAccount,
 } from "./hooks/useAccount";
@@ -50,6 +51,7 @@ export default function AccountFormPage() {
     register,
     handleSubmit,
     getValues,
+    reset,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,8 +64,11 @@ export default function AccountFormPage() {
       amount: "",
     },
   });
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { data: fetchDetailAccount, isLoading } = useFetchDetailAccount(
+    id || ""
+  );
   const { mutate: postAccount, isError: postError } = useCreateAccount({
     onSuccess: () => {
       navigate("/admin/account", {
@@ -76,6 +81,24 @@ export default function AccountFormPage() {
     },
   });
   const { mutate: updateAccount } = useUpdateAccount();
+
+  // cek, jika id ada dan isLoading = false
+  const isEdit = id && isLoading;
+
+  useEffect(() => {
+    if (fetchDetailAccount) {
+      reset({
+        id_bank: fetchDetailAccount.data?.id_bank.toString(),
+        number_account: fetchDetailAccount.data?.nomor_rekening,
+        name_account: fetchDetailAccount.data?.nama_akun,
+        on_behalf: fetchDetailAccount.data?.atas_nama,
+        admin: fetchDetailAccount.data?.administrasi.toString(),
+        amount: fetchDetailAccount.data?.saldo_awal.toString(),
+      });
+    }
+  }, [reset, fetchDetailAccount]);
+
+  // console.log(fetchDetailAccount?.data);
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -109,6 +132,24 @@ export default function AccountFormPage() {
       }
     }
   };
+
+  if (isLoading) {
+    return (
+      <div>
+        <h1>Loading</h1>
+        <p>maaf belum styling...</p>
+      </div>
+    );
+  }
+
+  if (fetchDetailAccount?.data === null) {
+    return (
+      <div>
+        <h1>404</h1>
+        <p>maaf belum styling...</p>
+      </div>
+    );
+  }
 
   return (
     <Layout>
@@ -151,16 +192,22 @@ export default function AccountFormPage() {
           className="rounded-2xl shadow p-6 border space-y-7">
           <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
             <div className="col-span-1 md:col-span-6">
-              <Controller
-                control={control}
-                name="id_bank"
-                render={({ field }) => (
-                  <SelectBank
-                    currentValue={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
+              {isEdit ? (
+                <div className="w-full animate-pulse">
+                  <div className="h-10 bg-gray-200 rounded-full w-full mb-2"></div>
+                </div>
+              ) : (
+                <Controller
+                  control={control}
+                  name="id_bank"
+                  render={({ field }) => (
+                    <SelectBank
+                      currentValue={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              )}
 
               {errors.id_bank && (
                 <span className="text-red-600 text-xs">
@@ -169,12 +216,20 @@ export default function AccountFormPage() {
               )}
             </div>
             <div className="col-span-1 md:col-span-2 space-y-1">
-              <TextField
-                {...register("on_behalf")}
-                label="Atas Nama"
-                placeholder="Atas nama Rekening"
-                icon={<WorkCaseIcon className="size-5 mr-1" color="#2B63E2" />}
-              />
+              {isEdit ? (
+                <div className="w-full animate-pulse">
+                  <div className="h-10 bg-gray-200 rounded-full w-full mb-2"></div>
+                </div>
+              ) : (
+                <TextField
+                  {...register("on_behalf")}
+                  label="Atas Nama"
+                  placeholder="Atas nama Rekening"
+                  icon={
+                    <WorkCaseIcon className="size-5 mr-1" color="#2B63E2" />
+                  }
+                />
+              )}
               {errors.on_behalf && (
                 <span className="text-red-600 text-xs">
                   {errors.on_behalf.message}
@@ -182,12 +237,18 @@ export default function AccountFormPage() {
               )}
             </div>
             <div className="col-span-1 md:col-span-2 space-y-1">
-              <TextField
-                {...register("number_account")}
-                label="No. Rekening"
-                placeholder="No. Rekening bank tertaut"
-                icon={<CardIcon className="size-5 mr-1" color="#2B63E2" />}
-              />
+              {isEdit ? (
+                <div className="w-full animate-pulse">
+                  <div className="h-10 bg-gray-200 rounded-full w-full mb-2"></div>
+                </div>
+              ) : (
+                <TextField
+                  {...register("number_account")}
+                  label="No. Rekening"
+                  placeholder="No. Rekening bank tertaut"
+                  icon={<CardIcon className="size-5 mr-1" color="#2B63E2" />}
+                />
+              )}
               {errors.number_account && (
                 <span className="text-red-600 text-xs">
                   {errors.number_account.message}
@@ -195,13 +256,19 @@ export default function AccountFormPage() {
               )}
             </div>
             <div className="col-span-1 md:col-span-2 space-y-1">
-              <TextField
-                {...register("admin")}
-                type="number"
-                label="Biaya Administrasi"
-                placeholder="0"
-                icon={<span className="text-[#2B63E2]">Rp.</span>}
-              />
+              {isEdit ? (
+                <div className="w-full animate-pulse">
+                  <div className="h-10 bg-gray-200 rounded-full w-full mb-2"></div>
+                </div>
+              ) : (
+                <TextField
+                  {...register("admin")}
+                  type="number"
+                  label="Biaya Administrasi"
+                  placeholder="0"
+                  icon={<span className="text-[#2B63E2]">Rp.</span>}
+                />
+              )}
               {errors.admin && (
                 <span className="text-red-600 text-xs">
                   {errors.admin.message}
@@ -209,12 +276,18 @@ export default function AccountFormPage() {
               )}
             </div>
             <div className="col-span-1 md:col-span-3 space-y-1">
-              <TextField
-                {...register("name_account")}
-                label="Nama Akun"
-                placeholder="Contoh: Tabungan"
-                icon={<CardIcon className="size-5 mr-1" color="#2B63E2" />}
-              />
+              {isEdit ? (
+                <div className="w-full animate-pulse">
+                  <div className="h-10 bg-gray-200 rounded-full w-full mb-2"></div>
+                </div>
+              ) : (
+                <TextField
+                  {...register("name_account")}
+                  label="Nama Akun"
+                  placeholder="Contoh: Tabungan"
+                  icon={<CardIcon className="size-5 mr-1" color="#2B63E2" />}
+                />
+              )}
               {errors.name_account && (
                 <span className="text-red-600 text-xs">
                   {errors.name_account.message}
@@ -222,13 +295,19 @@ export default function AccountFormPage() {
               )}
             </div>
             <div className="col-span-1 md:col-span-3 space-y-1">
-              <TextField
-                {...register("amount")}
-                label="Saldo awal"
-                placeholder="0"
-                type="number"
-                icon={<span className="text-[#2B63E2]">Rp.</span>}
-              />
+              {isEdit ? (
+                <div className="w-full animate-pulse">
+                  <div className="h-10 bg-gray-200 rounded-full w-full mb-2"></div>
+                </div>
+              ) : (
+                <TextField
+                  {...register("amount")}
+                  label="Saldo awal"
+                  placeholder="0"
+                  type="number"
+                  icon={<span className="text-[#2B63E2]">Rp.</span>}
+                />
+              )}
               {errors.amount && (
                 <span className="text-red-600 text-xs">
                   {errors.amount.message}
