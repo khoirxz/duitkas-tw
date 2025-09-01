@@ -26,7 +26,7 @@ import { SecuritySafeIcon } from "@/assets/icons/outline";
 
 export function AppSidebar() {
   return (
-    <Sidebar>
+    <Sidebar className="border-none bg-[#ffffff] dark:bg-[#171717]">
       <SidebarContent className="md:mt-[4.5rem] pt-5">
         <SidebarMenu>
           {router

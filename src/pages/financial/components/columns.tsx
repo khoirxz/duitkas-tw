@@ -1,12 +1,11 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
-import { DeleteSolidIcon, EditSolidIcon } from "@/assets/icons/solid";
 import { SwapIcon } from "@/assets/icons/outline";
-import { Button } from "@/components/ui/button";
+import ActionCell from "@/components/ActionCell";
 
-import { type TableProps } from "../data";
+import type { Category } from "../types/category";
 
-export const columns: ColumnDef<TableProps>[] = [
+export const columns: ColumnDef<Category>[] = [
   {
     header: () => <span className="text-center px-3">No</span>,
     accessorKey: "id",
@@ -37,7 +36,7 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "name",
+    accessorKey: "nama_kategori",
   },
   {
     header: ({ column }) => {
@@ -53,7 +52,7 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "type",
+    accessorKey: "nama_kategori",
   },
   {
     header: () => {
@@ -63,14 +62,14 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "color",
+    accessorKey: "warna",
     cell: ({ row }) => (
       <div className="flex flex-row items-center gap-2">
         <span
           className="inline-block w-5 h-5 rounded-full"
-          style={{ backgroundColor: row.getValue("color") }}
+          style={{ backgroundColor: row.getValue("warna") }}
         />
-        <p className="text-xs">{row.getValue("color")}</p>
+        <p className="text-xs">{row.getValue("warna")}</p>
       </div>
     ),
   },
@@ -83,21 +82,9 @@ export const columns: ColumnDef<TableProps>[] = [
       );
     },
     id: "actions",
-    cell: () => {
-      return (
-        <div className="flex flex-row items-center w-full gap-2 justify-center">
-          <Button
-            size="icon"
-            className="bg-amber-400 hover:bg-amber-400/80 rounded-full">
-            <EditSolidIcon width={16} height={16} color="#fff" />
-          </Button>
-          <Button
-            size="icon"
-            className="bg-red-500 hover:bg-red-500/80 rounded-full">
-            <DeleteSolidIcon width={16} height={16} color="#fff" />
-          </Button>
-        </div>
-      );
+    cell: ({ row }) => {
+      const id = row.original.id_kategori;
+      return <ActionCell id={id} linkEdit="/setting/kategori" />;
     },
   },
 ];

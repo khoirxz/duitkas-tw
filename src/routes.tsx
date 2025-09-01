@@ -37,6 +37,8 @@ import {
 import { ProtectedRouter } from "./components/protected-router";
 import SettingUserFormPage from "./pages/setting/pages/user/form";
 import SettingOfficeFormPage from "./pages/setting/pages/office/form";
+import FinancialCategoryListPage from "./pages/financial/pages/category";
+import FinancialCategoryFormPage from "./pages/financial/pages/category/form";
 
 export const router: {
   name: string;
@@ -171,6 +173,36 @@ export const router: {
         ),
         show: false,
         name: "Daftar Transaksi",
+      },
+      {
+        path: "/admin/financial/category/list",
+        element: (
+          <ProtectedRouter>
+            <FinancialCategoryListPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Tabel Kategori perencaanaan dana",
+      },
+      {
+        path: "/admin/financial/category/form",
+        element: (
+          <ProtectedRouter>
+            <FinancialCategoryFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Tabel Kategori perencaanaan dana",
+      },
+      {
+        path: "/admin/financial/category/form/:id",
+        element: (
+          <ProtectedRouter>
+            <FinancialCategoryFormPage />
+          </ProtectedRouter>
+        ),
+        show: false,
+        name: "Form Kategori perencaanaan dana",
       },
     ],
   },

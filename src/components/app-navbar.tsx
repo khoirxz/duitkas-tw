@@ -10,12 +10,15 @@ import { Button } from "./ui/button";
 import { useSidebar } from "./ui/sidebar";
 import { useTheme, type Theme } from "./theme-provider";
 
-import { ChevronDown } from "lucide-react";
+import {
+  ChevronDown,
+  HeadphonesIcon,
+  CircleQuestionMarkIcon,
+} from "lucide-react";
 
 import { useAuthStore } from "@/store/useAuth";
 
-import { HeadphoneIcon, MenuFriesIcon } from "@/assets/icons/outline";
-import { HelpIcon } from "@/assets/icons/solid";
+import { MenuFriesIcon } from "@/assets/icons/outline";
 
 import logoLight from "@/assets/navbar/LogoLight.svg";
 import idLang from "@/assets/navbar/id.png";
@@ -63,27 +66,27 @@ const AppNavbar: React.FC = () => {
 
   return (
     <nav
-      className={`fixed top-0 w-full z-30 shadow-lg bg-white max-h-[4.5rem] h-full flex flex-row justify-between items-center px-3`}>
+      className={`fixed top-0 w-full z-30 shadow-lg bg-white dark:bg-[#171717] max-h-[4.5rem] h-full flex flex-row justify-between items-center px-3`}>
       <div className="flex flex-row gap-2 h-full items-center ">
         <Button size="icon" variant="ghost" onClick={() => toggleSidebar()}>
-          <MenuFriesIcon />
+          <MenuFriesIcon color={theme === "dark" ? "white" : "black"} />
         </Button>
         <img src={logoLight} alt="logo" className="h-9 object-contain" />
       </div>
       <div className="flex flex-row gap-5 h-full items-center">
         <div className="hidden md:flex flex-row gap-2">
-          <button className="bg-white hover:bg-primary/15 p-1 flex flex-col items-center rounded transition-all">
-            <HeadphoneIcon className="w-6 h-6" />
+          <button className="bg-transparent hover:bg-primary/15 p-1 flex flex-col items-center rounded transition-all">
+            <HeadphonesIcon className="w-6 h-6 text-primary dark:text-amber-400" />
           </button>
-          <button className="bg-white hover:bg-primary/15 p-1 flex flex-col items-center rounded transition-all">
-            <HelpIcon className="w-6 h-6" />
+          <button className="bg-transparent hover:bg-primary/15 p-1 flex flex-col items-center rounded transition-all">
+            <CircleQuestionMarkIcon className="w-6 h-6 fill-black text-white dark:fill-white dark:text-black" />
           </button>
         </div>
 
         <div className="hidden md:flex">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="bg-white hover:bg-primary/15 flex flex-row items-center p-1.5 rounded transition-all">
+              <button className="flex flex-row items-center p-1.5 rounded transition-all">
                 <img
                   src={
                     dataLang.find((lang) => lang.value === selectedLang)?.icon
@@ -114,7 +117,7 @@ const AppNavbar: React.FC = () => {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="bg-white hover:bg-primary/15 flex flex-row gap-2 items-center py-1 px-2 rounded transition-all">
+            <button className="flex flex-row gap-2 items-center py-1 px-2 rounded transition-all">
               <img
                 src={profileImg}
                 alt={"profile"}
@@ -122,7 +125,7 @@ const AppNavbar: React.FC = () => {
               />
               <div className="hidden md:flex flex-col ml-2 items-start">
                 <span className="font-bold">Administrator</span>
-                <span className="text-xs font-domine text-black/60">
+                <span className="text-xs font-domine text-black/60 dark:text-white">
                   DEMODEV
                 </span>
               </div>

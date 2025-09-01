@@ -48,13 +48,16 @@ export const TextField: React.FC<TextFieldProps> = ({
           ) +
           " flex flex-row items-center gap-2 rounded-full border px-4.5 py-2.5 h-10"
         }>
-        <span className="aspect-square flex items-center">{icon && icon}</span>
+        {icon && (
+          <span className="aspect-square flex items-center">{icon}</span>
+        )}
         <input
           {...props}
           placeholder={placeholder}
           className={
             cn(props.disabled ? "cursor-not-allowed" : "") +
             " w-full outline-none font-normal text-sm" +
+            (compact ? " ml-1.5" : "") +
             ` ${props.className}`
           }
         />

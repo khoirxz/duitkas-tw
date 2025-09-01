@@ -1,3 +1,5 @@
+import { Link } from "react-router";
+
 import DataTable from "@/components/data-table";
 import {
   Breadcrumb,
@@ -25,7 +27,6 @@ import {
   useFetchUserSettings,
   useFetchOfficeSettings,
 } from "../../hooks/useSetting";
-import { Link } from "react-router";
 
 export default function SettingGeneralPage() {
   const { data: userData } = useFetchUserSettings();
