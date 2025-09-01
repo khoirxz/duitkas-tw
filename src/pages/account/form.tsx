@@ -80,7 +80,17 @@ export default function AccountFormPage() {
       });
     },
   });
-  const { mutate: updateAccount } = useUpdateAccount();
+  const { mutate: updateAccount } = useUpdateAccount({
+    onSuccess: () => {
+      navigate("/admin/account", {
+        replace: true,
+        state: {
+          success: true,
+          message: `Berhasil mengubah akun ${getValues("name_account")}`,
+        },
+      });
+    },
+  });
 
   // cek, jika id ada dan isLoading = false
   const isEdit = id && isLoading;
@@ -330,7 +340,7 @@ export default function AccountFormPage() {
             <Button
               type="submit"
               className="flex-1 rounded-full bg-green-600 hover:bg-green-500">
-              Simpan
+              {id ? "Simpan" : "Tambah"}
             </Button>
           </div>
         </form>

@@ -16,7 +16,7 @@ import {
   CircleQuestionMarkIcon,
 } from "lucide-react";
 
-import { useAuthStore } from "@/store/useAuth";
+import { useAuthStore, type UserProps } from "@/store/useAuth";
 
 import { MenuFriesIcon } from "@/assets/icons/outline";
 
@@ -57,7 +57,7 @@ const themes: { name: string; value: Theme; color: string }[] = [
   },
 ];
 
-const AppNavbar: React.FC = () => {
+const AppNavbar: React.FC<{ data: UserProps | null }> = ({ data }) => {
   const [selectedLang, setSelectedLang] = useState<string>("id");
   const { toggleSidebar } = useSidebar();
   const { setTheme, theme } = useTheme();
@@ -124,7 +124,7 @@ const AppNavbar: React.FC = () => {
                 className="h-9 w-9 bg-indigo-400 rounded-full object-contain"
               />
               <div className="hidden md:flex flex-col ml-2 items-start">
-                <span className="font-bold">Administrator</span>
+                <span className="font-bold">{data?.name}</span>
                 <span className="text-xs font-domine text-black/60 dark:text-white">
                   DEMODEV
                 </span>

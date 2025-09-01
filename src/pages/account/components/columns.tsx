@@ -2,9 +2,8 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import { formatRupiah } from "@/lib/formatMoney";
 import { SwapIcon } from "@/assets/icons/outline";
-
+import { ActionCellWrapper } from "./ActionCellWrapper";
 import type { AccountProps } from "../types/account";
-import ActionCell from "../../../components/ActionCell";
 
 export const columns: ColumnDef<AccountProps["data"]["akun"]["0"]>[] = [
   {
@@ -136,7 +135,7 @@ export const columns: ColumnDef<AccountProps["data"]["akun"]["0"]>[] = [
     cell: ({ row }) => {
       const id = row.original.id_akun_bank as unknown as string;
 
-      return <ActionCell id={id} linkEdit="/admin/account/form/edit" />;
+      return <ActionCellWrapper id={id} />;
     },
   },
 ];

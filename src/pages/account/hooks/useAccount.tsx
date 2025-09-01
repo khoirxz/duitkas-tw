@@ -3,6 +3,7 @@ import {
   fetchAccount,
   fetchDetailAccount,
   postAccount,
+  updateAccount,
   deteleAccount,
 } from "../services/accountApi";
 import { fetchBanks } from "../services/accountApi";
@@ -43,9 +44,13 @@ export const useCreateAccount = (options?: {
   });
 };
 
-export const useUpdateAccount = () => {
+export const useUpdateAccount = (options?: {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}) => {
   return useMutation({
-    mutationFn: (formData: FormData) => postAccount(formData),
+    mutationFn: (formData: FormData) => updateAccount(formData),
+    ...options,
   });
 };
 
