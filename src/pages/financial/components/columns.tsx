@@ -1,8 +1,8 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { SwapIcon } from "@/assets/icons/outline";
-import ActionCell from "@/components/ActionCell";
 
+import { ActionCellWrapper } from "./ActionCellWrapper";
 import type { Category } from "../types/category";
 
 export const columns: ColumnDef<Category>[] = [
@@ -52,7 +52,7 @@ export const columns: ColumnDef<Category>[] = [
         </div>
       );
     },
-    accessorKey: "nama_kategori",
+    accessorKey: "tipe",
   },
   {
     header: () => {
@@ -84,7 +84,7 @@ export const columns: ColumnDef<Category>[] = [
     id: "actions",
     cell: ({ row }) => {
       const id = row.original.id_kategori;
-      return <ActionCell id={id} linkEdit="/setting/kategori" />;
+      return <ActionCellWrapper id={id} />;
     },
   },
 ];

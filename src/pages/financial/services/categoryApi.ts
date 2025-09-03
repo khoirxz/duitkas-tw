@@ -22,3 +22,16 @@ export const postCategory = async (
   });
   return response.data;
 };
+
+export const deleteCategory = async (
+  id: string
+): Promise<
+  ResponseProps & {
+    data: {
+      affected: string;
+    };
+  }
+> => {
+  const response = await api.delete("kategori/hapus/" + id);
+  return response.data;
+};

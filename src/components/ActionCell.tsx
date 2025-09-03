@@ -13,19 +13,19 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-interface configProps {
-  mutation: (formData: FormData) => void;
-  formField: string;
+interface ConfigProps<T = unknown> {
+  mutation: (payload: T) => void;
+  formField?: string;
 }
 
-export default function ActionCell({
+export default function ActionCell<T>({
   id,
   linkEdit,
   config,
 }: {
   id: string;
   linkEdit?: string;
-  config: configProps;
+  config: ConfigProps<T>;
 }) {
   return (
     <div className="flex flex-row items-center w-full gap-2 justify-center">
@@ -42,26 +42,32 @@ export default function ActionCell({
   );
 }
 
-interface ModalDeleteProps {
+const ModalDelete = <T,>({
+  id,
+  config,
+}: {
   id: string;
-  config?: configProps;
-}
-
-const ModalDelete: React.FC<ModalDeleteProps> = ({ id, config }) => {
+  config?: ConfigProps<T>;
+}) => {
   const [open, setOpen] = useState<boolean>(false);
+
   const handleDelete = () => {
-    const formData = new FormData();
-
-    if (config?.formField) {
-      formData.append(config.formField, id.toString());
-    }
-
-    if (config?.mutation) {
-      config.mutation(formData);
-      setOpen(false);
-    } else {
+    if (!config?.mutation) {
       console.error("Missing mutation function in config.");
+      return;
     }
+
+    if (config.formField) {
+      // Kasus FormData
+      const formData = new FormData();
+      formData.append(config.formField, id.toString());
+      config.mutation(formData as T);
+    } else {
+      // Kasus langsung id
+      config.mutation(id as unknown as T);
+    }
+
+    setOpen(false);
   };
 
   return (

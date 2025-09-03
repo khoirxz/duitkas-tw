@@ -1,3 +1,4 @@
+import { useRef } from "react";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,6 +40,7 @@ import { useCategory } from "../../hooks/useCategory";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { useCreateTransaction } from "../../hooks/useTransaction";
 import { FormErrorSummary } from "@/components/FormErrorSummary";
+import { cn } from "@/lib/utils";
 
 const formSchema = z.object({
   date: z.string().nonempty("Tanggal TransaksiWajib diisi"),
@@ -48,21 +50,9 @@ const formSchema = z.object({
   note: z.string().optional().nullable(),
   file: z
     .any()
-    .transform((val) => (val instanceof FileList ? val[0] : val))
     .refine(
-      (file) => {
-        // optional -> kalau gak ada file, lolos
-        if (!file) return true;
-
-        // Pastikan file adalah File
-        if (!(file instanceof File)) return false;
-
-        // Max size 1MB (1 * 1024 * 1024 bytes)
-        return file.size <= 1 * 1024 * 1024;
-      },
-      {
-        message: "Ukuran file maksimal 1MB",
-      }
+      (file) => file instanceof FileList || file === null,
+      "File tidak valid"
     )
     .optional()
     .nullable(),
@@ -73,6 +63,8 @@ export default function CashflowFormPage() {
     register,
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -82,7 +74,6 @@ export default function CashflowFormPage() {
       id_account: "",
       amount: "",
       note: "",
-      file: null,
     },
   });
   const { pathname } = useLocation();
@@ -99,25 +90,26 @@ export default function CashflowFormPage() {
     1,
     10
   );
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
     const formData = new FormData();
 
-    if (data.file) {
-      formData.append("bukti", data.file); // file
+    const file = (data.file as FileList)?.[0];
+    if (file) {
+      formData.append("bukti", file);
     }
 
-    formData.append("tanggal", data.date); // date
+    formData.append("tanggal", new Date(data.date).toISOString().slice(0, 10)); // date
     formData.append("id_kategori", data.id_category); // id_category
     formData.append("id_akun_bank", data.id_account); // id_account
     formData.append("jumlah", data.amount); // amount
     formData.append("keterangan", data.note || ""); // note
 
     mutate(formData);
-    console.log(data);
+    //! for testing
+    // console.log(data);
   };
-
-  console.log(type);
 
   return (
     <Layout>
@@ -149,7 +141,7 @@ export default function CashflowFormPage() {
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col px-12 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
+        className="flex flex-col px-12 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white dark:bg-zinc-800 mx-5 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
           <ModalType />
 
@@ -301,22 +293,41 @@ export default function CashflowFormPage() {
                   BUKTI/NOTA <span className="text-red-500">*</span>
                 </label>
                 <input
-                  {...register("file")}
+                  {...register("file", {
+                    required: true,
+                    onChange: (e) => {
+                      const file = (e.target as HTMLInputElement).files;
+                      // debug
+                      setValue("file", file);
+                    },
+                  })}
                   type="file"
                   id="file"
-                  accept="image/png, image/jpeg, image/jpg"
+                  ref={fileInputRef}
+                  accept="image/*"
                   className="hidden"
                 />
                 <div className="relative flex-1 h-full text-white">
                   <div className="w-full h-48 relative">
                     <img
-                      src={placeholderImg}
+                      src={
+                        watch("file")
+                          ? URL.createObjectURL(watch("file")[0])
+                          : placeholderImg
+                      }
                       alt="Placeholder"
                       className="w-full h-full object-cover rounded-lg object-top"
                     />
-                    <div className="absolute inset-0 bg-black opacity-75 rounded-lg"></div>
+                    <div
+                      className={
+                        cn(watch("file") ? "hover:opacity-25" : "") +
+                        " absolute inset-0 bg-black rounded-lg opacity-75 transition-opacity "
+                      }></div>
                   </div>
-                  <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full flex flex-col items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full flex flex-col items-center gap-2">
                     <UploadIcon />
                     <p className="text-sm font-semibold">
                       Klik untuk memilih file yang akan diunggah
@@ -324,7 +335,7 @@ export default function CashflowFormPage() {
                     <p className="text-xs text-zinc-400">
                       Maksimal ukuran 1MB (*.png, *.jpg, *.jpeg)
                     </p>
-                  </div>
+                  </button>
                 </div>
               </div>
 

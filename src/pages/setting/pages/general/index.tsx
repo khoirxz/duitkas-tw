@@ -23,10 +23,8 @@ import { SlashIcon } from "lucide-react";
 import { OfficeColumns, UserColumns } from "../../components/columns";
 
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import {
-  useFetchUserSettings,
-  useFetchOfficeSettings,
-} from "../../hooks/useSetting";
+import { useFetchUserSettings } from "../../hooks/useUser";
+import { useFetchOfficeSettings } from "../../hooks/useOffice";
 
 export default function SettingGeneralPage() {
   const { data: userData } = useFetchUserSettings();

@@ -26,11 +26,10 @@ import {
 import { cn } from "@/lib/utils";
 
 import { columns } from "../../components/columns";
-// import { data, type TableProps } from "../../data";
-import { useFetchCategories } from "../../hook/useCategory";
+import { useFetchCategories } from "../../hooks/useCategory";
 
 export default function FinancialCategoryListPage() {
-  const { data } = useFetchCategories("pemasukan");
+  const { data, isLoading } = useFetchCategories("pemasukan");
 
   return (
     <Layout>
@@ -81,7 +80,7 @@ export default function FinancialCategoryListPage() {
 
             <Link
               className="rounded-full w-auto h-10 md:h-auto px-5 py-6 md:px-5 md:py-4 flex flex-row items-center gap-2 bg-primary text-white text-sm"
-              to="/admin/settings/offices/form">
+              to="/admin/financial/category/form">
               <AddCircleSolidIcon
                 className="size-5 fill-white"
                 color="inherit"
@@ -90,7 +89,13 @@ export default function FinancialCategoryListPage() {
             </Link>
           </div>
 
-          <DataTable columns={columns} data={data?.data.kategori || []} />
+          {isLoading ? (
+            <div className="w-full animate-pulse">
+              <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
+            </div>
+          ) : (
+            <DataTable columns={columns} data={data?.data.kategori || []} />
+          )}
 
           <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
             <div>

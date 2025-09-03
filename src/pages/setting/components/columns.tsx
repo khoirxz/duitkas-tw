@@ -1,9 +1,12 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { SwapIcon } from "@/assets/icons/outline";
+import {
+  ActionCellWrapperOffice,
+  ActionCellWrapperUser,
+} from "./ActionCellWrapper";
 
 import type { OfficeSettingsProps, UserSettingProps } from "../types/setting";
-import ActionCell from "@/components/ActionCell";
 
 export const OfficeColumns: ColumnDef<OfficeSettingsProps["data"]["0"]>[] = [
   {
@@ -66,7 +69,7 @@ export const OfficeColumns: ColumnDef<OfficeSettingsProps["data"]["0"]>[] = [
     cell: ({ row }) => {
       const id = row.original.id_kantor;
 
-      return <ActionCell id={id} linkEdit="/admin/settings/offices/form" />;
+      return <ActionCellWrapperOffice id={id} />;
     },
   },
 ];
@@ -164,7 +167,7 @@ export const UserColumns: ColumnDef<UserSettingProps["data"]["user"]["0"]>[] = [
     cell: ({ row }) => {
       const id = row.original.id_user;
 
-      return <ActionCell id={id} linkEdit="/admin/settings/users/form" />;
+      return <ActionCellWrapperUser id={id} />;
     },
   },
 ];

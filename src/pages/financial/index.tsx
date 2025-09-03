@@ -16,7 +16,7 @@ export default function FinancialPage() {
             asChild
             variant="default"
             className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700">
-            <Link to="/admin/financial/list">Data Kategori</Link>
+            <Link to="/admin/financial/category/list">Data Kategori</Link>
           </Button>
         </div>
         {/* Additional content for financial plan page can be added here */}

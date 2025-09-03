@@ -29,8 +29,8 @@ import Layout from "@/layouts/layout";
 
 import ModalType from "../../components/modalType";
 import { useCategory } from "../../hooks/useCategory";
-import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { useCreateTransaction } from "../../hooks/useTransaction";
+import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { FormErrorSummary } from "@/components/FormErrorSummary";
 
 const formSchema = z.object({
@@ -61,7 +61,7 @@ export default function TransferFormPage() {
   });
 
   const { mutate } = useCreateTransaction({
-    type: "transfer",
+    type: "bank/tambah-transaksi",
   });
   const { data: category, isLoading: isLoadingCategory } = useCategory({
     type: "pemasukan",

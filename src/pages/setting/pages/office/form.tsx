@@ -19,7 +19,7 @@ import {
   useCreateOfficeSettings,
   useUpdateOfficeSettings,
   useFetchOfficeDetailSettings,
-} from "../../hooks/useSetting";
+} from "../../hooks/useOffice";
 import { useEffect } from "react";
 
 const formSchema = z.object({

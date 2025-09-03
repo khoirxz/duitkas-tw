@@ -7,7 +7,12 @@ export type typeCategory = {
 };
 
 export type typeTransaction = {
-  type: "pemasukan" | "pengeluaran" | "hutang" | "piutang" | "transfer";
+  type:
+    | "pemasukan"
+    | "pengeluaran"
+    | "hutang"
+    | "piutang"
+    | "bank/tambah-transaksi";
 };
 
 export const fetchAllTransaction = async ({

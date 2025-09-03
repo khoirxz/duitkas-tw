@@ -26,11 +26,11 @@ import Layout from "@/layouts/layout";
 import { WorkCaseIcon } from "@/assets/icons/outline";
 
 import {
-  useFetchOfficeSettings,
   useFetchUserDetailSettings,
   useCreateUserSettings,
   useUpdateUserSettings,
-} from "../../hooks/useSetting";
+} from "../../hooks/useUser";
+import { useFetchOfficeSettings } from "../../hooks/useOffice";
 
 const formSchema = z.object({
   username: z.string().min(1, "Username tidak boleh kosong"),

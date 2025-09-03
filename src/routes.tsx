@@ -3,7 +3,6 @@ import AccountPage from "@/pages/account";
 import AccountFormPage from "@/pages/account/form";
 // financial pages
 import FinancialPage from "@/pages/financial";
-import FinancialListPage from "@/pages/financial/list";
 import BudgetFormPage from "@/pages/financial/pages/budget/form";
 import GoalFormPage from "@/pages/financial/pages/goal/form";
 // transaction pages
@@ -142,16 +141,6 @@ export const router: {
       inactive: <GraphIcon color="currentColor" />,
     },
     children: [
-      {
-        path: "/admin/financial/list",
-        element: (
-          <ProtectedRouter>
-            <FinancialListPage />
-          </ProtectedRouter>
-        ),
-        show: false,
-        name: "Perencanaan Dana",
-      },
       {
         path: "/admin/financial/form/budget",
         // lazy: () => import('./pages/dashboard/index.tsx'),
