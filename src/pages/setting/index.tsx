@@ -1,15 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { Link } from "react-router";
 import { z } from "zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { debounce } from "lodash";
 
 import { TextField, TextArea } from "@/components/textField";
 import { Button } from "@/components/ui/button";
 import Layout from "@/layouts/layout";
-import { MailIcon, MapPin, User2Icon } from "lucide-react";
+import {
+  MailIcon,
+  MapPin,
+  User2Icon,
+  CheckIcon,
+  XIcon,
+  LoaderCircleIcon,
+} from "lucide-react";
 
-import { useSetting } from "./hooks/useSetting";
+import {
+  useSetting,
+  useCheckIdentity,
+  useUpdateSetting,
+} from "./hooks/useSetting";
+import type { AxiosError } from "axios";
+import type { ResponseProps } from "@/types/response";
 
 const formSchema = z.object({
   identity: z.string().min(1, "Identitas akun tidak boleh kosong"),
@@ -25,6 +39,7 @@ export default function SettingPage() {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
     reset,
   } = useForm({
     resolver: zodResolver(formSchema),
@@ -37,6 +52,14 @@ export default function SettingPage() {
     },
   });
   const { data: settings, isLoading } = useSetting();
+  const {
+    mutate: checkIdentity,
+    isPending: isLoadingCheck,
+    data: dataCheck,
+  } = useCheckIdentity();
+  const { mutate: updateSettings } = useUpdateSetting();
+
+  const identity = watch("identity");
 
   useEffect(() => {
     if (settings) {
@@ -50,9 +73,49 @@ export default function SettingPage() {
     }
   }, [settings, reset]);
 
+  const debouncedCheck = useMemo(
+    () =>
+      debounce((value: string) => {
+        const formData = new FormData();
+        formData.append("identitas", value || "");
+        checkIdentity(formData);
+      }, 500),
+    [checkIdentity]
+  );
+
+  useEffect(() => {
+    if (!identity) return;
+    debouncedCheck(identity);
+
+    return () => debouncedCheck.cancel();
+  }, [debouncedCheck, identity]);
+
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    console.log("Form submitted with data:", data);
-    // Handle form submission logic here
+    try {
+      const formData = new FormData();
+
+      formData.append("nama", "test"); // nama
+      formData.append("direktur", data.accountName);
+      formData.append("email", data.email);
+      formData.append("identitas", data.identity);
+      formData.append("jenis_usaha", data.identity); // jenis_usaha
+      formData.append("kota", data.identity); // kota
+      formData.append("provinsi", data.identity); // provinsi
+      formData.append("alamat", data.address); // alamat
+      formData.append("kontak", data.whatsapp);
+
+      updateSettings(formData);
+    } catch (e) {
+      const error = e as AxiosError;
+      interface ErrResponseProps extends ResponseProps {
+        data: null;
+      }
+      const errorData = error.response?.data as ErrResponseProps | undefined;
+
+      if (errorData) {
+        alert(errorData.message);
+      }
+    }
   };
 
   return (
@@ -71,7 +134,7 @@ export default function SettingPage() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white">
+          className="grid grid-cols-1 md:grid-cols-2 gap-10 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white dark:bg-zinc-900">
           <div className="relative w-full col-span-2">
             {isLoading ? (
               <div className="border border-blue-300/30 rounded-full px-4.5 py-3 flex flex-row items-center bg-blue-300/30 animate-pulse h-12"></div>
@@ -81,7 +144,17 @@ export default function SettingPage() {
                 compact
                 label="Identitas Akun"
                 placeholder="duitkas.com"
-                endLabel="demo"
+                endLabel={
+                  openForm ? (
+                    isLoadingCheck ? (
+                      <LoaderCircleIcon className="size-4 animate-spin text-blue-500" />
+                    ) : dataCheck ? (
+                      <CheckIcon className="size-4 text-green-500" />
+                    ) : (
+                      <XIcon className="size-4 text-red-500" />
+                    )
+                  ) : null
+                }
                 id="identitas"
                 error={!!errors.identity}
                 ErrorMessage={errors.identity?.message}
@@ -162,7 +235,7 @@ export default function SettingPage() {
                 className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">
                 Batal
               </Button>
-              <Button className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 cursor-pointer">
+              <Button className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 cursor-pointer dark:text-white">
                 Simpan
               </Button>
             </div>

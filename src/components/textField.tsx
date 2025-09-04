@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
-  endLabel?: string;
+  endLabel?: string | React.ReactNode;
   placeholder?: string;
   icon?: React.ReactNode;
   required?: boolean;
@@ -28,7 +28,7 @@ export const TextField: React.FC<TextFieldProps> = ({
         ? label && (
             <label
               htmlFor={props.id}
-              className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 rounded-sm z-10">
+              className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase bg-white dark:bg-zinc-800 absolute left-4 top-[-12px] px-2 rounded-sm z-10">
               {label} <span className="text-red-500">*</span>
             </label>
           )
@@ -43,7 +43,7 @@ export const TextField: React.FC<TextFieldProps> = ({
         className={
           cn(
             props.disabled
-              ? "cursor-not-allowed bg-gray-200 border-gray-200"
+              ? "cursor-not-allowed bg-zinc-200 dark:bg-zinc-700 border-gray-200"
               : "border-blue-400/40"
           ) +
           " flex flex-row items-center gap-2 rounded-full border px-4.5 py-2.5 h-10"
@@ -98,7 +98,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
       className={
         cn(
           props.disabled
-            ? "cursor-not-allowed bg-gray-200 border-gray-200"
+            ? "cursor-not-allowed bg-zinc-200 dark:bg-zinc-700 border-zinc-200"
             : "cursor-pointer border-blue-400/40"
         ) + " w-full flex flex-col gap-1 relative pl-4 border rounded-lg"
       }>
@@ -106,7 +106,7 @@ export const TextArea: React.FC<TextAreaProps> = ({
         ? label && (
             <label
               htmlFor="textarea"
-              className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 rounded-sm z-10">
+              className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase bg-white dark:bg-zinc-800 absolute left-4 top-[-12px] px-2 rounded-sm z-10">
               {label} <span className="text-red-500">*</span>
             </label>
           )
