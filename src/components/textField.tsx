@@ -8,7 +8,7 @@ interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   required?: boolean;
   compact?: boolean;
   error?: boolean;
-  ErrorMessage?: string;
+  errorMessage?: string;
 }
 
 export const TextField: React.FC<TextFieldProps> = ({
@@ -19,7 +19,7 @@ export const TextField: React.FC<TextFieldProps> = ({
   icon,
   required,
   error = false,
-  ErrorMessage,
+  errorMessage,
   ...props
 }) => {
   return (
@@ -33,7 +33,7 @@ export const TextField: React.FC<TextFieldProps> = ({
             </label>
           )
         : label && (
-            <label className="uppercase block text-sm font-medium text-gray-700 mb-2">
+            <label className="uppercase block text-sm font-medium text-zinc-600 dark:text-zinc-400 mb-2">
               {label}
               {required && <span className="text-red-500 ml-1">*</span>}
             </label>
@@ -71,7 +71,7 @@ export const TextField: React.FC<TextFieldProps> = ({
 
       {error && (
         <span className="text-xs text-red-500 absolute -bottom-[18px] left-4">
-          {ErrorMessage || "This field is required."}
+          {errorMessage || "This field is required."}
         </span>
       )}
     </div>

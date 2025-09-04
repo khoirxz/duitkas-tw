@@ -15,7 +15,7 @@ export default function FinancialPage() {
           <Button
             asChild
             variant="default"
-            className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700">
+            className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700 dark:text-white">
             <Link to="/admin/financial/category/list">Data Kategori</Link>
           </Button>
         </div>
@@ -31,7 +31,7 @@ export default function FinancialPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 md:max-w-4xl md:mx-auto">
           <Link
             to="/admin/financial/form/budget"
-            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white">
+            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white dark:bg-zinc-800">
             <img
               src={budgetImg}
               alt="Budget"
@@ -42,7 +42,7 @@ export default function FinancialPage() {
           </Link>
           <Link
             to="/admin/financial/form/goals"
-            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white">
+            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white dark:bg-zinc-800">
             <img
               src={golasImg}
               alt="Goals"

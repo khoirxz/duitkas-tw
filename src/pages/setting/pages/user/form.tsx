@@ -180,7 +180,7 @@ export default function SettingUserFormPage() {
             placeholder="Username"
             icon={<WorkCaseIcon className="size-5 mr-1" color="#2B63E2" />}
             error={!!errors.username}
-            ErrorMessage={errors.username?.message as string}
+            errorMessage={errors.username?.message as string}
           />
           <div className="relative w-full flex">
             <Controller

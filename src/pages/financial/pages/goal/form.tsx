@@ -13,6 +13,7 @@ import {
 import Layout from "@/layouts/layout";
 import { SlashIcon, TagIcon } from "lucide-react";
 import ModalType from "../../components/modalType";
+import { TextField } from "@/components/textField";
 
 const formSchema = z.object({
   name: z.string().nonempty("Nama Perencanaan wajib diisi"),
@@ -57,7 +58,7 @@ export default function GoalFormPage() {
 
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col px-6 md:px-10 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
+        className="flex flex-col px-6 md:px-10 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white dark:bg-zinc-800 mx-3 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
           <ModalType />
 
@@ -73,42 +74,25 @@ export default function GoalFormPage() {
 
             <div className="grid grid-cols-1 gap-5">
               <div className="flex flex-col gap-3">
-                <label
-                  htmlFor=""
-                  className="text-sm font-semibold text-zinc-600 uppercase">
-                  NAMA PERENCANAAN <span className="text-red-500">*</span>
-                </label>
-                <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                  <button className="flex bg-white">
-                    <TagIcon className="size-4 mr-3" color="#3B82F6" />
-                  </button>
-                  <input
-                    {...register("name")}
-                    type="text"
-                    className="outline-none text-sm w-full"
-                    placeholder="Nama Perencanaan"
-                  />
-                </div>
+                <TextField
+                  {...register("name")}
+                  label="Nama Perencanaan"
+                  icon={<TagIcon className="size-5 mr-1" color="#3B82F6" />}
+                  placeholder="Nama Perencanaan"
+                />
               </div>
               <div className="flex flex-col gap-3">
-                <label
-                  htmlFor=""
-                  className="text-sm font-semibold text-zinc-600 uppercase">
-                  NOMINAL PERENCANAAN <span className="text-red-500">*</span>
-                </label>
-                <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                  <button className="flex bg-white">
+                <TextField
+                  {...register("nominal")}
+                  label="Nama Perencanaan"
+                  icon={
                     <span className="text-sm font-semibold text-blue-500 mr-2">
                       Rp.
                     </span>
-                  </button>
-                  <input
-                    {...register("nominal", { valueAsNumber: true })}
-                    type="number"
-                    className="outline-none text-sm w-full"
-                    placeholder="Nominal Perencanaan"
-                  />
-                </div>
+                  }
+                  type="number"
+                  placeholder="Nominal Perencanaan"
+                />
               </div>
             </div>
           </div>
@@ -116,7 +100,7 @@ export default function GoalFormPage() {
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
             type="reset"
-            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
+            className="bg-transparent text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-zinc-100 dark:hover:bg-zinc-700 shadow-none">
             Batal
           </Button>
           <Button

@@ -24,13 +24,14 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Percent, TrashIcon, SlashIcon } from "lucide-react";
+import { TrashIcon, SlashIcon, ChartPieIcon, PercentIcon } from "lucide-react";
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import { GraphIcon, TagIcon } from "@/assets/icons/outline";
+import { TagIcon } from "@/assets/icons/outline";
 
 import Layout from "@/layouts/layout";
 import ModalType from "../../components/modalType";
 import { cn } from "@/lib/utils";
+import { TextField } from "@/components/textField";
 
 const categorySchema = z.object({
   name: z.string().min(1, "Wajib diisi"),
@@ -103,7 +104,7 @@ export default function BudgetFormPage() {
       <form
         onSubmit={handleSubmit(onSubmit)}
         encType="multipart/form-data"
-        className="flex flex-col px-6 md:px-10 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
+        className="flex flex-col px-6 md:px-10 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white dark:bg-zinc-800 mx-3 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
           <ModalType />
 
@@ -142,46 +143,25 @@ export default function BudgetFormPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div
                 className={
-                  cn(step === 2 ? "col-span-2" : "") + " flex flex-col gap-3"
+                  cn(step === 2 ? "col-span-2" : "") +
+                  " flex flex-col gap-3 w-full"
                 }>
-                <div className="flex flex-col gap-3">
-                  <label
-                    htmlFor=""
-                    className="text-sm font-semibold text-zinc-600 uppercase">
-                    Nama Perencanaan <span className="text-red-500">*</span>
-                  </label>
-                  <div
-                    className={
-                      cn(
-                        step === 2
-                          ? "cursor-not-allowed bg-gray-200 text-gray-500 border-gray-200"
-                          : "border-blue-300"
-                      ) +
-                      " border rounded-full px-4.5 py-3 flex flex-row items-center"
-                    }>
-                    <span className="flex bg-inherit">
-                      <TagIcon className="size-4 mr-3" color="#3B82F6" />
-                    </span>
-                    <input
-                      autoComplete="off"
-                      {...register("name")}
-                      type="text"
-                      disabled={step === 2}
-                      className="outline-none text-sm w-full"
-                      placeholder="Nama Perencanaan"
-                    />
-                  </div>
-                </div>
-                <span className="text-red-500 text-sm">
-                  {errors.name?.message}
-                </span>
+                <TextField
+                  {...register("name")}
+                  label="Nama Perencanaan"
+                  icon={<TagIcon className="size-4" color="#3B82F6" />}
+                  disabled={step === 2}
+                  placeholder="Nama Perencanaan"
+                  error={!!errors.name}
+                  errorMessage={errors.name?.message}
+                />
               </div>
               {step === 1 && (
                 <div>
                   <div className="flex flex-col gap-3">
                     <label
                       htmlFor=""
-                      className="text-sm font-semibold text-zinc-600 uppercase">
+                      className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase">
                       PORSI (PERSENTASE/NOMINAL){" "}
                       <span className="text-red-500">*</span>
                     </label>
@@ -192,7 +172,7 @@ export default function BudgetFormPage() {
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}>
-                          <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
+                          <SelectTrigger className="w-full rounded-full border border-blue-400/40 px-4.5 h-10! dark:bg-zinc-800">
                             <SelectValue placeholder="Pilih porsi" />
                           </SelectTrigger>
                           <SelectContent>
@@ -217,50 +197,28 @@ export default function BudgetFormPage() {
               {step === 2 &&
                 fields.map((field, index) => (
                   <div className="col-span-2" key={field.id}>
-                    <div className="flex gap-3 mt-2">
-                      <div className="flex-1 flex flex-col md:flex-row gap-3 items-center">
+                    <div className="flex gap-4 mt-2">
+                      <div className="flex-1 flex flex-col md:flex-row gap-5 items-center">
                         <div className="relative w-full">
-                          <label
-                            htmlFor=""
-                            className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                            Nama Kategori{" "}
-                            <span className="text-red-500">*</span>
-                          </label>
-                          <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                            <button className="flex bg-white">
-                              <GraphIcon
-                                className="size-4 mr-3"
-                                color="#3B82F6"
-                              />
-                            </button>
-                            <input
-                              {...register(`categories.${index}.name`)}
-                              type="text"
-                              className="outline-none text-sm w-full"
-                            />
-                          </div>
+                          <TextField
+                            {...register(`categories.${index}.name`)}
+                            label="Nama Kategori"
+                            icon={<ChartPieIcon className="size-4" />}
+                            compact
+                            placeholder="Nama Kategori"
+                          />
                         </div>
                         <div className="relative w-full">
-                          <label
-                            htmlFor=""
-                            className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                            Presentase <span className="text-red-500">*</span>
-                          </label>
-                          <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                            <button className="flex bg-white">
-                              <Percent
-                                className="size-4 mr-3"
-                                color="#3B82F6"
-                              />
-                            </button>
-                            <input
-                              {...register(`categories.${index}.percentage`, {
-                                valueAsNumber: true,
-                              })}
-                              type="number"
-                              className="outline-none text-sm w-full"
-                            />
-                          </div>
+                          <TextField
+                            {...register(`categories.${index}.percentage`, {
+                              valueAsNumber: true,
+                            })}
+                            type="number"
+                            label="Presentase"
+                            icon={<PercentIcon className="size-4" />}
+                            compact
+                            placeholder="Persentase"
+                          />
                         </div>
                       </div>
 
@@ -291,7 +249,7 @@ export default function BudgetFormPage() {
           <Button
             type="reset"
             onClick={() => setStep(1)}
-            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
+            className="bg-transparent text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
             {step === 2 ? "Kembali" : "Batal"}
           </Button>
           {step === 1 ? (

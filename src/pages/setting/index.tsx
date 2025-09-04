@@ -159,7 +159,7 @@ export default function SettingPage() {
                 }
                 id="identitas"
                 error={!!errors.identity}
-                ErrorMessage={errors.identity?.message}
+                errorMessage={errors.identity?.message}
                 disabled={!openForm}
               />
             )}
@@ -176,7 +176,7 @@ export default function SettingPage() {
                 icon={<User2Icon className="size-4" color="#3B82F6" />}
                 id="accountName"
                 error={!!errors.accountName}
-                ErrorMessage={errors.accountName?.message}
+                errorMessage={errors.accountName?.message}
                 disabled={!openForm}
               />
             )}
@@ -194,7 +194,7 @@ export default function SettingPage() {
                 icon={<MailIcon className="size-4" color="#3B82F6" />}
                 id="email"
                 error={!!errors.email}
-                ErrorMessage={errors.email?.message}
+                errorMessage={errors.email?.message}
                 disabled={!openForm}
               />
             )}
@@ -210,7 +210,7 @@ export default function SettingPage() {
                 placeholder="+62"
                 id="whatsapp"
                 error={!!errors.whatsapp}
-                ErrorMessage={errors.whatsapp?.message}
+                errorMessage={errors.whatsapp?.message}
                 disabled={!openForm}
               />
             )}

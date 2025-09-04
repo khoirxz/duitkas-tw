@@ -36,7 +36,7 @@ function isTraversable(v: unknown): v is Record<string, unknown> | unknown[] {
 }
 
 /** Ekstrak semua pesan error tanpa masuk ke sirkular */
-export function ExtractErrorMessages<T extends Record<string, unknown>>(
+export function ExtracterrorMessages<T extends Record<string, unknown>>(
   errors: FieldErrors<T>
 ): string[] {
   const messages: string[] = [];
@@ -90,7 +90,7 @@ export function FormErrorSummary<T extends Record<string, unknown>>({
 }: FormErrorSummaryProps<T>) {
   const [dismissed, setDismissed] = React.useState(false);
 
-  const msgs = React.useMemo(() => ExtractErrorMessages(errors), [errors]);
+  const msgs = React.useMemo(() => ExtracterrorMessages(errors), [errors]);
 
   React.useEffect(() => {
     if (msgs.length > 0) setDismissed(false);
