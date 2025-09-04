@@ -173,7 +173,7 @@ export const TableFilter: React.FC<TableFilterProps> = ({
                     setLimit && setLimit(parseInt(e.target.value) || 10)
                   }
                 />
-                <button className="flex absolute bg-white right-2">
+                <button className="flex absolute bg-transparent right-2">
                   <ChevronDownIcon />
                 </button>
               </div>
@@ -218,7 +218,7 @@ export const TableFilter: React.FC<TableFilterProps> = ({
         <div
           className={
             cn(showRowCount ? "flex-1" : "flex-0 ") +
-            " border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white"
+            " border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white dark:bg-zinc-800"
           }>
           <span className="flex">
             <SearchIcon className="size-4 mr-2" />

@@ -32,6 +32,7 @@ import { useCategory } from "../../hooks/useCategory";
 import { useCreateTransaction } from "../../hooks/useTransaction";
 import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { FormErrorSummary } from "@/components/FormErrorSummary";
+import { TextField } from "@/components/textField";
 
 const formSchema = z.object({
   date: z.string().nonempty("Tanggal TransaksiWajib diisi"),
@@ -116,7 +117,7 @@ export default function TransferFormPage() {
       <form
         encType="multipart/form-data"
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col px-12 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white mx-5 mb-5 space-y-10">
+        className="flex flex-col px-12 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white dark:bg-zinc-800 mx-5 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
           <ModalType />
 
@@ -124,16 +125,16 @@ export default function TransferFormPage() {
             <div className="relative w-full">
               <label
                 htmlFor=""
-                className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase bg-white dark:bg-zinc-800 absolute left-4 top-[-12px] px-2">
                 tanggal transaksi <span className="text-red-500">*</span>
               </label>
 
               <Popover>
-                <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
+                <div className="border border-blue-400/40 rounded-full px-4.5 py-3 flex flex-row items-center">
                   <PopoverTrigger asChild>
-                    <button className="flex bg-white">
+                    <span className="flex bg-transparent">
                       <CalendarIcon className="size-4 mr-3" color="#3B82F6" />
-                    </button>
+                    </span>
                   </PopoverTrigger>
                   <Controller
                     control={control}
@@ -183,13 +184,13 @@ export default function TransferFormPage() {
                       <>
                         <label
                           htmlFor="id_bank_sender"
-                          className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                          className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase bg-white dark:bg-zinc-800 absolute left-4 top-[-12px] px-2">
                           akun asal <span className="text-red-500">*</span>
                         </label>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}>
-                          <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
+                          <SelectTrigger className="w-full rounded-full border border-blue-400/40 px-4.5 py-5.5 dark:bg-zinc-800 h-40">
                             <SelectValue placeholder="Pilih Kategori" />
                           </SelectTrigger>
                           <SelectContent>
@@ -218,13 +219,13 @@ export default function TransferFormPage() {
                       <>
                         <label
                           htmlFor="id_bank_receiver"
-                          className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                          className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase bg-white dark:bg-zinc-800 absolute left-4 top-[-12px] px-2">
                           akun tujuan <span className="text-red-500">*</span>
                         </label>
                         <Select
                           onValueChange={field.onChange}
                           defaultValue={field.value}>
-                          <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
+                          <SelectTrigger className="w-full rounded-full border border-blue-400/40 px-4.5 py-5.5 dark:bg-zinc-800 h-40">
                             <SelectValue placeholder="Pilih akun" />
                           </SelectTrigger>
                           <SelectContent>
@@ -245,42 +246,33 @@ export default function TransferFormPage() {
             </div>
 
             <div className="relative w-full">
-              <label
-                htmlFor="amount"
-                className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                Jumlah <span className="text-red-500">*</span>
-              </label>
-              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                <span className="flex bg-white mr-3 text-sm text-blue-500">
-                  Rp.
-                </span>
-                <input
-                  {...register("amount", { required: true })}
-                  type="number"
-                  className="outline-none text-sm w-full"
-                  placeholder="Jumlah"
-                />
-              </div>
+              <TextField
+                {...register("amount")}
+                compact
+                label="jumlah"
+                placeholder="Jumlah"
+                type="number"
+                icon={
+                  <span className="flex bg-transparent text-sm text-blue-500">
+                    Rp.
+                  </span>
+                }
+              />
             </div>
 
             <div className="relative w-full">
-              <label
-                htmlFor="text"
-                className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
-                Biaya transfer <span className="text-red-500">*</span>
-              </label>
-              <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center">
-                <span className="flex bg-white mr-3 text-sm text-blue-500">
-                  Rp.
-                </span>
-                <input
-                  id="tax"
-                  {...register("tax", { required: true })}
-                  type="number"
-                  className="outline-none text-sm w-full"
-                  placeholder="Jumlah"
-                />
-              </div>
+              <TextField
+                {...register("tax")}
+                compact
+                type="number"
+                label="biaya transfer"
+                placeholder="Biaya transfer"
+                icon={
+                  <span className="flex bg-transparent text-sm text-blue-500">
+                    Rp.
+                  </span>
+                }
+              />
             </div>
 
             <div className="grid grid-cols-1 gap-6">
@@ -290,8 +282,8 @@ export default function TransferFormPage() {
                   className="text-sm font-semibold text-zinc-600 uppercase">
                   KETERANGAN <span className="text-red-500">*</span>
                 </label>
-                <div className="relative h-40 pb-3 border border-zinc-300 rounded-xl pl-12 pr-3">
-                  <BookMarkedIcon className="absolute top-3 left-3.5 size-5" />
+                <div className="relative h-40 pb-3 border border-blue-400/40 rounded-xl pl-12 pr-3">
+                  <BookMarkedIcon className="absolute top-3 left-3.5 size-4 text-blue-500" />
                   <textarea
                     id="note"
                     {...register("note", { required: true })}
@@ -307,7 +299,7 @@ export default function TransferFormPage() {
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
             type="reset"
-            className="bg-white text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
+            className="bg-transparent text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
             Batal
           </Button>
           <Button

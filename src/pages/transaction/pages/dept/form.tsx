@@ -431,7 +431,7 @@ export default function DebtFormPage() {
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
             type="reset"
-            className="bg-white shadow-none text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100">
+            className="bg-transparent shadow-none text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100">
             Batal
           </Button>
           <Button

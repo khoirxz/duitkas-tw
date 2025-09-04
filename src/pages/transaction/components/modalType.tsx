@@ -72,7 +72,7 @@ export default function ModalType() {
       <img
         src={TYPE_FORM.find((type) => type.value === currentPath)?.img}
         alt="Transfer"
-        className="aspect-square w-xs"
+        className="aspect-square w-40 md:w-xs mx-auto"
       />
 
       <p className="font-semibold text-center uppercase">
@@ -105,15 +105,15 @@ export default function ModalType() {
               </DialogDescription>
             </VisuallyHidden>
           </DialogHeader>
-          <div className="bg-white rounded-b-2xl p-5 space-y-5">
+          <div className="bg-white dark:bg-zinc-800 rounded-b-2xl p-5 space-y-5">
             <div className="grid gird-cols-2 md:grid-cols-3 gap-2 overflow-auto max-h-80 md:max-h-full">
               {TYPE_FORM.map((type) => (
                 <button
                   key={type.value}
                   onClick={() => handleClick(`/${type.value}`)}
-                  className="flex flex-col w-full items-center gap-3 cursor-pointer shadow hover:shadow-lg transition-shadow rounded-2xl px-5 pt-12 pb-5 border relative">
+                  className="flex flex-col w-full items-center gap-3 cursor-pointer shadow hover:shadow-lg transition-shadow rounded-2xl px-5 pt-12 pb-5 border relative dark:bg-zinc-700">
                   {currentPath === type.value && (
-                    <span className="absolute font-public top-4 px-3 py-2 bg-green-500/20 text-green-800 text-xs rounded-full">
+                    <span className="absolute font-public top-4 px-3 py-2 bg-green-500/20 text-green-800 dark:bg-green-600 dark:text-green-100 text-xs rounded-full">
                       Tujuan saat ini
                     </span>
                   )}
