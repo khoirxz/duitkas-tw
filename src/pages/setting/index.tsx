@@ -120,21 +120,23 @@ export default function SettingPage() {
 
   return (
     <Layout>
-      <div className="w-full p-3 md:p-5 space-y-7">
-        <div className="flex flex-col md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
+      <div className="w-full p-2 md:p-5 space-y-7">
+        <div className="flex flex-col-reverse md:flex-row gap-3 md:gap-0 items-start md:items-center justify-between mt-5">
           <h1 className="font-bold text-xl">Konfigurasi Perusahaan</h1>
 
-          <Button
-            asChild
-            variant="default"
-            className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700 hidden md:flex">
-            <Link to="/admin/settings/users">Data pengguna</Link>
-          </Button>
+          <div className="flex justify-end items-center w-full">
+            <Button
+              asChild
+              variant="default"
+              className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full md:w-auto bg-blue-700 dark:text-white">
+              <Link to="/admin/settings/users">Data pengguna</Link>
+            </Button>
+          </div>
         </div>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white dark:bg-zinc-900">
+          className="grid grid-cols-1 md:grid-cols-2 gap-10 p-4 md:px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white dark:bg-zinc-900">
           <div className="relative w-full col-span-2">
             {isLoading ? (
               <div className="border border-blue-300/30 rounded-full px-4.5 py-3 flex flex-row items-center bg-blue-300/30 animate-pulse h-12"></div>
@@ -229,7 +231,7 @@ export default function SettingPage() {
           </div>
 
           {openForm ? (
-            <div className="flex flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
+            <div className="flex flex-col md:flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
               <Button
                 onClick={() => setOpenForm(false)}
                 className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">

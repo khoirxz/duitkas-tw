@@ -150,7 +150,7 @@ export default function SettingUserFormPage() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white">
+          className="grid grid-cols-1 md:grid-cols-2 gap-10 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white dark:bg-zinc-800">
           <div className="col-span-2 relative w-full">
             <Controller
               control={control}
@@ -190,14 +190,14 @@ export default function SettingUserFormPage() {
                 <>
                   <label
                     htmlFor="id_category"
-                    className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2">
+                    className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase bg-white dark:bg-zinc-800 absolute left-4 top-[-12px] px-2">
                     kantor <span className="text-red-500">*</span>
                   </label>
 
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}>
-                    <SelectTrigger className="w-full flex justify-start h-10! py-2.5 px-4.5 rounded-full border border-blue-300">
+                    <SelectTrigger className="w-full flex justify-start h-10! py-2.5 px-4.5 rounded-full border border-blue-300 dark:bg-zinc-800">
                       <span className="">
                         <GlobeIcon className="size-5 mr-1" color="#2B63E2" />
                       </span>
@@ -243,11 +243,11 @@ export default function SettingUserFormPage() {
             )}
           </div>
 
-          <div className="flex flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
             <Button className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">
               Batal
             </Button>
-            <Button className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 cursor-pointer">
+            <Button className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 cursor-pointer dark:text-white">
               Simpan
             </Button>
           </div>

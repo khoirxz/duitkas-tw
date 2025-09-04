@@ -36,13 +36,13 @@ const CustomSelect: React.FC<CustomSelectProps> = ({
 
   return (
     <>
-      <span className="text-sm font-semibold text-zinc-600 uppercase bg-white absolute left-4 top-[-12px] px-2 rounded-sm z-10">
+      <span className="text-sm font-semibold text-zinc-600 dark:text-zinc-400 uppercase bg-white dark:bg-zinc-800 absolute left-4 top-[-12px] px-2 rounded-sm z-10">
         {title} <span className="text-red-500">*</span>
       </span>
       <Button
         onClick={() => setOpen(true)}
         type="button"
-        className="w-full rounded-full max-h-10 bg-white text-black border border-blue-400/40 h-auto py-2.5 px-4.5 hover:bg-zinc-300">
+        className="w-full rounded-full max-h-10 bg-white dark:bg-zinc-800 text-black border border-blue-400/40 h-auto py-2.5 px-4.5 hover:bg-zinc-300 dark:text-white">
         <div className="flex items-center gap-2 w-full">
           <span className="aspect-square flex items-center">
             <WorkCaseIcon className="size-5 mr-1" color="#2B63E2" />

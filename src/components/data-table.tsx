@@ -87,7 +87,7 @@ const DataTable = <TData, TValue>({
   return (
     <div className="w-full">
       <Table className="px-3">
-        <TableHeader className="bg-[#E3F2FD] font-domine ">
+        <TableHeader className="bg-[#E3F2FD] dark:bg-zinc-800 font-domine ">
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
               {headerGroup.headers.map((header) => {
@@ -105,7 +105,7 @@ const DataTable = <TData, TValue>({
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody className="bg-white">
+        <TableBody className="bg-white dark:bg-zinc-700">
           {table.getRowModel().rows?.length ? (
             table.getRowModel().rows.map((row) => (
               <TableRow

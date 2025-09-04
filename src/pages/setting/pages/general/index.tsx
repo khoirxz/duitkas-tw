@@ -65,8 +65,8 @@ export default function SettingGeneralPage() {
 
         <div className="mt-7 space-y-10">
           <div className="flex md:flex-row gap-2 md:gap-5 items-center justify-between">
-            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white">
-              <span className="flex bg-white">
+            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600">
+              <span className="flex bg-transparent">
                 <SearchIcon className="size-4 mr-2" />
               </span>
               <input
@@ -134,11 +134,11 @@ export default function SettingGeneralPage() {
         </div>
 
         <div className="mt-20 space-y-10">
-          <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
-            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white">
-              <button className="flex bg-white">
+          <div className="flex md:flex-row gap-2 md:gap-5 items-center justify-between">
+            <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center bg-white dark:bg-zinc-800 text-zinc-400 dark:text-zinc-600">
+              <span className="flex bg-transparent">
                 <SearchIcon className="size-4 mr-2" />
-              </button>
+              </span>
               <input
                 type="text"
                 className="outline-none"
@@ -154,10 +154,11 @@ export default function SettingGeneralPage() {
                   className="size-5 fill-white"
                   color="inherit"
                 />{" "}
-                Tambah
+                <span className="hidden md:block">Tambah</span>
               </Link>
             </Button>
           </div>
+
           <UserTable />
 
           <div className="flex flex-col md:flex-row gap-5 items-center justify-between">

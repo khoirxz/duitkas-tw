@@ -115,7 +115,7 @@ export default function SettingOfficeFormPage() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="grid grid-cols-1 md:grid-cols-2 gap-10 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white">
+          className="grid grid-cols-1 md:grid-cols-2 gap-10 px-8 py-12 border shadow-[0px_2px_4px_0px_rgba(0,0,0,0.1)] rounded-3xl bg-white dark:bg-zinc-800">
           <div className="col-span-2 relative w-full">
             <TextField
               {...register("name")}
@@ -128,7 +128,7 @@ export default function SettingOfficeFormPage() {
           <div className="relative w-full">
             <TextField
               {...register("code")}
-              label="Kado kantor"
+              label="Kode kantor"
               placeholder="001"
               required
               compact
@@ -144,10 +144,10 @@ export default function SettingOfficeFormPage() {
             />
           </div>
 
-          <div className="flex flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
             <Button
               type="button"
-              className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">
+              className="rounded-full shadow-none px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">
               Batal
             </Button>
             <Button
