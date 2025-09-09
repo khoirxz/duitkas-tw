@@ -17,7 +17,7 @@ export default function DebsBalance({ data }: DebsBalanceProps) {
   // Gunakan kondisi untuk menghindari pembagian dengan nol jika totalnya 0.
   const incomePercentage = total > 0 ? (data.total_hutang / total) * 100 : 0;
   return (
-    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col justify-between bg-white dark:bg-zinc-800">
+    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col justify-between bg-white dark:bg-zinc-900">
       <div className="flex flex-row justify-between items-center">
         <p className="font-semibold">Hutang Piutang</p>
 

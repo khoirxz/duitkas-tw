@@ -22,25 +22,26 @@ import { cn } from "@/lib/utils";
 import { Check, ChevronDownIcon } from "lucide-react";
 
 import useScroll from "@/components/use-scroll";
-import type { DashboardProps } from "../types/dashboard";
 import { formatRupiah } from "@/lib/formatMoney";
 
 interface TransactionChartProps {
   data: {
     pemasukan: {
-      total: DashboardProps["data"]["pemasukan_bulan_ini"];
+      total: number;
       data: {
         nama: string;
         jumlah: number;
         warna: string;
+        total_transaksi: number;
       }[];
     };
     pengeluaran: {
-      total: DashboardProps["data"]["pengeluaran_bulan_ini"];
+      total: number;
       data: {
         nama: string;
         jumlah: number;
         warna: string;
+        total_transaksi: number;
       }[];
     };
   };
@@ -95,7 +96,9 @@ export default function TransactionChart({ data }: TransactionChartProps) {
                   <p className="font-semibold block md:hidden text-sm">
                     {item.nama}
                   </p>
-                  <p className="text-xs text-zinc-500">1 Transaksi</p>
+                  <p className="text-xs text-zinc-500">
+                    {item.total_transaksi} Transaksi
+                  </p>
                   <p className="font-semibold font-domine text-sm hidden md:block">
                     {formatRupiah(item.jumlah)}
                   </p>

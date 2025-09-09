@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 
 import { SquareArrowUpIcon } from "lucide-react";
-import { UpSquareIcon, ChevronRightIcon } from "@/assets/icons/outline";
+import { ChevronRightIcon } from "@/assets/icons/outline";
 import { GraphSolidIcon, AddSquareSolidIcon } from "@/assets/icons/solid";
 import { formatRupiah } from "@/lib/formatMoney";
 
 interface ActualBalanceProps {
   data: {
+    total_real_balance: number;
     pemasukan_bulan_ini: number;
     pengeluaran_bulan_ini: number;
     prosentase: number;
@@ -25,7 +26,9 @@ export default function ActualBalance({ data }: ActualBalanceProps) {
           </span>
         </div>
 
-        <p className="text-2xl font-semibold">Rp 909.750.000</p>
+        <p className="text-2xl font-semibold">
+          {formatRupiah(data.total_real_balance)}
+        </p>
       </div>
 
       <div className="flex flex-col gap-2 mt-4 text-sm md:text-base">

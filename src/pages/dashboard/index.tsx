@@ -11,6 +11,7 @@ import TransactionChart from "./components/transactionChart";
 
 import { DatePicker } from "@/components/date-selector";
 import { useDashboard } from "./hooks/useDashboard";
+import type { DashboardProps } from "./types/dashboard";
 
 export default function DashboardPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
@@ -21,6 +22,37 @@ export default function DashboardPage() {
   );
 
   if (isError) return <p>Terjadi kesalahan saat memuat data.</p>;
+
+  const calculateIncomeCategory = (
+    pemasukan_terbaru: DashboardProps["data"]["pemasukan_terbaru"]
+  ) => {
+    return pemasukan_terbaru.reduce((acc, item) => {
+      // cek apakah kategori sudah ada di acc
+      const existing = acc.find((x) => x.nama === item.nama_kategori);
+
+      if (existing) {
+        existing.jumlah += item.jumlah; // tambah jumlah
+        existing.total_transaksi += 1; // tambah jumlah transaksi
+      } else {
+        acc.push({
+          nama: item.nama_kategori,
+          jumlah: item.jumlah,
+          warna: item.warna,
+          total_transaksi: 1,
+        });
+      }
+
+      return acc;
+    }, [] as { nama: string; jumlah: number; warna: string; total_transaksi: number }[]);
+  };
+
+  const resultPemasukan = data?.data.pemasukan_terbaru
+    ? calculateIncomeCategory(data.data.pemasukan_terbaru)
+    : [];
+
+  const resultPengeluaran = data?.data.pengeluaran_terbaru
+    ? calculateIncomeCategory(data.data.pengeluaran_terbaru)
+    : [];
 
   return (
     <Layout>
@@ -69,6 +101,7 @@ export default function DashboardPage() {
             ) : (
               <ActualBalance
                 data={{
+                  total_real_balance: data?.data.total_real_balance || 0,
                   pemasukan_bulan_ini: data?.data.pemasukan_bulan_ini || 0,
                   pengeluaran_bulan_ini: data?.data.pengeluaran_bulan_ini || 0,
                   prosentase: data?.data.prosentase || 0,
@@ -103,7 +136,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:col-span-2 md:row-span-1 md:col-start-2 md:row-start-2">
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4 bg-white dark:bg-zinc-800">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4 bg-white dark:bg-zinc-900">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full border rounded-2xl p-3">
                   <div className="animate-pulse w-full h-full border-primary bg-gray-200 rounded-2xl"></div>
@@ -113,7 +146,7 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2 order-first md:order-2 bg-white dark:bg-zinc-800">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2 order-first md:order-2 bg-white dark:bg-zinc-900">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full border rounded-2xl p-3">
                   <div className="animate-pulse w-full h-full border-primary bg-gray-200 rounded-2xl"></div>
@@ -123,21 +156,11 @@ export default function DashboardPage() {
                   data={{
                     pemasukan: {
                       total: data?.data.pemasukan_bulan_ini || 0,
-                      data:
-                        data?.data.pemasukan_terbaru.map((item) => ({
-                          nama: item.nama_kategori,
-                          jumlah: item.jumlah,
-                          warna: item.warna,
-                        })) || [],
+                      data: resultPemasukan,
                     },
                     pengeluaran: {
                       total: data?.data.pengeluaran_bulan_ini || 0,
-                      data:
-                        data?.data.pengeluaran_terbaru.map((item) => ({
-                          nama: item.nama_kategori,
-                          jumlah: item.jumlah,
-                          warna: item.warna,
-                        })) || [],
+                      data: resultPengeluaran,
                     },
                   }}
                 />
