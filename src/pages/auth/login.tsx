@@ -146,9 +146,9 @@ export default function LoginPage() {
               username <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
-              <button className="flex bg-white">
+              <span className="flex bg-white">
                 <UserIcon className="size-4 mr-3" color="#3B82F6" />
-              </button>
+              </span>
               <input
                 id="username"
                 {...register("username")}
@@ -171,9 +171,9 @@ export default function LoginPage() {
               Kata sandi <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
-              <button className="flex bg-white">
+              <span className="flex bg-white">
                 <LockKeyholeIcon className="size-4 mr-3" color="#3B82F6" />
-              </button>
+              </span>
               <input
                 id="password"
                 {...register("password")}

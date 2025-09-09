@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import useScroll from "@/components/use-scroll";
 
-import { ChevronRightIcon } from "@/assets/icons/outline";
+import { ChevronRightIcon } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import type { DashboardProps } from "../types/dashboard";
 import { formatRupiah } from "@/lib/formatMoney";
@@ -15,14 +15,14 @@ export default function Account({ data }: AccountProps) {
     useScroll();
 
   return (
-    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:justify-between bg-white">
+    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:justify-between bg-white dark:bg-zinc-900">
       <div className="flex flex-row justify-between items-center">
         <p className="font-semibold">Akun</p>
 
         <Button
           size="icon"
-          className="bg-white rounded-full hover:bg-primary/10 p-0">
-          <ChevronRightIcon className="w-4 h-4" color="black" />
+          className="bg-transparent rounded-full hover:bg-primary/10 p-0">
+          <ChevronRightIcon className="w-4 h-4 dark:text-white" />
         </Button>
       </div>
 
@@ -72,7 +72,7 @@ const AccountItem: React.FC<AccountItemProps> = ({ data }) => {
         <span>{formatRupiah(data.saldo_awal)}</span>
       </div>
       <div>
-        <div className="relative w-full h-6 bg-amber-500 rounded-2xl overflow-hidden mt-3">
+        <div className="relative w-full h-6 bg-amber-500 dark:bg-zinc-200 rounded-2xl overflow-hidden mt-3">
           <div
             className="absolute top-0 left-0 h-full bg-blue-700"
             style={{
@@ -96,7 +96,7 @@ const AccountItem: React.FC<AccountItemProps> = ({ data }) => {
         </div>
         <div className="flex flex-row justify-between items-center border-b border-[#EFEFEF] py-2.5">
           <div className="flex flex-row items-center gap-2">
-            <span className="h-2.5 w-6 bg-amber-500 rounded-full"></span>
+            <span className="h-2.5 w-6 bg-amber-500 dark:bg-zinc-200 rounded-full"></span>
             <p className="text-xs">Pengeluaran</p>
           </div>
           <button className="flex flex-row items-center gap-2 rounded-lg">

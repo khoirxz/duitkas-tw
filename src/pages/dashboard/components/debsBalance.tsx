@@ -1,4 +1,4 @@
-import { ChevronRightIcon } from "@/assets/icons/outline";
+import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { DashboardProps } from "../types/dashboard";
 import { formatRupiah } from "@/lib/formatMoney";
@@ -17,14 +17,14 @@ export default function DebsBalance({ data }: DebsBalanceProps) {
   // Gunakan kondisi untuk menghindari pembagian dengan nol jika totalnya 0.
   const incomePercentage = total > 0 ? (data.total_hutang / total) * 100 : 0;
   return (
-    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col justify-between bg-white">
+    <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col justify-between bg-white dark:bg-zinc-800">
       <div className="flex flex-row justify-between items-center">
         <p className="font-semibold">Hutang Piutang</p>
 
         <Button
           size="icon"
-          className="bg-white rounded-full hover:bg-primary/10 p-1">
-          <ChevronRightIcon className="w-4 h-4" color="black" />
+          className="bg-transparent rounded-full hover:bg-primary/10 p-1">
+          <ChevronRight className="w-4 h-4 text-black dark:text-white" />
         </Button>
       </div>
 
@@ -39,7 +39,7 @@ export default function DebsBalance({ data }: DebsBalanceProps) {
       </div>
 
       <div className="mt-3">
-        <div className="flex flex-row justify-between items-center border-t border-[#EFEFEF] py-2.5">
+        <div className="flex flex-row justify-between items-center border-t border-[#EFEFEF] dark:border-zinc-600 py-2.5">
           <div className="flex flex-row items-center gap-2">
             <span className="h-2.5 w-6 bg-amber-500 rounded-full"></span>
             <p className="text-sm">Total Hutang</p>
@@ -50,7 +50,7 @@ export default function DebsBalance({ data }: DebsBalanceProps) {
             </span>
           </button>
         </div>
-        <div className="flex flex-row justify-between items-center border-t border-[#EFEFEF] py-2.5">
+        <div className="flex flex-row justify-between items-center border-t border-[#EFEFEF] dark:border-zinc-600 py-2.5">
           <div className="flex flex-row items-center gap-2">
             <span className="h-2.5 w-6 bg-blue-100 rounded-full"></span>
             <p className="text-sm">Total Piutang</p>

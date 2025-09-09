@@ -1,8 +1,7 @@
 import { useState } from "react";
 import Layout from "@/layouts/layout";
 
-import { ChevronDown } from "lucide-react";
-import { CalendarIcon } from "@/assets/icons/outline";
+import { ChevronDown, CalendarIcon } from "lucide-react";
 
 import ActualBalance from "./components/actualBalance";
 import DebsBalance from "./components/debsBalance";
@@ -34,7 +33,7 @@ export default function DashboardPage() {
               type="month"
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}>
-              <button className="rounded-full bg-white text-black border-blue-300 border flex flex-row items-center justify-between gap-2 px-3.5 py-2 w-full md:w-auto">
+              <button className="rounded-full bg-white text-black dark:text-white dark:bg-zinc-800 border-blue-300 border flex flex-row items-center justify-between gap-2 px-3.5 py-2 w-full md:w-auto">
                 <CalendarIcon className="size-5 mr-1" />
                 <span className="flex-1 md:min-w-22 text-left uppercase">
                   {selectedDate?.toLocaleString("id-ID", { month: "long" }) ||
@@ -47,7 +46,7 @@ export default function DashboardPage() {
               type="year"
               selectedDate={selectedDate}
               setSelectedDate={setSelectedDate}>
-              <button className="rounded-full bg-white text-black border-blue-300 border flex flex-row items-center justify-between gap-2 px-3.5 py-2 w-full md:w-auto">
+              <button className="rounded-full bg-white text-black dark:text-white dark:bg-zinc-800 border-blue-300 border flex flex-row items-center justify-between gap-2 px-3.5 py-2 w-full md:w-auto">
                 <CalendarIcon className="size-5 mr-1" />
                 <span className="flex-1 md:min-w-22 text-left uppercase">
                   {selectedDate?.toLocaleString("id-ID", {
@@ -104,7 +103,7 @@ export default function DashboardPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-6 gap-4 md:col-span-2 md:row-span-1 md:col-start-2 md:row-start-2">
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4 bg-white">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-4 bg-white dark:bg-zinc-800">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full border rounded-2xl p-3">
                   <div className="animate-pulse w-full h-full border-primary bg-gray-200 rounded-2xl"></div>
@@ -114,13 +113,34 @@ export default function DashboardPage() {
               )}
             </div>
 
-            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2 order-first md:order-2 bg-white">
+            <div className="shadow-lg rounded-2xl h-full p-5 border flex flex-col md:col-span-2 order-first md:order-2 bg-white dark:bg-zinc-800">
               {isLoading ? (
                 <div className="flex items-center justify-center h-full border rounded-2xl p-3">
                   <div className="animate-pulse w-full h-full border-primary bg-gray-200 rounded-2xl"></div>
                 </div>
               ) : (
-                <TransactionChart />
+                <TransactionChart
+                  data={{
+                    pemasukan: {
+                      total: data?.data.pemasukan_bulan_ini || 0,
+                      data:
+                        data?.data.pemasukan_terbaru.map((item) => ({
+                          nama: item.nama_kategori,
+                          jumlah: item.jumlah,
+                          warna: item.warna,
+                        })) || [],
+                    },
+                    pengeluaran: {
+                      total: data?.data.pengeluaran_bulan_ini || 0,
+                      data:
+                        data?.data.pengeluaran_terbaru.map((item) => ({
+                          nama: item.nama_kategori,
+                          jumlah: item.jumlah,
+                          warna: item.warna,
+                        })) || [],
+                    },
+                  }}
+                />
               )}
             </div>
           </div>

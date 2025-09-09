@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 
+import { SquareArrowUpIcon } from "lucide-react";
 import { UpSquareIcon, ChevronRightIcon } from "@/assets/icons/outline";
 import { GraphSolidIcon, AddSquareSolidIcon } from "@/assets/icons/solid";
 import { formatRupiah } from "@/lib/formatMoney";
@@ -14,12 +15,12 @@ interface ActualBalanceProps {
 
 export default function ActualBalance({ data }: ActualBalanceProps) {
   return (
-    <div className="bg-blue-700 text-white p-5 rounded-2xl h-full flex flex-col justify-between">
+    <div className="bg-blue-700 dark:bg-zinc-800 text-white p-5 rounded-2xl h-full flex flex-col justify-between">
       <div className="flex flex-col md:flex-row justify-between md:items-center gap-3">
         <div className="flex flex-row gap-2 items-center justify-between md:justify-start">
           <p className=" md:text-lg font-semibold">Saldo Aktual</p>
-          <span className="bg-green-200 text-green-700 py-1 px-2 rounded-lg font-bold text-sm flex flex-row gap-1 items-center">
-            <UpSquareIcon className="w-4 h-4 md:w-5 md:h-5" color="#008236" />
+          <span className="bg-green-200 text-green-700 dark:bg-green-700 dark:text-green-200 py-1 px-2 rounded-lg font-bold text-sm flex flex-row gap-1 items-center">
+            <SquareArrowUpIcon className="w-4 h-4 md:w-5 md:h-5" />
             <span className="text-xs md:text-sm">5 %</span>
           </span>
         </div>
@@ -55,7 +56,7 @@ export default function ActualBalance({ data }: ActualBalanceProps) {
       </div>
 
       <div className="grid grud-cols-1 md:grid-cols-2 mt-5 md:mt-2 gap-1">
-        <Button className="flex-1 rounded-full uppercase flex flex-row items-center md:justify-between h-auto bg-transparent border-2 border-white">
+        <Button className="flex-1 rounded-full uppercase flex flex-row items-center md:justify-between h-auto bg-transparent border-2 border-white dark:text-white">
           <GraphSolidIcon
             style={{
               height: 16,

@@ -2,8 +2,9 @@ import { useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { AnimatePresence } from "motion/react";
+import { useTheme } from "@/components/theme-provider";
 
-import { ChevronDownIcon, GraphIcon } from "@/assets/icons/outline";
+import { GraphIcon } from "@/assets/icons/outline";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -18,25 +19,35 @@ import {
 } from "@/components/ui/popover";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { Check } from "lucide-react";
+import { Check, ChevronDownIcon } from "lucide-react";
 
 import useScroll from "@/components/use-scroll";
-// import type { DashboardProps } from "../types/dashboard";
+import type { DashboardProps } from "../types/dashboard";
+import { formatRupiah } from "@/lib/formatMoney";
 
-// interface TransactionChartProps {
-//   data: {
-//     pemasukan: {
-//       pemasukan_bulan_ini: DashboardProps["data"]["pemasukan_bulan_ini"];
-//       data: DashboardProps["data"]["pemasukan_terbaru"];
-//     };
-//     pengeluaran: {
-//       pengeluaran_bulan_ini: DashboardProps["data"]["pengeluaran_bulan_ini"];
-//       data: DashboardProps["data"]["pengeluaran_terbaru"];
-//     };
-//   };
-// }
+interface TransactionChartProps {
+  data: {
+    pemasukan: {
+      total: DashboardProps["data"]["pemasukan_bulan_ini"];
+      data: {
+        nama: string;
+        jumlah: number;
+        warna: string;
+      }[];
+    };
+    pengeluaran: {
+      total: DashboardProps["data"]["pengeluaran_bulan_ini"];
+      data: {
+        nama: string;
+        jumlah: number;
+        warna: string;
+      }[];
+    };
+  };
+}
 
-export default function TransactionChart() {
+export default function TransactionChart({ data }: TransactionChartProps) {
+  const [value, setValue] = useState<"pemasukan" | "pengeluaran">("pemasukan");
   const { scrollRef, scrollPosition, handleScroll, ScrollIndicator } =
     useScroll();
 
@@ -45,7 +56,7 @@ export default function TransactionChart() {
       <p className="font-semibold">Ringkasan Transaksi</p>
 
       <div className="w-full">
-        <SelectCategory />
+        <SelectCategory value={value} setValue={setValue} />
       </div>
 
       <div className="flex flex-row md:flex-col justify-between gap-4 items-center">
@@ -54,14 +65,14 @@ export default function TransactionChart() {
         <div className="flex flex-col gap-1 justify-start w-full">
           <p className="text-sm text-right md:text-left">Total Pengeluaran</p>
           <p className="text-lg md:text-xl font-semibold text-right md:text-left">
-            Rp. 20.000.000
+            {formatRupiah(data[value].total)}
           </p>
         </div>
       </div>
 
       <div className="space-y-1">
         <Badge variant="default" className="text-violet-600 bg-violet-300">
-          11 Transaksi
+          {data[value].data.length} Transaksi
         </Badge>
 
         <div className="relative">
@@ -69,29 +80,29 @@ export default function TransactionChart() {
             className="space-y-2.5 max-h-[190px] overflow-y-auto snap-x snap-mandatory relative scroll-smooth"
             ref={scrollRef}
             onScroll={handleScroll}>
-            {Array.from({ length: 5 }).map((_, index) => (
+            {data[value].data.map((item, index) => (
               <div
-                className="flex flex-row md:flex-col gap-2 border-b border-[#EFEFEF] py-2 items-center "
+                className="flex flex-row md:flex-col gap-2 border-b border-[#EFEFEF] dark:border-zinc-600 py-2 items-center "
                 key={index}>
                 <div className="text-white bg-blue-700 py-1 px-2 rounded-full text-center md:w-full">
                   <p className="text-xs font-semibold hidden md:block">
-                    Pemasaran
+                    {item.nama}
                   </p>
                   <span className="block md:hidden w-3 h-5 bg-blue-700"></span>
                 </div>
 
                 <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between flex-1 md:flex-0 w-full">
                   <p className="font-semibold block md:hidden text-sm">
-                    Pemasaran
+                    {item.nama}
                   </p>
                   <p className="text-xs text-zinc-500">1 Transaksi</p>
                   <p className="font-semibold font-domine text-sm hidden md:block">
-                    Rp. 7.500.000
+                    {formatRupiah(item.jumlah)}
                   </p>
                 </div>
 
                 <p className="font-semibold font-domine text-sm block md:hidden">
-                  Rp. 7.500.000
+                  {formatRupiah(item.jumlah)}
                 </p>
               </div>
             ))}
@@ -111,9 +122,14 @@ export default function TransactionChart() {
   );
 }
 
-function SelectCategory() {
+function SelectCategory({
+  value,
+  setValue,
+}: {
+  value: string;
+  setValue: React.Dispatch<React.SetStateAction<"pemasukan" | "pengeluaran">>;
+}) {
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("pemasukan");
 
   const options: { value: string; label: string; icon: React.ReactNode }[] = [
     {
@@ -131,7 +147,7 @@ function SelectCategory() {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button className="w-full rounded-full bg-white text-black border border-blue-600 h-auto py-3 px-4 hover:bg-zinc-300">
+        <Button className="w-full rounded-full bg-white dark:bg-zinc-800 text-black dark:text-white border border-blue-600 h-auto py-3 px-4 hover:bg-zinc-300">
           <div className="flex items-center gap-2 w-full">
             <span>
               {options.find((option) => option.value === value)?.icon}
@@ -152,7 +168,7 @@ function SelectCategory() {
                   key={option.value}
                   value={option.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue as string);
+                    setValue(currentValue as "pemasukan" | "pengeluaran");
                     setOpen(false);
                   }}>
                   <div className="flex items-center gap-2">
@@ -176,41 +192,49 @@ function SelectCategory() {
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-const data = {
-  labels: ["Makan", "Transport", "Hiburan", "Tagihan", "Lainnya"],
-  datasets: [
-    {
-      data: [60, 20, 10, 3, 7],
-      backgroundColor: ["#2563eb", "#f59e0b", "#15803d", "#bbf7d0", "#cbd5e1"],
-      borderColor: "#ffffff",
-      borderWidth: 6,
-      borderRadius: 20, // 🟢 Ini dia tumpulnya
-      spacing: 0, // 🟢 Ini jarak antar segmen
-    },
-  ],
-};
+function DonutChart() {
+  const { theme } = useTheme();
 
-// Remove custom interfaces and use the correct callback signature for Chart.js
-const options = {
-  cutout: "70%", // besar lubang tengah
-  plugins: {
-    legend: { display: false },
-    tooltip: {
-      callbacks: {
-        label: function (
-          tooltipItem: import("chart.js").TooltipItem<"doughnut">
-        ) {
-          // tooltipItem.raw may be unknown, so we check and format safely
-          const value =
-            typeof tooltipItem.raw === "number" ? tooltipItem.raw : 0;
-          return `Rp. ${value.toLocaleString()}`;
+  const data = {
+    labels: ["Makan", "Transport", "Hiburan", "Tagihan", "Lainnya"],
+    datasets: [
+      {
+        data: [60, 20, 10, 3, 7],
+        backgroundColor: [
+          "#2563eb",
+          "#f59e0b",
+          "#15803d",
+          "#bbf7d0",
+          "#cbd5e1",
+        ],
+        borderColor: theme === "light" ? "#ffffff" : "#27272A",
+        borderWidth: 6,
+        borderRadius: 20, // 🟢 Ini dia tumpulnya
+        spacing: 0, // 🟢 Ini jarak antar segmen
+      },
+    ],
+  };
+
+  // Remove custom interfaces and use the correct callback signature for Chart.js
+  const options = {
+    cutout: "70%", // besar lubang tengah
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: function (
+            tooltipItem: import("chart.js").TooltipItem<"doughnut">
+          ) {
+            // tooltipItem.raw may be unknown, so we check and format safely
+            const value =
+              typeof tooltipItem.raw === "number" ? tooltipItem.raw : 0;
+            return `Rp. ${value.toLocaleString()}`;
+          },
         },
       },
     },
-  },
-};
+  };
 
-function DonutChart() {
   return (
     <div className="w-30 h-30 md:w-40 md:h-40 mx-auto">
       <Doughnut data={data} options={options} />
