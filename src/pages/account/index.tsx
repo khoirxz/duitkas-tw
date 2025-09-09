@@ -33,7 +33,7 @@ export default function AccountPage() {
 
           <Button
             variant="default"
-            className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700"
+            className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700 dark:text-white"
             asChild>
             <Link to="/admin/account/form/add">
               <span>

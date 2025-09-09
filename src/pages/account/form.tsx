@@ -143,15 +143,6 @@ export default function AccountFormPage() {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div>
-        <h1>Loading</h1>
-        <p>maaf belum styling...</p>
-      </div>
-    );
-  }
-
   if (fetchDetailAccount?.data === null) {
     return (
       <div>
@@ -199,7 +190,7 @@ export default function AccountFormPage() {
 
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="rounded-2xl bg-white shadow p-6 border space-y-7">
+          className="rounded-2xl bg-white dark:bg-zinc-900 shadow p-6 border space-y-7">
           <div className="grid grid-cols-1 md:grid-cols-6 gap-5">
             <div className="col-span-1 md:col-span-6">
               {isEdit ? (
@@ -334,12 +325,12 @@ export default function AccountFormPage() {
           <div className="flex gap-3 relative">
             <Button
               type="button"
-              className="flex-1 rounded-full bg-white shadow-none text-indigo-600 hover:bg-zinc-100">
+              className="flex-1 rounded-full bg-transparent shadow-none text-indigo-600 hover:bg-transparent">
               Batal
             </Button>
             <Button
               type="submit"
-              className="flex-1 rounded-full bg-green-600 hover:bg-green-500">
+              className="flex-1 rounded-full bg-green-600 hover:bg-green-500 dark:text-white">
               {id ? "Simpan" : "Tambah"}
             </Button>
           </div>

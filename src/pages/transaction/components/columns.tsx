@@ -10,7 +10,7 @@ export const columns: ColumnDef<TransactionProps["data"]["transaksi"]["0"]>[] =
   [
     {
       header: ({ column }) => (
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex flex-row items-center gap-2 px-2">
           <p>Tanggal Transaksi</p>
           <button
             className="bg-transparent hover:bg-transparent"
@@ -28,6 +28,11 @@ export const columns: ColumnDef<TransactionProps["data"]["transaksi"]["0"]>[] =
             </span>
           </button>
         </div>
+      ),
+      cell: ({ row }) => (
+        <span className="inline-block w-full px-2">
+          {row.getValue("tanggal")}
+        </span>
       ),
       accessorKey: "tanggal",
     },
