@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import axios from "axios";
+import { Controller, useForm } from "react-hook-form";
+import { apiAuth } from "@/services/api";
+import ReCAPTCHA from "react-google-recaptcha";
 
 import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
@@ -24,6 +25,7 @@ const formSchema = z.object({
   email: z.email().nonempty("Wajib diisi"),
   phone: z.string().min(1, "Wajib diisi"),
   source: z.enum(["web", "social media", "friend"]),
+  g_recaptcha_response: z.string().nonempty("Wajib diisi"),
 });
 
 export default function SignUpPage() {
@@ -42,14 +44,31 @@ export default function SignUpPage() {
       email: "",
       phone: "",
       source: "web",
+      g_recaptcha_response: "",
     },
   });
+  // ref
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   // state
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const secretKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
   // handle submit
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
-      const response = await axios.post(BASE_API + "signup", data); //<- api belum tersedia :(
+      const formData = new FormData();
+
+      formData.append("identity", data.identity); // identity
+      formData.append("username", data.username); // username
+      formData.append("password", data.password); // password
+      formData.append("email", data.email); // email
+      formData.append("phone", data.phone); // phone
+      formData.append("source", data.source); // source
+      formData.append("g_recaptcha_response", data.g_recaptcha_response); // recaptcha
+
+      const { data: response } = await apiAuth.post(
+        `${BASE_API}/auth/signup`,
+        formData
+      );
 
       console.log(response);
     } catch (error) {
@@ -85,7 +104,7 @@ export default function SignUpPage() {
                 id="identity"
                 {...register("identity")}
                 type="text"
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="duitkas.com"
               />
               {watch("identity") === "" && (
@@ -108,14 +127,14 @@ export default function SignUpPage() {
               username <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
-              <button className="flex bg-white">
+              <span className="flex bg-white">
                 <UserIcon className="size-4 mr-3" color="#3B82F6" />
-              </button>
+              </span>
               <input
                 id="username"
                 {...register("username")}
                 type="text"
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="username anda"
               />
             </div>
@@ -133,14 +152,14 @@ export default function SignUpPage() {
               Kata sandi <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
-              <button className="flex bg-white">
+              <span className="flex bg-white">
                 <LockKeyholeIcon className="size-4 mr-3" color="#3B82F6" />
-              </button>
+              </span>
               <input
                 id="password"
                 {...register("password")}
                 type={showPassword ? "text" : "password"}
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="password anda"
               />
               <button
@@ -168,14 +187,14 @@ export default function SignUpPage() {
               email <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
-              <button className="flex bg-white">
+              <span className="flex bg-white">
                 <UserIcon className="size-4 mr-3" color="#3B82F6" />
-              </button>
+              </span>
               <input
                 id="email"
                 {...register("email")}
                 type="text"
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="email yang dapat dihubungi"
               />
             </div>
@@ -193,12 +212,14 @@ export default function SignUpPage() {
               nomor <span className="text-red-500">*</span>
             </label>
             <div className="border border-blue-300 rounded-full px-4.5 py-3 flex flex-row items-center relative">
-              <button className="flex bg-white mr-3 text-xs">+62</button>
+              <span className="flex bg-white text-blue-600 mr-3 text-xs">
+                +62
+              </span>
               <input
                 id="phone"
                 {...register("phone")}
                 type="text"
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="nomor yang dapat dihubungi"
               />
             </div>
@@ -220,7 +241,7 @@ export default function SignUpPage() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}>
-                  <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5">
+                  <SelectTrigger className="w-full rounded-full border border-blue-300 px-4.5 py-5.5 dark:text-black">
                     <SelectValue placeholder="Pilih" />
                   </SelectTrigger>
                   <SelectContent>
@@ -234,7 +255,25 @@ export default function SignUpPage() {
               </div>
             )}></FormField>
 
-          <Button className="w-full rounded-full py-6 uppercase">Masuk</Button>
+          <div className="flex flex-col gap-2">
+            <Controller
+              control={control}
+              name="g_recaptcha_response"
+              render={({ field }) => (
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey={secretKey}
+                  onChange={(value) => {
+                    field.onChange(value);
+                  }}
+                />
+              )}
+            />
+          </div>
+
+          <Button className="w-full rounded-full py-6 uppercase dark:text-white">
+            daftar
+          </Button>
           <p className="font-domine text-center text-sm">
             Sudah punya akun ?{" "}
             <Link to="/" className="text-blue-600 underline">

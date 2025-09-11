@@ -160,9 +160,7 @@ const AppNavbar: React.FC<{ data: UserProps | null }> = ({ data }) => {
                   style={{ backgroundColor: theme.color }}></span>
               ))}
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={logout}>
-              {themes.find((t) => t.value === theme)?.name}
-            </DropdownMenuItem>
+            <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

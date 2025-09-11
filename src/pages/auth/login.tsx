@@ -75,7 +75,7 @@ export default function LoginPage() {
       // redirect to dashboard after 2 seconds
       // todo: refactor soon using react router
       setTimeout(() => {
-        window.location.href = "/admin/dashboard";
+        navigate("/admin/dashboard", { replace: true });
       }, 2000);
       // console.log(response);
     } catch (e) {
