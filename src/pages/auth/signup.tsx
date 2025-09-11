@@ -2,8 +2,11 @@ import { useState, useRef } from "react";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { apiAuth } from "@/services/api";
+import { useSignup } from "./hooks/useAuth";
 import ReCAPTCHA from "react-google-recaptcha";
+import { toast } from "sonner";
+import type { AxiosError } from "axios";
+import { Link, useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import { EyeIcon, EyeOffIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
@@ -14,9 +17,8 @@ import {
   SelectValue,
   Select,
 } from "@/components/ui/select";
-import { Link } from "react-router";
-import { BASE_API } from "@/services/api";
 import { FormField } from "@/components/ui/form";
+import type { ResponseProps } from "@/types/response";
 
 const formSchema = z.object({
   identity: z.string().min(1, "Wajib diisi"),
@@ -47,6 +49,8 @@ export default function SignUpPage() {
       g_recaptcha_response: "",
     },
   });
+  const navigate = useNavigate();
+  const { mutateAsync, isPending } = useSignup();
   // ref
   const recaptchaRef = useRef<ReCAPTCHA>(null);
   // state
@@ -57,22 +61,45 @@ export default function SignUpPage() {
     try {
       const formData = new FormData();
 
-      formData.append("identity", data.identity); // identity
+      formData.append("identitas", data.identity); // identity
+      formData.append("nama", data.identity); // identity
       formData.append("username", data.username); // username
       formData.append("password", data.password); // password
       formData.append("email", data.email); // email
-      formData.append("phone", data.phone); // phone
-      formData.append("source", data.source); // source
-      formData.append("g_recaptcha_response", data.g_recaptcha_response); // recaptcha
+      formData.append("telp", data.phone); // phone
+      // formData.append("source", data.source); // source
+      formData.append("g-recaptcha-response", data.g_recaptcha_response); // recaptcha
 
-      const { data: response } = await apiAuth.post(
-        `${BASE_API}/auth/signup`,
-        formData
-      );
+      const response = await mutateAsync(formData);
 
-      console.log(response);
-    } catch (error) {
-      console.log(error);
+      if (!response.error && response.data) {
+        toast.success("Registrasi berhasil!", {
+          description: `Silahkan login kembali untuk melanjutkan`,
+          position: "top-center",
+          duration: 1500,
+          icon: "🚀",
+        });
+
+        setInterval(() => {
+          navigate("/auth/login", { replace: true });
+        }, 2000);
+      }
+    } catch (e) {
+      const error = e as AxiosError;
+
+      interface ErrResponseProps extends ResponseProps {
+        data: null;
+      }
+
+      const errorData = error.response?.data as ErrResponseProps | undefined;
+
+      if (errorData) {
+        toast.error(errorData.message, {
+          position: "top-center",
+          duration: 1500,
+          icon: "🚫",
+        });
+      }
     }
   };
 
@@ -87,7 +114,7 @@ export default function SignUpPage() {
         // reduce opacity
         opacity: 0.9,
       }}>
-      <div className="grid grid-cols-1 md:grid-cols-2 shadow-lg rounded-2xl w-full max-w-6xl mx-auto bg-white">
+      <div className="grid grid-cols-1 md:grid-cols-2 shadow-lg md:rounded-2xl w-full max-w-6xl mx-auto bg-white">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="p-5 md:p-10 flex flex-col gap-6">
@@ -271,10 +298,12 @@ export default function SignUpPage() {
             />
           </div>
 
-          <Button className="w-full rounded-full py-6 uppercase dark:text-white">
-            daftar
+          <Button
+            className="w-full rounded-full py-6 uppercase dark:text-white"
+            disabled={isPending}>
+            {isPending ? "Loading..." : "Daftar"}
           </Button>
-          <p className="font-domine text-center text-sm">
+          <p className="font-domine text-center text-sm dark:text-black">
             Sudah punya akun ?{" "}
             <Link to="/" className="text-blue-600 underline">
               Klik disini

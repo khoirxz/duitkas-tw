@@ -1,10 +1,4 @@
-import type { ResponseProps } from "../response";
-
-export interface LoginSuccessResponse extends ResponseProps {
-  data: Root;
-}
-
-export interface Root {
+export interface AuthResponseProps {
   perusahaan: Perusahaan;
   user: User;
   token: string;

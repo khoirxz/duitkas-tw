@@ -11,10 +11,9 @@ import { Toaster } from "@/components/ui/sonner";
 import { EyeIcon, EyeOffIcon, LockKeyholeIcon, UserIcon } from "lucide-react";
 
 import { useAuthStore } from "@/store/useAuth";
-import type { ResponseProps } from "@/types/response";
-import type { LoginSuccessResponse } from "@/types/auth";
+import { useLogin } from "./hooks/useAuth";
 
-import { apiAuth } from "@/services/api";
+import type { ResponseProps } from "@/types/response";
 
 const loginFormSchema = z.object({
   identity: z.string().nonempty("Wajib diisi"),
@@ -37,6 +36,8 @@ export default function LoginPage() {
       password: "",
     },
   });
+  //hook login
+  const { mutateAsync, isPending } = useLogin();
   // state
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -56,27 +57,27 @@ export default function LoginPage() {
       formData.append("username", data.username); // username
       formData.append("password", data.password); // password
 
-      const { data: response } = await apiAuth.post<LoginSuccessResponse>(
-        "login",
-        formData
-      );
-      useAuthStore.getState().setAuth(response.data.token, {
-        name: response.data.perusahaan.nama_direktur,
-        company: response.data.perusahaan.id_perusahaan,
-        role: response.data.user.role,
-        id: response.data.user.id_user,
-      });
-      toast.success("Login berhasil!", {
-        description: `Selamat datang, ${response.data.perusahaan.nama_direktur}`,
-        position: "top-center",
-        duration: 1500,
-        icon: "🚀",
-      });
-      // redirect to dashboard after 2 seconds
-      // todo: refactor soon using react router
-      setTimeout(() => {
-        navigate("/admin/dashboard", { replace: true });
-      }, 2000);
+      const response = await mutateAsync(formData);
+
+      if (!response.error && response.data) {
+        useAuthStore.getState().setAuth(response.data.token, {
+          name: response.data.perusahaan.nama_direktur,
+          company: response.data.perusahaan.id_perusahaan,
+          role: response.data.user.role,
+          id: response.data.user.id_user,
+        });
+
+        toast.success("Login berhasil!", {
+          description: `Selamat datang, ${response.data.perusahaan.nama_direktur}`,
+          position: "top-center",
+          duration: 1500,
+          icon: "🚀",
+        });
+
+        setTimeout(() => {
+          navigate("/admin/dashboard", { replace: true });
+        }, 2000);
+      }
       // console.log(response);
     } catch (e) {
       const error = e as AxiosError;
@@ -123,7 +124,7 @@ export default function LoginPage() {
                 id="identity"
                 {...register("identity")}
                 type="text"
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="duitkas.com"
               />
               {watch("identity") === "" && (
@@ -153,7 +154,7 @@ export default function LoginPage() {
                 id="username"
                 {...register("username")}
                 type="text"
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="username anda"
               />
             </div>
@@ -178,7 +179,7 @@ export default function LoginPage() {
                 id="password"
                 {...register("password")}
                 type={showPassword ? "text" : "password"}
-                className="outline-none text-sm w-full"
+                className="outline-none text-sm w-full dark:text-black"
                 placeholder="password anda"
               />
               <button
@@ -200,12 +201,13 @@ export default function LoginPage() {
           </div>
 
           <Button
-            className="w-full rounded-full py-6 uppercase cursor-pointer"
-            type="submit">
-            Masuk
+            className="w-full rounded-full py-6 uppercase cursor-pointer text-white"
+            type="submit"
+            disabled={isPending}>
+            {isPending ? "Loading..." : "Masuk"}
           </Button>
 
-          <p className="font-domine text-center text-sm">
+          <p className="font-domine text-center text-sm text-zinc-800">
             Belum punya akun ?{" "}
             <Link to="/auth/signup" className="text-blue-600 underline">
               Daftar disini

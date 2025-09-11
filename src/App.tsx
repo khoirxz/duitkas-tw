@@ -1,6 +1,7 @@
 import { RouterProvider, createBrowserRouter } from "react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ThemeProvider } from "@/components/theme-provider";
 
 import { router } from "./routes";
 import { useState } from "react";
@@ -34,8 +35,10 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={routers} />
-      <ReactQueryDevtools initialIsOpen={false} />
+      <ThemeProvider defaultTheme="system" storageKey="duitkas-theme">
+        <RouterProvider router={routers} />
+        <ReactQueryDevtools initialIsOpen={false} />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };
