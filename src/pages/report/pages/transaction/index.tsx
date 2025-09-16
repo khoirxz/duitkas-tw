@@ -14,7 +14,17 @@ import {
 } from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
 
+import { useFetchNote } from "../../hooks/useReport";
+
 export default function ReportTransactionPage() {
+  const { data } = useFetchNote({
+    akun: "",
+    jenis_transaksi: "",
+    jumlah_min: "",
+    jumlah_max: "",
+    limit: "6",
+    page: "1",
+  });
   return (
     <Layout>
       <div className="w-full p-1 md:p-5 space-y-7">
@@ -35,27 +45,27 @@ export default function ReportTransactionPage() {
           <TableFilter />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {data.map((item) => (
+            {data?.data.transaksi.map((item) => (
               <div
                 key={item.id}
                 className="bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow relative">
                 <div className="relative">
                   <Badge
                     className={cn(
-                      item.type === 0
+                      item.kategori === "baru"
                         ? "bg-green-200 text-green-800"
-                        : item.type === 1
+                        : item.kategori === "Pembayaran"
                         ? "bg-red-200 text-red-800"
-                        : item.type === 2
+                        : item.kategori === "Dikasih"
                         ? "bg-yellow-200 text-yellow-800"
                         : "bg-gray-200 text-gray-800",
                       "absolute top-2 right-2 text-sm px-3 py-1 rounded-lg z-20"
                     )}>
-                    {item.type === 0
+                    {item.kategori === "baru"
                       ? "Pemasukan"
-                      : item.type === 1
+                      : item.kategori === "Pembayaran"
                       ? "Pengeluaran"
-                      : item.type === 2
+                      : item.kategori === "Dikasih"
                       ? "Piutang"
                       : "Hutang - Lunas"}
                   </Badge>
@@ -69,13 +79,13 @@ export default function ReportTransactionPage() {
                 </div>
                 <div className="p-5 border rounded-b-2xl shadow hover:shadow-lg transition-shadow">
                   <div className="flex flex-row justify-between items-center">
-                    <h2 className="text-sm">{item.description}</h2>
+                    <h2 className="text-sm">{item.keterangan}</h2>
                     <p className="text-sm font-semibold">
-                      Rp {item.amount.toLocaleString()}
+                      Rp {item.jumlah.toLocaleString()}
                     </p>
                   </div>
 
-                  <p className="text-xs mt-5 text-zinc-500">{item.date}</p>
+                  <p className="text-xs mt-5 text-zinc-500">{item.tanggal}</p>
                 </div>
               </div>
             ))}

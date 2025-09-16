@@ -2,19 +2,9 @@ import { type ColumnDef } from "@tanstack/react-table";
 
 import { formatRupiah } from "@/lib/formatMoney";
 import { SwapIcon } from "@/assets/icons/outline";
+import type { TransaksiProps } from "../types/report";
 
-export interface TableProps {
-  id: number;
-  date: string;
-  account: string;
-  type: string;
-  category: string;
-  note: string;
-  file: string;
-  amount: number;
-}
-
-export const columns: ColumnDef<TableProps>[] = [
+export const columns: ColumnDef<TransaksiProps["transaksi"]["0"]>[] = [
   {
     header: ({ column }) => {
       return (
@@ -40,10 +30,10 @@ export const columns: ColumnDef<TableProps>[] = [
     },
     cell: ({ row }) => (
       <span className="inline-block w-full px-3 py-4">
-        {row.getValue("date")}
+        {row.getValue("tanggal")}
       </span>
     ),
-    accessorKey: "date",
+    accessorKey: "tanggal",
   },
   {
     header: ({ column }) => {
@@ -59,7 +49,7 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "account",
+    accessorKey: "akun",
   },
   {
     header: ({ column }) => {
@@ -75,17 +65,17 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "type",
+    accessorKey: "jenis_transaksi",
   },
   {
     header: () => {
       return <div className="flex flex-row items-center gap-2">Keterangan</div>;
     },
-    accessorKey: "note",
+    accessorKey: "keterangan",
     cell: ({ row }) => {
       return (
         <span className="inline-block w-full">
-          {(row.getValue("note") as string).slice(0, 15) + "..."}
+          {(row.getValue("keterangan") as string).slice(0, 15) + "..."}
         </span>
       );
     },
@@ -98,11 +88,11 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "file",
+    accessorKey: "bukti",
     cell: ({ row }) => {
       return (
         <span className="text-right inline-block w-full">
-          <a href={row.getValue("file")} className="underline text-indigo-800">
+          <a href={row.getValue("bukti")} className="underline text-indigo-800">
             Lihat Bukti
           </a>
         </span>
@@ -123,9 +113,9 @@ export const columns: ColumnDef<TableProps>[] = [
         </div>
       );
     },
-    accessorKey: "amount",
+    accessorKey: "jumlah",
     cell: ({ row }) => {
-      const amount = row.getValue<number>("amount");
+      const amount = row.getValue<number>("jumlah");
       return (
         <span className="text-right inline-block w-full px-3">
           {formatRupiah(amount)}

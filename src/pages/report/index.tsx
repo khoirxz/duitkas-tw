@@ -13,32 +13,41 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import DataTable, { TableFilter } from "@/components/data-table";
+import DataTable, {
+  PaginationTable,
+  TableFilter,
+} from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import Layout from "@/layouts/layout";
-import {
-  PrinterIcon,
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  Check,
-} from "lucide-react";
-import {
-  Pagination,
-  PaginationContent,
-  PaginationItem,
-  PaginationLink,
-} from "@/components/ui/pagination";
+import { PrinterIcon, Check } from "lucide-react";
 import { ChevronDownIcon, GraphIcon } from "@/assets/icons/outline";
 import { cn } from "@/lib/utils";
 
-import { data } from "./data";
-import { columns } from "./partials/columns";
+import { columns } from "./components/columns";
 import { Badge } from "@/components/ui/badge";
 import { FilterModal } from "@/components/filter-modal";
 import { formatRupiah } from "@/lib/formatMoney";
 
+import { useFetchReport } from "./hooks/useReport";
+
 export default function ReportPage() {
+  const [search, setSearch] = useState<string>("");
+  const [limit, setLimit] = useState<number>(10);
+  const [page, setPage] = useState<number>(1);
   const [open, setOpen] = useState<boolean>(false);
+  // hooks
+  const {
+    data: dataReport,
+    isFetching,
+    isLoading,
+  } = useFetchReport({
+    akun: search,
+    jenis_transaksi: "",
+    jumlah_min: "",
+    jumlah_max: "",
+    limit: limit.toString(),
+    page: page.toString(),
+  });
 
   const handleFilter = () => {
     setOpen(true);
@@ -71,54 +80,31 @@ export default function ReportPage() {
               Cetak
             </Button>
 
-            <TableFilter handleModal={handleFilter} />
-            <DataTable
-              columns={columns}
-              data={data}
-              pageSize={10}
-              border={false}
+            <TableFilter
+              handleModal={handleFilter}
+              setLimit={setLimit}
+              setSearch={setSearch}
             />
 
-            <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
-              <div>
-                <p>Menampilkan 1 - 10 dari 10</p>
+            {isFetching && isLoading ? (
+              <div className="w-full animate-pulse">
+                <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
               </div>
-              <div>
-                <Pagination>
-                  <PaginationContent className="space-x-3">
-                    <PaginationItem>
-                      <Button
-                        size="icon"
-                        className="rounded-full bg-blue-600 hover:bg-blue-500">
-                        <ChevronLeftIcon />
-                      </Button>
-                    </PaginationItem>
-                    <PaginationItem className="space-x-1">
-                      {Array.from({ length: 5 }).map((_, index) => (
-                        <PaginationLink
-                          key={index}
-                          href="#"
-                          className={
-                            cn(
-                              index === 0 &&
-                                `bg-blue-600 text-white hover:bg-blue-500`
-                            ) + " rounded-full"
-                          }>
-                          {index + 1}
-                        </PaginationLink>
-                      ))}
-                    </PaginationItem>
-                    <PaginationItem>
-                      <Button
-                        size="icon"
-                        className="rounded-full bg-blue-600 hover:bg-blue-500">
-                        <ChevronRightIcon />
-                      </Button>
-                    </PaginationItem>
-                  </PaginationContent>
-                </Pagination>
-              </div>
-            </div>
+            ) : (
+              <DataTable
+                columns={columns}
+                data={dataReport?.data.transaksi || []}
+                pageSize={10}
+                border={false}
+              />
+            )}
+
+            <PaginationTable
+              limit={limit}
+              page={page}
+              setPage={setPage}
+              total={dataReport?.data.total || 0}
+            />
           </div>
           <div>
             <div className="rounded-3xl p-5 w-full space-y-5 shadow-xl border min-w-64">
