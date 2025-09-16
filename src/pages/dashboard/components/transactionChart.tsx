@@ -85,11 +85,15 @@ export default function TransactionChart({ data }: TransactionChartProps) {
               <div
                 className="flex flex-row md:flex-col gap-2 border-b border-[#EFEFEF] dark:border-zinc-600 py-2 items-center "
                 key={index}>
-                <div className="text-white bg-blue-700 py-1 px-2 rounded-full text-center md:w-full">
+                <div
+                  className="text-white py-1 px-2 rounded-full text-center md:w-full"
+                  style={{ backgroundColor: item.warna }}>
                   <p className="text-xs font-semibold hidden md:block">
                     {item.nama}
                   </p>
-                  <span className="block md:hidden w-3 h-5 bg-blue-700"></span>
+                  <span
+                    className="block md:hidden w-3 h-5"
+                    style={{ backgroundColor: item.warna }}></span>
                 </div>
 
                 <div className="flex flex-col md:flex-row items-start md:items-center md:justify-between flex-1 md:flex-0 w-full">
