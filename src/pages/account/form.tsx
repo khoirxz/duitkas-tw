@@ -330,7 +330,8 @@ export default function AccountFormPage() {
           <div className="flex gap-3 relative">
             <Button
               type="button"
-              className="flex-1 rounded-full bg-transparent shadow-none text-indigo-600 hover:bg-transparent">
+              className="flex-1 rounded-full bg-transparent shadow-none text-indigo-600 hover:bg-transparent"
+              onClick={() => navigate(-1)}>
               Batal
             </Button>
             <Button
