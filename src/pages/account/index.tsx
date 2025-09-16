@@ -20,7 +20,7 @@ export default function AccountPage() {
   // State management for search, limit, and page
   const [search, setSearch] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const { isLoading, data } = useFetchAccount(search, page, limit);
   const location = useLocation();
   const state = location.state as { success?: boolean; message?: string };
@@ -59,7 +59,11 @@ export default function AccountPage() {
         )}
 
         <div className="mt-7 space-y-10">
-          <TableFilter setSearch={setSearch} setLimit={setLimit} />
+          <TableFilter
+            setSearch={setSearch}
+            setLimit={setLimit}
+            limit={limit}
+          />
 
           {isLoading ? (
             <div className="w-full animate-pulse">

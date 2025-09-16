@@ -79,7 +79,7 @@ export default function TransactionPage() {
                 <span>
                   <AddCircleSolidIcon color="white" />
                 </span>
-                Tambah Akun
+                Tambah Transaksi
               </Link>
             </Button>
           )}

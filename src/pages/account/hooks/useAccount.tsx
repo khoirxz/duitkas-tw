@@ -38,9 +38,18 @@ export const useCreateAccount = (options?: {
   onSuccess?: () => void;
   onError?: (error: Error) => void;
 }) => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (formData: FormData) => postAccount(formData),
-    ...options,
+    onSuccess: () => {
+      // Refresh data account
+      queryClient.invalidateQueries({ queryKey: ["account"] });
+
+      // kalau ada tambahan logic dari luar
+      options?.onSuccess?.();
+    },
+    onError: options?.onError,
   });
 };
 

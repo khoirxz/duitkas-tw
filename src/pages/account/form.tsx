@@ -69,7 +69,11 @@ export default function AccountFormPage() {
   const { data: fetchDetailAccount, isLoading } = useFetchDetailAccount(
     id || ""
   );
-  const { mutate: postAccount, isError: postError } = useCreateAccount({
+  const {
+    mutateAsync: postAccount,
+    isError: postError,
+    isPending: postPending,
+  } = useCreateAccount({
     onSuccess: () => {
       navigate("/admin/account", {
         replace: true,
@@ -80,17 +84,18 @@ export default function AccountFormPage() {
       });
     },
   });
-  const { mutate: updateAccount } = useUpdateAccount({
-    onSuccess: () => {
-      navigate("/admin/account", {
-        replace: true,
-        state: {
-          success: true,
-          message: `Berhasil mengubah akun ${getValues("name_account")}`,
-        },
-      });
-    },
-  });
+  const { mutateAsync: updateAccount, isPending: updatePending } =
+    useUpdateAccount({
+      onSuccess: () => {
+        navigate("/admin/account", {
+          replace: true,
+          state: {
+            success: true,
+            message: `Berhasil mengubah akun ${getValues("name_account")}`,
+          },
+        });
+      },
+    });
 
   // cek, jika id ada dan isLoading = false
   const isEdit = id && isLoading;
@@ -330,7 +335,8 @@ export default function AccountFormPage() {
             </Button>
             <Button
               type="submit"
-              className="flex-1 rounded-full bg-green-600 hover:bg-green-500 dark:text-white">
+              className="flex-1 rounded-full bg-green-600 hover:bg-green-500 dark:text-white"
+              disabled={postPending || updatePending}>
               {id ? "Simpan" : "Tambah"}
             </Button>
           </div>

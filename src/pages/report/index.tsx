@@ -84,6 +84,7 @@ export default function ReportPage() {
               handleModal={handleFilter}
               setLimit={setLimit}
               setSearch={setSearch}
+              limit={limit}
             />
 
             {isFetching && isLoading ? (
@@ -107,7 +108,7 @@ export default function ReportPage() {
             />
           </div>
           <div>
-            <div className="rounded-3xl p-5 w-full space-y-5 shadow-xl border min-w-64">
+            <div className="rounded-3xl p-5 w-full space-y-5 shadow-xl border min-w-64 bg-white dark:bg-zinc-800">
               <h1 className="font-bold">Grafik Laporan</h1>
 
               <div className="w-full">

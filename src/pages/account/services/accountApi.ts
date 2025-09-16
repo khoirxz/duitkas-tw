@@ -43,7 +43,7 @@ export const fetchDetailAccount = async (
 export const updateAccount = async (
   formData: FormData
 ): Promise<AccountProps> => {
-  const response = await api.put("bank/edit", formData, {
+  const response = await api.post("bank/edit", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return response.data;

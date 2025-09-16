@@ -71,7 +71,7 @@ export default function TransactionChart({ data }: TransactionChartProps) {
         </div>
       </div>
 
-      <div className="space-y-1">
+      <div className="space-y-1 flex-1">
         <Badge variant="default" className="text-violet-600 bg-violet-300">
           {data[value].data.length} Transaksi
         </Badge>
@@ -110,15 +110,18 @@ export default function TransactionChart({ data }: TransactionChartProps) {
               </div>
             ))}
           </div>
-          <AnimatePresence>
-            {(scrollPosition === "top" || scrollPosition === "middle") && (
-              <ScrollIndicator position="bottom" />
-            )}
 
-            {(scrollPosition === "bottom" || scrollPosition === "middle") && (
-              <ScrollIndicator position="top" />
-            )}
-          </AnimatePresence>
+          {data[value].data.length > 0 && (
+            <AnimatePresence>
+              {(scrollPosition === "top" || scrollPosition === "middle") && (
+                <ScrollIndicator position="bottom" />
+              )}
+
+              {(scrollPosition === "bottom" || scrollPosition === "middle") && (
+                <ScrollIndicator position="top" />
+              )}
+            </AnimatePresence>
+          )}
         </div>
       </div>
     </div>
