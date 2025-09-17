@@ -96,7 +96,7 @@ export default function SettingOfficeFormPage() {
                 <BreadcrumbLink
                   href="/admin/settings/users"
                   className="text-blue-700 font-semibold text-lg">
-                  Tambah data kantor
+                  Daftar Kantor & Akun
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>
@@ -106,7 +106,7 @@ export default function SettingOfficeFormPage() {
                 <BreadcrumbLink
                   href="/admin/settings/offices/form"
                   className="font-normal text-lg">
-                  Data kantor
+                  Tambah Kantor
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -147,6 +147,7 @@ export default function SettingOfficeFormPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
             <Button
               type="button"
+              onClick={() => navigate(-1)}
               className="rounded-full shadow-none px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">
               Batal
             </Button>

@@ -3,7 +3,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
-import { Link, useParams, useNavigate } from "react-router";
+import { useParams, useNavigate } from "react-router";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -14,17 +14,10 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { TextField } from "@/components/textField";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Check, ChevronDown, SlashIcon, XIcon } from "lucide-react";
+import { Check, ChevronDown, XIcon } from "lucide-react";
 
 import Layout from "@/layouts/layout";
 import { CardIcon, WorkCaseIcon } from "@/assets/icons/outline";
@@ -35,6 +28,7 @@ import {
   useUpdateAccount,
 } from "./hooks/useAccount";
 import type { ResponseProps } from "@/types/response";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 
 const formSchema = z.object({
   id_bank: z.string().min(1, { message: "Bank harus diisi" }),
@@ -161,25 +155,18 @@ export default function AccountFormPage() {
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  className="text-blue-700 text-lg font-semibold"
-                  asChild>
-                  <Link to="/admin/account">Akun</Link>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <SlashIcon />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink className="text-lg font-semibold">
-                  {id ? "Edit Akun" : "Tambah Akun"}
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <AppBreadcrumb
+            data={[
+              {
+                name: "Akun",
+                link: "/admin/account",
+              },
+              {
+                name: id ? "Edit Akun" : "Tambah Akun",
+                link: "",
+              },
+            ]}
+          />
         </div>
 
         {postError && (

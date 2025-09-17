@@ -244,7 +244,10 @@ export default function SettingUserFormPage() {
           </div>
 
           <div className="flex flex-col md:flex-row justify-between items-center gap-5 col-span-2 overflow-hidden">
-            <Button className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">
+            <Button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 bg-transparent text-indigo-500 hover:bg-transparent cursor-pointer">
               Batal
             </Button>
             <Button className="rounded-full px-5 py-3 flex-row items-center gap-2 h-full w-full flex-1 cursor-pointer dark:text-white">
