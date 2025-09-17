@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router";
 
 import {
   Select,
@@ -60,6 +61,7 @@ export default function TransferFormPage() {
       tax: "",
     },
   });
+  const navigate = useNavigate();
 
   const { mutate } = useCreateTransaction({
     type: "bank/tambah-transaksi",
@@ -298,7 +300,8 @@ export default function TransferFormPage() {
 
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
-            type="reset"
+            type="button"
+            onClick={() => navigate(-1)}
             className="bg-transparent text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none">
             Batal
           </Button>

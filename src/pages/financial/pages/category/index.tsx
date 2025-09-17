@@ -39,9 +39,9 @@ export default function FinancialCategoryListPage() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink
-                  href="/admin/transaction"
+                  href="/admin/financial"
                   className="text-blue-700 text-lg">
-                  <h1 className="font-semibold text-lg">Perencanaan Data</h1>
+                  <h1 className="font-semibold text-lg">Perencanaan Dana</h1>
                 </BreadcrumbLink>
               </BreadcrumbItem>
               <BreadcrumbSeparator>

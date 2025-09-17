@@ -70,11 +70,7 @@ export default function AccountPage() {
               <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
             </div>
           ) : (
-            <DataTable
-              border={false}
-              columns={columns}
-              data={data?.data.akun || []}
-            />
+            <DataTable columns={columns} data={data?.data.akun || []} />
           )}
 
           <PaginationTable

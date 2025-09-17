@@ -2,10 +2,13 @@ import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import Layout from "@/layouts/layout";
 
-import budgetImg from "@/assets/financial/chart-3d.png";
-import golasImg from "@/assets/financial/goal-trophy.png";
+import DataTable from "@/components/data-table";
+import { columnsFinancial } from "./components/columns";
+import { useFetchBudget } from "./hooks/useFinancial";
 
 export default function FinancialPage() {
+  const { data, isLoading } = useFetchBudget();
+
   return (
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-7">
@@ -21,36 +24,23 @@ export default function FinancialPage() {
         </div>
         {/* Additional content for financial plan page can be added here */}
 
-        <div className="text-center">
-          <p className="text-sm">Belum ada perencanaan dana saat ini</p>
-          <p className="font-semibold">
-            Silahkan pilih tujuan perencanaan anda.
-          </p>
-        </div>
+        {data?.data.length === 0 && !isLoading && (
+          <div className="text-center">
+            <p className="text-sm">Belum ada perencanaan dana saat ini</p>
+            <p className="font-semibold">
+              Silahkan pilih tujuan perencanaan anda.
+            </p>
+          </div>
+        )}
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-4 md:max-w-4xl md:mx-auto">
-          <Link
-            to="/admin/financial/form/budget"
-            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white dark:bg-zinc-800">
-            <img
-              src={budgetImg}
-              alt="Budget"
-              className="aspect-square md:w-xs h-36 md:h-auto"
-            />
-
-            <h2 className="text-lg font-semibold mt-3">Budget</h2>
-          </Link>
-          <Link
-            to="/admin/financial/form/goals"
-            className="flex flex-col gap-3 items-center shadow-lg p-5 rounded-3xl border hover:shadow-2xl transition-shadow bg-white dark:bg-zinc-800">
-            <img
-              src={golasImg}
-              alt="Goals"
-              className="aspect-square md:w-xs h-36 md:h-auto"
-            />
-
-            <h2 className="text-lg font-semibold mt-3">Goals</h2>
-          </Link>
+        <div className="mt-7 space-y-10">
+          {isLoading ? (
+            <div className="w-full animate-pulse">
+              <div className="h-48 bg-gray-200 rounded-md w-full mb-2"></div>
+            </div>
+          ) : (
+            <DataTable columns={columnsFinancial} data={data?.data || []} />
+          )}
         </div>
       </div>
     </Layout>

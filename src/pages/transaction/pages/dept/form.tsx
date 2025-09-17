@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 import {
   Select,
@@ -83,6 +83,7 @@ export default function DebtFormPage() {
       file: null,
     },
   });
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const type = pathname.split("/").pop() as "debt" | "credit";
 
@@ -430,7 +431,8 @@ export default function DebtFormPage() {
 
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
-            type="reset"
+            type="button"
+            onClick={() => navigate(-1)}
             className="bg-transparent shadow-none text-indigo-600 flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100">
             Batal
           </Button>

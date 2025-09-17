@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { Doughnut } from "react-chartjs-2";
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { AnimatePresence } from "motion/react";
-import { useTheme } from "@/components/theme-provider";
 
 import { GraphIcon } from "@/assets/icons/outline";
 import { Button } from "@/components/ui/button";
@@ -61,7 +64,13 @@ export default function TransactionChart({ data }: TransactionChartProps) {
       </div>
 
       <div className="flex flex-row md:flex-col justify-between gap-4 items-center">
-        <DonutChart />
+        <DonutChart
+          data={data[value].data.map((item) => ({
+            name: item.nama,
+            value: item.jumlah,
+            fill: item.warna,
+          }))}
+        />
 
         <div className="flex flex-col gap-1 justify-start w-full">
           <p className="text-sm text-right md:text-left">Total Pengeluaran</p>
@@ -200,54 +209,48 @@ function SelectCategory({
   );
 }
 
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-function DonutChart() {
-  const { theme } = useTheme();
-
-  const data = {
-    labels: ["Makan", "Transport", "Hiburan", "Tagihan", "Lainnya"],
-    datasets: [
-      {
-        data: [60, 20, 10, 3, 7],
-        backgroundColor: [
-          "#2563eb",
-          "#f59e0b",
-          "#15803d",
-          "#bbf7d0",
-          "#cbd5e1",
-        ],
-        borderColor: theme === "light" ? "#ffffff" : "#27272A",
-        borderWidth: 6,
-        borderRadius: 20, // 🟢 Ini dia tumpulnya
-        spacing: 0, // 🟢 Ini jarak antar segmen
-      },
-    ],
-  };
-
-  // Remove custom interfaces and use the correct callback signature for Chart.js
-  const options = {
-    cutout: "70%", // besar lubang tengah
-    plugins: {
-      legend: { display: false },
-      tooltip: {
-        callbacks: {
-          label: function (
-            tooltipItem: import("chart.js").TooltipItem<"doughnut">
-          ) {
-            // tooltipItem.raw may be unknown, so we check and format safely
-            const value =
-              typeof tooltipItem.raw === "number" ? tooltipItem.raw : 0;
-            return `Rp. ${value.toLocaleString()}`;
-          },
-        },
-      },
-    },
-  };
+function DonutChart({
+  data,
+}: {
+  data: { name: string; value: number; fill: string }[];
+}) {
+  const chartConfig = data.reduce((acc, item) => {
+    acc[item.name] = {
+      label: item.name,
+      color: item.fill, // looping kalau data lebih banyak dari warna
+    };
+    return acc;
+  }, {} as Record<string, { label: string; color: string }>);
 
   return (
     <div className="w-30 h-30 md:w-40 md:h-40 mx-auto">
-      <Doughnut data={data} options={options} />
+      <ChartContainer
+        config={chartConfig}
+        className="mx-auto aspect-square max-h-[160px] max-w-[160px]">
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              innerRadius={50}
+              outerRadius={70}
+              paddingAngle={4}
+              dataKey="value"
+              strokeWidth={0}
+              cornerRadius={100} // Added rounded corners to chart segments
+            >
+              {data.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.fill} stroke="none" />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </ChartContainer>
     </div>
   );
 }

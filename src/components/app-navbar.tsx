@@ -14,6 +14,9 @@ import {
   ChevronDown,
   HeadphonesIcon,
   CircleQuestionMarkIcon,
+  MoonIcon,
+  SunIcon,
+  MonitorCogIcon,
 } from "lucide-react";
 
 import { useAuthStore, type UserProps } from "@/store/useAuth";
@@ -24,7 +27,6 @@ import logoLight from "@/assets/navbar/LogoLight.svg";
 import idLang from "@/assets/navbar/id.png";
 import enLang from "@/assets/navbar/en.png";
 import profileImg from "@/assets/navbar/profile.png";
-import { cn } from "@/lib/utils";
 
 const dataLang: { name: string; value: string; icon: string }[] = [
   {
@@ -39,21 +41,29 @@ const dataLang: { name: string; value: string; icon: string }[] = [
   },
 ];
 
-const themes: { name: string; value: Theme; color: string }[] = [
+const themes: {
+  name: string;
+  value: Theme;
+  color: string;
+  icon: React.ReactNode;
+}[] = [
   {
     name: "Light",
     value: "light",
     color: "#f9f9f9",
+    icon: <SunIcon className="w-5 h-5" />,
   },
   {
     name: "Dark",
     value: "dark",
     color: "#1f1f1f",
+    icon: <MoonIcon className="w-5 h-5" />,
   },
   {
     name: "System",
     value: "system",
     color: "#1f1f1f",
+    icon: <MonitorCogIcon className="w-5 h-5" />,
   },
 ];
 
@@ -81,6 +91,26 @@ const AppNavbar: React.FC<{ data: UserProps | null }> = ({ data }) => {
           <button className="bg-transparent hover:bg-primary/15 p-1 flex flex-col items-center rounded transition-all">
             <CircleQuestionMarkIcon className="w-6 h-6 fill-black text-white dark:fill-white dark:text-black" />
           </button>
+        </div>
+
+        <div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex flex-row items-center p-1.5 rounded transition-all">
+                {themes.find((t) => t.value === theme)?.icon}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {themes.map((i) => (
+                <DropdownMenuItem
+                  onClick={() => setTheme(i.value)}
+                  key={i.name}>
+                  {i.icon}
+                  {i.name}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="hidden md:flex">
@@ -136,30 +166,7 @@ const AppNavbar: React.FC<{ data: UserProps | null }> = ({ data }) => {
             <DropdownMenuItem>Profile</DropdownMenuItem>
             <DropdownMenuItem>Billing</DropdownMenuItem>
             <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => {
-                const nextTheme =
-                  theme === "light"
-                    ? "dark"
-                    : theme === "dark"
-                    ? "system"
-                    : "light";
-                setTheme(nextTheme);
-              }}>
-              Theme :
-              {themes.map((theme) => (
-                <span
-                  key={theme.value}
-                  className={cn(
-                    themes.find((t) => t.value === theme.value)?.name ===
-                      theme.name
-                      ? "border-primary border-2"
-                      : "border-transparent",
-                    "border-2 h-4 w-4 rounded-full cursor-pointer"
-                  )}
-                  style={{ backgroundColor: theme.color }}></span>
-              ))}
-            </DropdownMenuItem>
+
             <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

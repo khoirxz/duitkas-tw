@@ -2,7 +2,7 @@ import { useRef } from "react";
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 
 import {
   Select,
@@ -76,6 +76,7 @@ export default function CashflowFormPage() {
       note: "",
     },
   });
+  const navigate = useNavigate();
   const { pathname } = useLocation();
   const type = pathname.split("/").pop() as "expense" | "income";
 
@@ -370,8 +371,9 @@ export default function CashflowFormPage() {
 
         <div className="flex flex-col md:flex-row gap-5 items-center justify-between">
           <Button
-            type="reset"
-            className="flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none bg-transparent">
+            type="button"
+            onClick={() => navigate(-1)}
+            className="flex-1 rounded-full py-3 md:py-5 w-full hover:bg-gray-100 shadow-none bg-transparent text-indigo-600">
             Batal
           </Button>
           <Button
