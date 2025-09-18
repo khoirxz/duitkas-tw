@@ -1,3 +1,4 @@
+import { Fragment } from "react";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -19,8 +20,8 @@ export function AppBreadcrumb({ data }: AppBreadcrumbProps) {
     <Breadcrumb>
       <BreadcrumbList>
         {data.map((item, index) => (
-          <>
-            <BreadcrumbItem key={index}>
+          <Fragment key={index}>
+            <BreadcrumbItem>
               <BreadcrumbLink
                 href={item.link}
                 className={`${
@@ -34,7 +35,7 @@ export function AppBreadcrumb({ data }: AppBreadcrumbProps) {
                 <SlashIcon />
               </BreadcrumbSeparator>
             )}
-          </>
+          </Fragment>
         ))}
       </BreadcrumbList>
     </Breadcrumb>

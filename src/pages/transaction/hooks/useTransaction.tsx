@@ -5,13 +5,19 @@ import {
   type typeTransaction,
 } from "../services/transactionApi";
 
-export const useCreateTransaction = ({
-  type,
-}: {
+type Props = {
   type: typeTransaction["type"];
-}) => {
+  options?: {
+    onSuccess?: () => void;
+    onError?: (error: Error) => void;
+  };
+};
+
+export const useCreateTransaction = ({ type, options = {} }: Props) => {
   return useMutation({
     mutationFn: (formData: FormData) => postTransaction(formData, { type }),
+    onSuccess: options.onSuccess,
+    onError: options.onError,
   });
 };
 

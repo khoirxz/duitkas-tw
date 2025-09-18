@@ -12,19 +12,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+
 import {
   BookMarkedIcon,
   CalendarIcon,
   UploadIcon,
   PlusCircleIcon,
-  SlashIcon,
+  XIcon,
 } from "lucide-react";
 import {
   Popover,
@@ -32,6 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import Layout from "@/layouts/layout";
 import placeholderImg from "@/assets/transaction/upload-placeholder.png";
@@ -41,9 +36,12 @@ import { useFetchAccount } from "@/pages/account/hooks/useAccount";
 import { useCreateTransaction } from "../../hooks/useTransaction";
 import { FormErrorSummary } from "@/components/FormErrorSummary";
 import { cn } from "@/lib/utils";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
+import type { AxiosError } from "axios";
+import type { ResponseProps } from "@/types/response";
 
 const formSchema = z.object({
-  date: z.string().nonempty("Tanggal TransaksiWajib diisi"),
+  date: z.string().nonempty("Tanggal Transaksi wajib diisi"),
   id_category: z.string().nonempty("Kategori wajib diisi"),
   id_account: z.string().nonempty("Pilih akun"),
   amount: z.string().nonempty("Jumlah nominal wajib diisi"),
@@ -80,8 +78,25 @@ export default function CashflowFormPage() {
   const { pathname } = useLocation();
   const type = pathname.split("/").pop() as "expense" | "income";
 
-  const { mutate } = useCreateTransaction({
+  const {
+    mutateAsync: createTransaction,
+    isPending,
+    isError,
+  } = useCreateTransaction({
     type: type === "income" ? "pemasukan" : "pengeluaran",
+    options: {
+      onSuccess: () => {
+        navigate("/admin/transaction", {
+          replace: true,
+          state: {
+            success: true,
+            message: `Berhasil menambahkan transaksi ${
+              type === "income" ? "pemasukan" : "pengeluaran"
+            }`,
+          },
+        });
+      },
+    },
   });
   const { data: category, isLoading: isLoadingCategory } = useCategory({
     type: "pemasukan",
@@ -94,49 +109,68 @@ export default function CashflowFormPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = (data: z.infer<typeof formSchema>) => {
-    const formData = new FormData();
+    try {
+      const formData = new FormData();
 
-    const file = (data.file as FileList)?.[0];
-    if (file) {
-      formData.append("bukti", file);
+      const file = (data.file as FileList)?.[0];
+      if (file) {
+        formData.append("bukti", file);
+      }
+
+      formData.append(
+        "tanggal",
+        new Date(data.date).toISOString().slice(0, 10)
+      ); // date
+      formData.append("id_kategori", data.id_category); // id_category
+      formData.append("id_akun_bank", data.id_account); // id_account
+      formData.append("jumlah", data.amount); // amount
+      formData.append("keterangan", data.note || ""); // note
+
+      createTransaction(formData);
+    } catch (e) {
+      const error = e as AxiosError;
+      interface ErrResponseProps extends ResponseProps {
+        data: null;
+      }
+      const errorData = error.response?.data as ErrResponseProps | undefined;
+
+      if (errorData) {
+        alert(errorData.message);
+      }
     }
-
-    formData.append("tanggal", new Date(data.date).toISOString().slice(0, 10)); // date
-    formData.append("id_kategori", data.id_category); // id_category
-    formData.append("id_akun_bank", data.id_account); // id_account
-    formData.append("jumlah", data.amount); // amount
-    formData.append("keterangan", data.note || ""); // note
-
-    mutate(formData);
-    //! for testing
-    // console.log(data);
   };
 
   return (
     <Layout>
-      <FormErrorSummary errors={errors} firstOnly={false} />
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/admin/transaction"
-                  className="text-blue-700 text-lg">
-                  <h1 className="font-semibold text-lg">Data Transaksi</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <SlashIcon />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink className="text-lg">
-                  <h1 className="font-semibold text-lg">Tambah Data</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <AppBreadcrumb
+            data={[
+              {
+                name: "Data Transaksi",
+                link: "/admin/transaction",
+              },
+              {
+                name: `Tambah ${
+                  type === "income" ? "Pemasukan" : "Pengeluaran"
+                }`,
+                link: "/admin/transaction/form",
+              },
+            ]}
+          />
         </div>
+
+        {isError && (
+          <Alert variant="destructive" className="bg-red-200/50 border-0">
+            <AlertDescription className="flex justify-between items-center">
+              Gagal Menambahkan Akun, Harap Lengkapi Data Yang Dibutuhkan
+              <Button variant="ghost" size="icon">
+                <XIcon className="h-4 w-4 text-red-600" />
+              </Button>
+            </AlertDescription>
+          </Alert>
+        )}
+        <FormErrorSummary errors={errors} firstOnly={false} />
       </div>
 
       <form
@@ -378,6 +412,7 @@ export default function CashflowFormPage() {
           </Button>
           <Button
             type="submit"
+            disabled={isPending}
             className="flex-1 bg-blue-600 hover:bg-blue-500 text-white rounded-full py-3 md:py-5 w-full">
             Simpan
           </Button>

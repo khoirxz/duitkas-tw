@@ -239,10 +239,10 @@ function DonutChart({
               cy="50%"
               innerRadius={50}
               outerRadius={70}
-              paddingAngle={4}
+              paddingAngle={data.length === 1 ? 0 : 4}
               dataKey="value"
               strokeWidth={0}
-              cornerRadius={100} // Added rounded corners to chart segments
+              cornerRadius={data.length === 1 ? 0 : 100} // Added rounded corners to chart segments
             >
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} stroke="none" />
