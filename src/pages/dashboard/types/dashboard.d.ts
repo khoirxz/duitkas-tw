@@ -19,6 +19,7 @@ export interface Data {
   budget: Budget[];
   pemasukan_tahun_ini: number[];
   pengeluaran_tahun_ini: number[];
+  pengeluaran_pemasukan_tahun_ini: PengeluaranPemasukanTahunIni[];
   data_grafik: number[];
   all_bank: AllBank[];
   suplier: Suplier[];
@@ -56,6 +57,12 @@ export interface Suplier {
   suplier: string;
   id_perusahaan: string;
   date_add: string;
+}
+
+export interface PengeluaranPemasukanTahunIni {
+  month: string;
+  pengeluaran: number;
+  pemasukan: number;
 }
 
 export interface BankTrendPerbulan {

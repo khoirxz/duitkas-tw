@@ -142,7 +142,9 @@ export default function DashboardPage() {
                   <div className="animate-pulse w-full h-full border-primary bg-gray-200 rounded-2xl"></div>
                 </div>
               ) : (
-                <SummaryChart />
+                <SummaryChart
+                  data={data?.data.pengeluaran_pemasukan_tahun_ini || []}
+                />
               )}
             </div>
 

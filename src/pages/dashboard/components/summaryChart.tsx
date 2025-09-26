@@ -1,104 +1,50 @@
-import ReactApexChart from "react-apexcharts";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  ReferenceLine,
+  ResponsiveContainer,
+} from "recharts";
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 import { UpSquareIcon } from "@/assets/icons/outline";
+import type { PengeluaranPemasukanTahunIni } from "../types/dashboard";
+import { useIsMobile } from "@/components/use-mobile";
 
-export default function SummaryChart() {
-  const salesData = [
-    { id: 1, month: "2023-01-01", income: 100000, expenses: 60000 },
-    { id: 2, month: "2023-02-01", income: 100000, expenses: 35000 },
-    { id: 3, month: "2023-03-01", income: 180000, expenses: 45000 },
-    { id: 4, month: "2023-04-01", income: 90000, expenses: 20000 },
-    { id: 5, month: "2023-05-01", income: 120000, expenses: 15000 },
-    { id: 6, month: "2023-06-01", income: 95000, expenses: 0 },
-    { id: 7, month: "2023-07-01", income: 102000, expenses: 65000 },
-    { id: 8, month: "2023-08-01", income: 110000, expenses: 50000 },
-    { id: 9, month: "2023-09-01", income: 115000, expenses: 40000 },
-    { id: 10, month: "2023-10-01", income: 130000, expenses: 50000 },
-    { id: 11, month: "2023-11-01", income: 125000, expenses: 35000 },
-    { id: 12, month: "2023-12-01", income: 135000, expenses: 40000 },
-  ];
+const chartConfig = {
+  pemasukan: {
+    label: "Pemasukan",
+  },
+} satisfies ChartConfig;
 
-  const series = [
-    {
-      name: "Pemasukan",
-      data: salesData.map((d) => d.income),
-    },
-    {
-      name: "Pengeluaran",
-      data: salesData.map((d) => -d.expenses),
-    },
-  ];
-
-  const options = {
-    chart: {
-      type: "bar" as const,
-      stacked: true,
-      height: 350,
-      zoom: {
-        enabled: true,
-        type: "x" as const,
-        autoScaleYaxis: true,
-      },
-      toolbar: {
-        show: true,
-        tools: {
-          download: true,
-          selection: true,
-          zoom: true,
-          zoomin: true,
-          zoomout: true,
-          pan: true,
-        },
-      },
-    },
-    colors: ["#053EBF", "#F98E25"],
-    plotOptions: {
-      bar: {
-        colors: {
-          ranges: [
-            {
-              from: -1000000,
-              to: -1,
-              color: "#F98E25", // pengeluaran dominan
-            },
-            {
-              from: 0,
-              to: 1000000,
-              color: "#053EBF", // pemasukan dominan
-            },
-          ],
-        },
-        columnWidth: "60%",
-        borderRadius: 10,
-        borderRadiusApplication: "end" as const,
-      },
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    yaxis: {
-      labels: {
-        formatter: function (y: number) {
-          return `Rp. ${y.toLocaleString()}`;
-        },
-      },
-    },
-    xaxis: {
-      type: "datetime" as const,
-      categories: salesData.map((d) => d.month),
-      labels: {
-        rotate: -45,
-        datetimeUTC: false,
-        format: "MMM",
-      },
-    },
-    tooltip: {
-      y: {
-        formatter: function (val: number) {
-          return `Rp. ${Math.abs(val).toLocaleString()}`;
-        },
-      },
-    },
+export default function SummaryChart({
+  data,
+}: {
+  data: PengeluaranPemasukanTahunIni[];
+}) {
+  const isMobile = useIsMobile();
+  const formatYAxis = (value: number) => {
+    const sign = value < 0 ? "-" : "";
+    const abs = Math.abs(value);
+    if (abs >= 1_000_000_000)
+      return `${sign}${(abs / 1_000_000_000).toFixed(1)}B`;
+    if (abs >= 1_000_000) return `${sign}${(abs / 1_000_000).toFixed(1)}M`;
+    if (abs >= 1_000) return `${sign}${(abs / 1_000).toFixed(1)}k`;
+    return `${value}`;
+  };
+  const formatData = (data: PengeluaranPemasukanTahunIni[]) => {
+    return data.map((item) => ({
+      month: item.month.slice(0, 3),
+      pemasukan: item.pemasukan,
+      pengeluaran: item.pengeluaran,
+    }));
   };
 
   return (
@@ -112,13 +58,60 @@ export default function SummaryChart() {
         </span>
       </div>
 
-      <div className="w-full relative">
-        <ReactApexChart
-          options={options}
-          series={series}
-          type="bar"
-          height={505}
-        />
+      <div className="relative h-full w-full overflow-x-auto sm:overflow-visible">
+        <div className="h-full min-w-[720px] sm:min-w-full">
+          <ChartContainer config={chartConfig} className="h-[500px] w-full">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                accessibilityLayer
+                data={formatData(data)}
+                stackOffset="sign"
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}>
+                <CartesianGrid vertical={false} />
+                <ChartTooltip
+                  content={<ChartTooltipContent />}
+                  formatter={(value: number, name: string) => [
+                    `Rp. ${value} `,
+                    name === "pemasukan" ? "Pemasukan" : "Pengeluaran",
+                  ]}
+                />
+                <XAxis
+                  dataKey="month"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fontSize: isMobile ? 10 : 12, fill: "#64748b" }}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tickFormatter={formatYAxis}
+                  width={isMobile ? 28 : 40}
+                  tick={{ fontSize: isMobile ? 10 : 12, fill: "#64748b" }}
+                  tickCount={isMobile ? 5 : 7}
+                  domain={[-200, 400]}
+                />
+                <ReferenceLine y={0} stroke="#000" />
+                <Bar
+                  dataKey={"pemasukan"}
+                  fill="#2B63E2"
+                  stackId={"1"}
+                  radius={[100, 100, 0, 0]}
+                />
+                <Bar
+                  dataKey={"pengeluaran"}
+                  fill="#EF9E4D"
+                  stackId={"1"}
+                  radius={[100, 100, 0, 0]}
+                />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartContainer>
+        </div>
       </div>
     </div>
   );

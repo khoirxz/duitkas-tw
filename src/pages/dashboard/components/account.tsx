@@ -36,15 +36,17 @@ export default function Account({ data }: AccountProps) {
               <AccountItem key={index} data={data} />
             ))}
           </div>
-          <AnimatePresence>
-            {(scrollPosition === "top" || scrollPosition === "middle") && (
-              <ScrollIndicator position="bottom" vertical={true} />
-            )}
+          {data.length > 4 && (
+            <AnimatePresence>
+              {(scrollPosition === "top" || scrollPosition === "middle") && (
+                <ScrollIndicator position="bottom" vertical={true} />
+              )}
 
-            {(scrollPosition === "bottom" || scrollPosition === "middle") && (
-              <ScrollIndicator position="top" vertical={true} />
-            )}
-          </AnimatePresence>
+              {(scrollPosition === "bottom" || scrollPosition === "middle") && (
+                <ScrollIndicator position="top" vertical={true} />
+              )}
+            </AnimatePresence>
+          )}
         </div>
       ) : null}
     </div>
