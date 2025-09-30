@@ -17,21 +17,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { TrashIcon, SlashIcon, ChartPieIcon, PercentIcon } from "lucide-react";
+
+import { TrashIcon, ChartPieIcon, RefreshCcwIcon } from "lucide-react";
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
 import { TagIcon } from "@/assets/icons/outline";
 
 import Layout from "@/layouts/layout";
-import ModalType from "../../components/modalType";
-import { cn } from "@/lib/utils";
+// import ModalType from "../../components/modalType";
 import { TextField } from "@/components/textField";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
+import budgetImg from "@/assets/financial/chart-3d.png";
+import LeadingText from "../../components/LeadingText";
 
 const categorySchema = z.object({
   name: z.string().min(1, "Wajib diisi"),
@@ -40,7 +36,10 @@ const categorySchema = z.object({
 
 const formSchema = z.object({
   name: z.string().nonempty("Nama Perencanaan wajib diisi"),
-  portion: z.string().nonempty("Porsi wajib diisi"),
+  portion: z
+    .enum(["percen", "nominal", "hybrid"], "Tipe Perencanaan wajib diisi")
+    .default("percen")
+    .nonoptional(),
   categories: z.array(categorySchema).min(1, "Minimal 1 kategori"),
 });
 
@@ -56,7 +55,7 @@ export default function BudgetFormPage() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      portion: "",
+      portion: "percen",
       categories: [{ name: "", percentage: 0 }],
     },
   });
@@ -79,25 +78,18 @@ export default function BudgetFormPage() {
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/admin/transaction"
-                  className="text-blue-700 text-lg">
-                  <h1 className="font-semibold text-lg">Data Transaksi</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <SlashIcon />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink className="text-lg">
-                  <h1 className="font-semibold text-lg">Tambah Data</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <AppBreadcrumb
+            data={[
+              {
+                name: "Perencanaan Dana",
+                link: "/admin/financial",
+              },
+              {
+                name: "Tambah Perencanaan Dana",
+                link: "/admin/financial/form/budget",
+              },
+            ]}
+          />
         </div>
       </div>
 
@@ -106,7 +98,21 @@ export default function BudgetFormPage() {
         encType="multipart/form-data"
         className="flex flex-col px-6 md:px-10 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white dark:bg-zinc-800 mx-3 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
-          <ModalType />
+          {/* <ModalType /> */}
+          <div className="flex flex-col gap-3 items-center">
+            <img
+              src={budgetImg}
+              alt="Current Type"
+              className="aspect-square w-40 md:w-xs mx-auto"
+            />
+
+            <p className="font-semibold text-center uppercase">
+              PORSI DIGUNAKAN
+            </p>
+            <span className="bg-blue-400/20 text-blue-500 py-1 px-3 rounded-md text-xs uppercase font-semibold">
+              {watch("portion")}
+            </span>
+          </div>
 
           <div className="flex flex-col flex-1 space-y-7 pt-4">
             {step === 1 ? (
@@ -120,34 +126,17 @@ export default function BudgetFormPage() {
                 </p>
               </div>
             ) : (
-              <div className="w-full">
-                <p className="text-sm">
-                  Pastikan persentase mencapai 100% untuk melanjutkan
-                </p>
-                <p className="font-semibold text-lg">
-                  Persentase saat ini:{" "}
-                  <span
-                    className={cn(
-                      totalPercentage > 100
-                        ? "text-red-500"
-                        : totalPercentage === 100
-                        ? "text-green-500"
-                        : "text-black"
-                    )}>
-                    {totalPercentage}%
-                  </span>
-                </p>
-              </div>
+              <LeadingText
+                typeCategory={watch("portion")}
+                total={totalPercentage}
+              />
             )}
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div
-                className={
-                  cn(step === 2 ? "col-span-2" : "") +
-                  " flex flex-col gap-3 w-full"
-                }>
+              <div className={"flex flex-col gap-3 w-full"}>
                 <TextField
                   {...register("name")}
+                  compact={step === 2}
                   label="Nama Perencanaan"
                   icon={<TagIcon className="size-4" color="#3B82F6" />}
                   disabled={step === 2}
@@ -156,7 +145,7 @@ export default function BudgetFormPage() {
                   errorMessage={errors.name?.message}
                 />
               </div>
-              {step === 1 && (
+              {step === 1 ? (
                 <div>
                   <div className="flex flex-col gap-3">
                     <label
@@ -176,13 +165,15 @@ export default function BudgetFormPage() {
                             <SelectValue placeholder="Pilih porsi" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="percentage">
-                              Persentase
-                            </SelectItem>
-                            <SelectItem value="nominal">Nominal</SelectItem>
-                            <SelectItem value="hybrid">
-                              Hybrid (Persentase & Nominal)
-                            </SelectItem>
+                            {[
+                              { value: "percen", label: "Persentase" },
+                              { value: "nominal", label: "Nominal" },
+                              { value: "hybrid", label: "Hybrid" },
+                            ].map((item) => (
+                              <SelectItem value={item.value} key={item.value}>
+                                {item.label}
+                              </SelectItem>
+                            ))}
                           </SelectContent>
                         </Select>
                       )}
@@ -191,6 +182,38 @@ export default function BudgetFormPage() {
                   <span className="text-red-500 text-sm">
                     {errors.portion?.message}
                   </span>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex flex-col gap-3">
+                    <Controller
+                      control={control}
+                      name="portion"
+                      render={({ field }) => (
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}>
+                          <SelectTrigger className="relative w-full rounded-full border bg-green-600 text-white px-4.5 h-10! dark:bg-zinc-800">
+                            <div className="absolute left-1/2 -translate-x-1/2 flex flex-row items-center gap-2">
+                              <RefreshCcwIcon className="size-4 text-white" />
+                              Ubah porsi [{field.value}]
+                            </div>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {[
+                              { value: "percen", label: "Persentase" },
+                              { value: "nominal", label: "Nominal" },
+                              { value: "hybrid", label: "Hybrid" },
+                            ].map((item) => (
+                              <SelectItem value={item.value} key={item.value}>
+                                {item.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      )}
+                    />
+                  </div>
                 </div>
               )}
 
@@ -203,7 +226,9 @@ export default function BudgetFormPage() {
                           <TextField
                             {...register(`categories.${index}.name`)}
                             label="Nama Kategori"
-                            icon={<ChartPieIcon className="size-4" />}
+                            icon={
+                              <ChartPieIcon className="size-4 text-primary" />
+                            }
                             compact
                             placeholder="Nama Kategori"
                           />
@@ -214,10 +239,24 @@ export default function BudgetFormPage() {
                               valueAsNumber: true,
                             })}
                             type="number"
-                            label="Presentase"
-                            icon={<PercentIcon className="size-4" />}
+                            label={
+                              watch("portion") === "percen"
+                                ? "Persentase"
+                                : "Nominal"
+                            }
+                            icon={
+                              watch("portion") === "percen" ? (
+                                <span className="text-sm text-primary">%</span>
+                              ) : (
+                                <span className="text-sm text-primary">Rp</span>
+                              )
+                            }
                             compact
-                            placeholder="Persentase"
+                            placeholder={
+                              watch("portion") === "percen"
+                                ? "Persentase"
+                                : "Nominal"
+                            }
                           />
                         </div>
                       </div>
@@ -255,7 +294,10 @@ export default function BudgetFormPage() {
           {step === 1 ? (
             <Button
               onClick={() => setStep(2)}
-              disabled={watch("portion") === "" || watch("name") === ""}
+              disabled={
+                ["percen", "nominal", "hybrid"].indexOf(watch("portion")) ===
+                  -1 || watch("name") === ""
+              }
               type="button"
               className="flex-1 bg-blue-600 hover:bg-blue-500 text-white rounded-full py-3 md:py-5 w-full">
               Selanjutnya

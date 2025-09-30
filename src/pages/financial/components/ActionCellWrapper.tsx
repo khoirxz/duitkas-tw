@@ -7,7 +7,7 @@ export const ActionCellWrapper = ({ id }: { id: string }) => {
   return (
     <ActionCell
       id={id}
-      linkEdit="/admin/account/form"
+      linkEdit="/admin/financial/category/form"
       config={{
         mutation: mutate,
       }}

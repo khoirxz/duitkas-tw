@@ -1,13 +1,6 @@
 import { Link } from "react-router";
 
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
   Pagination,
   PaginationContent,
   PaginationItem,
@@ -17,16 +10,12 @@ import { Button } from "@/components/ui/button";
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
 import DataTable from "@/components/data-table";
 import Layout from "@/layouts/layout";
-import {
-  ChevronRightIcon,
-  ChevronLeftIcon,
-  SlashIcon,
-  SearchIcon,
-} from "lucide-react";
+import { ChevronRightIcon, ChevronLeftIcon, SearchIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import { columns } from "../../components/columns";
 import { useFetchCategories } from "../../hooks/useCategory";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 
 export default function FinancialCategoryListPage() {
   const { data, isLoading } = useFetchCategories("pemasukan");
@@ -35,30 +24,23 @@ export default function FinancialCategoryListPage() {
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-10">
         <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/admin/financial"
-                  className="text-blue-700 text-lg">
-                  <h1 className="font-semibold text-lg">Perencanaan Dana</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <SlashIcon />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink className="text-lg">
-                  <h1 className="font-semibold text-lg">Data Kategori</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <AppBreadcrumb
+            data={[
+              {
+                name: "Perencanaan Dana",
+                link: "/admin/financial",
+              },
+              {
+                name: "Data Kategori",
+                link: "/admin/financial/category/list",
+              },
+            ]}
+          />
         </div>
 
         {data?.data.kategori?.length === 0 && (
-          <div className="md:text-center">
-            <p className="text-sm mb-2">Untuk memulai perencanaan dana.</p>
+          <div className="text-center">
+            <p className="text-sm">Untuk memulai perencanaan dana</p>
             <p className="font-semibold">
               Silahkan tambahkan kategori terlebih dahulu.
             </p>

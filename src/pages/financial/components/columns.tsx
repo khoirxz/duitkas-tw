@@ -4,7 +4,9 @@ import { SwapIcon } from "@/assets/icons/outline";
 
 import { ActionCellWrapper } from "./ActionCellWrapper";
 import type { Category } from "../types/category";
-import type { BudgetProps } from "../types/financial";
+// import type { BudgetProps } from "../types/financial";
+import type { BudgetProps } from "../data";
+import { formatRupiah } from "@/lib/formatMoney";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -93,7 +95,7 @@ export const columns: ColumnDef<Category>[] = [
 export const columnsFinancial: ColumnDef<BudgetProps>[] = [
   {
     header: () => <span className="text-center px-3">No</span>,
-    accessorKey: "id_budget",
+    accessorKey: "id",
     cell: ({ row }) => (
       <span className="text-center px-3">{row.index + 1}</span>
     ),
@@ -102,7 +104,7 @@ export const columnsFinancial: ColumnDef<BudgetProps>[] = [
     header: ({ column }) => {
       return (
         <div className="flex flex-row items-center gap-2 justify-start">
-          <p className="text-sm">Nama</p>
+          <p className="text-sm">Nama Kategori</p>
           <button
             className="bg-transparent hover:bg-transparent"
             onClick={() =>
@@ -121,13 +123,13 @@ export const columnsFinancial: ColumnDef<BudgetProps>[] = [
         </div>
       );
     },
-    accessorKey: "nama_budget",
+    accessorKey: "name",
   },
   {
     header: ({ column }) => {
       return (
         <div className="flex flex-row items-center gap-2 justify-start">
-          <p className="text-sm">Tanggal</p>
+          <p className="text-sm">Presentase/Nominal</p>
           <button
             className="bg-transparent hover:bg-transparent"
             onClick={() =>
@@ -146,65 +148,32 @@ export const columnsFinancial: ColumnDef<BudgetProps>[] = [
         </div>
       );
     },
-    accessorKey: "date_update",
+    accessorKey: "value",
+    cell: ({ row }) => {
+      const type = row.original.type;
+
+      return (
+        <span className="text-center px-3">
+          {type === "percen"
+            ? `${row.getValue("value")} %`
+            : `${formatRupiah(row.getValue("value"))}`}
+        </span>
+      );
+    },
   },
   {
-    header: ({ column }) => {
+    header: () => {
       return (
-        <div className="flex flex-row items-center gap-2 justify-start">
-          <p className="text-sm">Warna</p>
-          <button
-            className="bg-transparent hover:bg-transparent"
-            onClick={() =>
-              column.toggleSorting(column.getIsSorted() === "asc")
-            }>
-            <span className="w-5 h-5 flex items-center justify-center">
-              <SwapIcon
-                style={{
-                  width: "16px",
-                  height: "16px",
-                }}
-                color="#1976D2"
-              />
-            </span>
-          </button>
-        </div>
+        <span className="text-center">
+          <p>Aksi</p>
+        </span>
       );
     },
-    accessorKey: "warna_budget",
-    cell: ({ row }) => (
-      <div className="flex flex-row items-center gap-2">
-        <span
-          className="inline-block w-5 h-5 rounded-full"
-          style={{ backgroundColor: row.getValue("warna_budget") }}
-        />
-        <p className="text-xs">{row.getValue("warna_budget")}</p>
-      </div>
-    ),
-  },
-  {
-    header: ({ column }) => {
-      return (
-        <div className="flex flex-row items-center gap-2 justify-start">
-          <p className="text-sm">Jumlah</p>
-          <button
-            className="bg-transparent hover:bg-transparent"
-            onClick={() =>
-              column.toggleSorting(column.getIsSorted() === "asc")
-            }>
-            <span className="w-5 h-5 flex items-center justify-center">
-              <SwapIcon
-                style={{
-                  width: "16px",
-                  height: "16px",
-                }}
-                color="#1976D2"
-              />
-            </span>
-          </button>
-        </div>
-      );
+    id: "actions",
+    cell: ({ row }) => {
+      const id = row.original.id;
+
+      return <ActionCellWrapper id={id.toString()} />;
     },
-    accessorKey: "jumlah_budget",
   },
 ];
