@@ -18,32 +18,53 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 
-import { TrashIcon, ChartPieIcon, RefreshCcwIcon } from "lucide-react";
+import { TrashIcon, RefreshCcwIcon } from "lucide-react";
+import { TextField } from "@/components/textField";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
 import { TagIcon } from "@/assets/icons/outline";
+import budgetImg from "@/assets/financial/chart-3d.png";
 
 import Layout from "@/layouts/layout";
 // import ModalType from "../../components/modalType";
-import { TextField } from "@/components/textField";
-import { AppBreadcrumb } from "@/components/app-breadcrumb";
-import budgetImg from "@/assets/financial/chart-3d.png";
 import LeadingText from "../../components/LeadingText";
+import SearchableSelect from "../../components/SearchableSelect";
+import {
+  useCreateBudget,
+  useCreateBudgetContent,
+  useUpdateBudget,
+} from "../../hooks/useFinancial";
+import { useFetchCategories } from "../../hooks/useCategory";
+import { useNavigate } from "react-router";
+
+const portionMap: Record<string, string> = {
+  percen: "persentase",
+  nominal: "nominal",
+  hybrid: "hybrid",
+};
 
 const categorySchema = z.object({
   name: z.string().min(1, "Wajib diisi"),
   percentage: z.number().min(1, "Minimal 1%"),
 });
 
-const formSchema = z.object({
+const financialSchema = z.object({
   name: z.string().nonempty("Nama Perencanaan wajib diisi"),
   portion: z
     .enum(["percen", "nominal", "hybrid"], "Tipe Perencanaan wajib diisi")
     .default("percen")
     .nonoptional(),
+});
+
+const formSchema = financialSchema.extend({
   categories: z.array(categorySchema).min(1, "Minimal 1 kategori"),
 });
 
 export default function BudgetFormPage() {
+  // setelah submit kategori, makan akan lanjut ke step 2
+  // pada response akan memberikan id dari perencanaan yang baru dibuat
+  // kemudian akan disimpan di state id
+  const [id, setId] = useState<string>("");
   const [step, setStep] = useState<number>(1);
   const {
     register,
@@ -68,10 +89,68 @@ export default function BudgetFormPage() {
     (acc, item) => acc + (Number(item.percentage) || 0),
     0
   );
+  const navigate = useNavigate();
+
+  const { data: categoriesData } = useFetchCategories();
+  const { mutateAsync: createBudget, isPending: pendingBudget } =
+    useCreateBudget();
+  const { mutateAsync: updateBudget, isPending: pendingUpdateBudget } =
+    useUpdateBudget();
+  const { mutateAsync: createBudgetContent } = useCreateBudgetContent();
+
+  const onUpdateBudget = () => {
+    console.log("onUpdateBudget");
+    try {
+      const formData = new FormData();
+      formData.append("nama_perencanaan", watch("name"));
+      formData.append("porsi", portionMap[watch("portion")]);
+      formData.append("id_perencanaan", id);
+
+      if (step === 2) {
+        updateBudget(formData, {
+          onSuccess: () => {
+            console.log("berhasil update budget");
+          },
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const onSubmit: SubmitHandler<z.infer<typeof formSchema>> = (data) => {
-    console.log(data);
-    // Handle form submission logic here
+    try {
+      const formData = new FormData();
+
+      formData.append("id_perencanaan", id);
+      data.categories.forEach((cat) => {
+        formData.append(`kategori[${cat.name}]`, cat.percentage.toString());
+      });
+      createBudgetContent(formData, {
+        onSuccess: () => {
+          navigate("/admin/financial", { replace: true });
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const onSubmitCategories: SubmitHandler<z.infer<typeof financialSchema>> = (
+    data
+  ) => {
+    if (step === 1) {
+      const formData = new FormData();
+      formData.append("nama_perencanaan", data.name);
+      formData.append("porsi", portionMap[data.portion]);
+      createBudget(formData, {
+        onSuccess: (response) => {
+          setStep(2);
+          // get response data insert_id lalu simpan di state
+          setId(response.data.insert_id);
+        },
+      });
+    }
   };
 
   return (
@@ -191,9 +270,14 @@ export default function BudgetFormPage() {
                       name="portion"
                       render={({ field }) => (
                         <Select
-                          onValueChange={field.onChange}
+                          onValueChange={(value) => {
+                            field.onChange(value);
+                            onUpdateBudget();
+                          }}
                           defaultValue={field.value}>
-                          <SelectTrigger className="relative w-full rounded-full border bg-green-600 text-white px-4.5 h-10! dark:bg-zinc-800">
+                          <SelectTrigger
+                            disabled={pendingUpdateBudget}
+                            className="relative w-full rounded-full border bg-green-600 text-white px-4.5 h-10! dark:bg-zinc-800">
                             <div className="absolute left-1/2 -translate-x-1/2 flex flex-row items-center gap-2">
                               <RefreshCcwIcon className="size-4 text-white" />
                               Ubah porsi [{field.value}]
@@ -223,14 +307,31 @@ export default function BudgetFormPage() {
                     <div className="flex gap-4 mt-2">
                       <div className="flex-1 flex flex-col md:flex-row gap-5 items-center">
                         <div className="relative w-full">
-                          <TextField
-                            {...register(`categories.${index}.name`)}
-                            label="Nama Kategori"
-                            icon={
-                              <ChartPieIcon className="size-4 text-primary" />
-                            }
-                            compact
-                            placeholder="Nama Kategori"
+                          <Controller
+                            control={control}
+                            name={`categories.${index}.name`}
+                            render={({ field: selectField }) => (
+                              <SearchableSelect
+                                onChange={(value) =>
+                                  selectField.onChange(value)
+                                }
+                                defaultValue={selectField.value}
+                                placeholder="Pilih Kategori"
+                                options={
+                                  categoriesData?.data.kategori?.map(
+                                    (cat: {
+                                      id_kategori: string;
+                                      nama_kategori: string;
+                                      tipe: string;
+                                    }) => ({
+                                      value: cat.id_kategori,
+                                      label: cat.nama_kategori,
+                                      category: cat.tipe,
+                                    })
+                                  ) || []
+                                }
+                              />
+                            )}
                           />
                         </div>
                         <div className="relative w-full">
@@ -293,14 +394,16 @@ export default function BudgetFormPage() {
           </Button>
           {step === 1 ? (
             <Button
-              onClick={() => setStep(2)}
+              onClick={() => onSubmitCategories(watch())}
               disabled={
                 ["percen", "nominal", "hybrid"].indexOf(watch("portion")) ===
-                  -1 || watch("name") === ""
+                  -1 ||
+                watch("name") === "" ||
+                pendingBudget
               }
               type="button"
               className="flex-1 bg-blue-600 hover:bg-blue-500 text-white rounded-full py-3 md:py-5 w-full">
-              Selanjutnya
+              {pendingBudget ? "Menyimpan..." : "Selanjutnya"}
             </Button>
           ) : (
             <Button

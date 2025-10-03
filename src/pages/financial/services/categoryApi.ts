@@ -3,13 +3,13 @@ import type { ResponseProps } from "@/types/response";
 import type { CategoryProps } from "../types/category";
 
 interface typeCategory {
-  type?: "pengeluaran" | "pemasukan";
+  type?: "pengeluaran" | "pemasukan" | undefined;
 }
 
 export const fetchAllCategory = async ({
   type,
 }: typeCategory): Promise<ResponseProps & { data: CategoryProps }> => {
-  const response = await api.get("kategori/" + type);
+  const response = await api.get(`kategori${type ? "/" + type : ""}`);
   return response.data;
 };
 

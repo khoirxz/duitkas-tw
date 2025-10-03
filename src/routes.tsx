@@ -199,7 +199,7 @@ export const router: {
   {
     path: "/admin/transaction",
     show: true,
-    parent: false,
+    parent: true,
     name: "Transaksi",
     element: (
       <ProtectedRouter>
@@ -211,6 +211,28 @@ export const router: {
       inactive: <CalendarIcon color="currentColor" />,
     },
     children: [
+      {
+        path: "/admin/transaction/general",
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <TransactionPage />
+          </ProtectedRouter>
+        ),
+        show: true,
+        name: "Umum",
+      },
+      {
+        path: "/admin/transaction/debt-credit", // halaman hutang piutang
+        // lazy: () => import('./pages/dashboard/index.tsx'),
+        element: (
+          <ProtectedRouter>
+            <TransactionPage />
+          </ProtectedRouter>
+        ),
+        show: true,
+        name: "Hutang & Piutang",
+      },
       {
         path: "/admin/transaction/form/income",
         // lazy: () => import('./pages/dashboard/index.tsx'),

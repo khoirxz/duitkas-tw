@@ -4,7 +4,7 @@ import { fetchAllCategory, deleteCategory } from "../services/categoryApi";
 import type { ResponseProps } from "@/types/response";
 import type { CategoryProps } from "../types/category";
 
-export const useFetchCategories = (type: "pemasukan" | "pengeluaran") => {
+export const useFetchCategories = (type?: "pemasukan" | "pengeluaran") => {
   return useQuery<ResponseProps & { data: CategoryProps }>({
     queryKey: ["categories", type],
     queryFn: () => fetchAllCategory({ type }),

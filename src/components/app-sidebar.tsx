@@ -105,27 +105,29 @@ function Items({ item }: ItemsProps) {
             </CollapsibleTrigger>
             <CollapsibleContent>
               {hasChildren &&
-                item.children?.map((item) => {
-                  const childActive = isActive(item.path);
+                item.children
+                  ?.filter((child) => child.show)
+                  .map((item) => {
+                    const childActive = isActive(item.path);
 
-                  return (
-                    <SidebarMenuSub key={item.name}>
-                      <SidebarMenuSubItem>
-                        <Button
-                          variant="link"
-                          className="w-full h-full px-3 py-3 rounded-none justify-start text-inherit">
-                          <Link
-                            to={item.path}
-                            className={
-                              cn(childActive && "text-blue-700") + " text-sm"
-                            }>
-                            {item.name}
-                          </Link>
-                        </Button>
-                      </SidebarMenuSubItem>
-                    </SidebarMenuSub>
-                  );
-                })}
+                    return (
+                      <SidebarMenuSub key={item.name}>
+                        <SidebarMenuSubItem>
+                          <Button
+                            variant="link"
+                            className="w-full h-full px-3 py-3 rounded-none justify-start text-inherit">
+                            <Link
+                              to={item.path}
+                              className={
+                                cn(childActive && "text-blue-700") + " text-sm"
+                              }>
+                              {item.name}
+                            </Link>
+                          </Button>
+                        </SidebarMenuSubItem>
+                      </SidebarMenuSub>
+                    );
+                  })}
             </CollapsibleContent>
           </SidebarMenuItem>
         </Collapsible>

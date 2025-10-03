@@ -10,3 +10,39 @@ export const fetchAllBudget = async (): Promise<
   );
   return response.data;
 };
+
+export const postBudget = async (
+  formData: FormData
+): Promise<ResponseProps & { data: { insert_id: string } }> => {
+  const response = await api.post<
+    ResponseProps & { data: { insert_id: string } }
+  >("perencanaan", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  return response.data;
+};
+
+export const updateBudget = async (
+  formData: FormData
+): Promise<ResponseProps & { data: { affected_rows: string } }> => {
+  const response = await api.post<
+    ResponseProps & { data: { affected_rows: string } }
+  >("perencanaan/edit", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  return response.data;
+};
+
+export const postBudgetContent = async (
+  formData: FormData
+): Promise<ResponseProps & { data: { affected_rows: string } }> => {
+  const response = await api.post<
+    ResponseProps & { data: { affected_rows: string } }
+  >("perencanaan/kategori", formData, {
+    headers: { "Content-Type": "multipart/form-data" },
+  });
+
+  return response.data;
+};

@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import type { AxiosError } from "axios";
 import { useParams, useNavigate } from "react-router";
 
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { Button } from "@/components/ui/button";
 import {
   CommandDialog,
@@ -28,7 +29,6 @@ import {
   useUpdateAccount,
 } from "./hooks/useAccount";
 import type { ResponseProps } from "@/types/response";
-import { AppBreadcrumb } from "@/components/app-breadcrumb";
 
 const formSchema = z.object({
   id_bank: z.string().min(1, { message: "Bank harus diisi" }),
@@ -63,6 +63,7 @@ export default function AccountFormPage() {
   const { data: fetchDetailAccount, isLoading } = useFetchDetailAccount(
     id || ""
   );
+
   const {
     mutateAsync: postAccount,
     isError: postError,
@@ -78,6 +79,7 @@ export default function AccountFormPage() {
       });
     },
   });
+  
   const { mutateAsync: updateAccount, isPending: updatePending } =
     useUpdateAccount({
       onSuccess: () => {
