@@ -3,7 +3,7 @@ import { Link, useSearchParams, useLocation } from "react-router";
 
 import Layout from "@/layouts/layout";
 
-import { columns } from "./components/columns";
+import { columns } from "../../components/columns";
 import DataTable, {
   PaginationTable,
   TableFilter,
@@ -12,15 +12,14 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import incomeImg from "@/assets/transaction/pemasukan.png";
-import expenseImg from "@/assets/transaction/pengeluaran.png";
-import transferImg from "@/assets/transaction/pindahdana.png";
+import debtImg from "@/assets/transaction/hutang.png";
+import creditImg from "@/assets/transaction/piutang.png";
 
-import { useFetchTransaction } from "./hooks/useTransaction";
+import { useFetchTransaction } from "../../hooks/useTransaction";
 import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { XIcon } from "lucide-react";
 
-export default function TransactionPage() {
+export default function DeptCreditCredit() {
   const [search, setSearch] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
@@ -31,7 +30,7 @@ export default function TransactionPage() {
 
   const [searchParams] = useSearchParams({ get: ["add"] });
 
-  const pageState = Boolean(Number(searchParams.get("add")));
+  const pageState = Number(searchParams.get("add"));
 
   const { data: transactions, isLoading } = useFetchTransaction(
     search,
@@ -59,7 +58,7 @@ export default function TransactionPage() {
               />
             </div>
           ) : (
-            <h1 className="font-bold text-xl">Data Transaksi</h1>
+            <h1 className="font-bold text-xl">Hutang & Piutang</h1>
           )}
 
           {transactions?.data.transaksi.length !== 0 && !pageState && (
@@ -67,7 +66,7 @@ export default function TransactionPage() {
               asChild
               variant="default"
               className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700 dark:text-white">
-              <Link to={`/admin/transaction?add=1`}>
+              <Link to={`/admin/transaction/debt-credit?add=1`}>
                 <span>
                   <AddCircleSolidIcon color="white" />
                 </span>
@@ -149,24 +148,18 @@ export default function TransactionPage() {
 
 function ShowMenu() {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 gap-4 my-10">
+    <div className="grid grid-cols-2 md:grid-cols-2 gap-4 my-10">
       <Link
-        to={"/admin/transaction/form/income"}
+        to={"/admin/transaction/form/debt"}
         className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 bg-white dark:bg-zinc-800">
-        <img src={incomeImg} alt="Income" className="aspect-square w-xs" />
-        <p className="font-semibold uppercase">Pemasukan</p>
+        <img src={debtImg} alt="Income" className="aspect-square w-xs" />
+        <p className="font-semibold uppercase">Hutang</p>
       </Link>
       <Link
-        to={"/admin/transaction/form/expense"}
+        to={"/admin/transaction/form/credit"}
         className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 bg-white dark:bg-zinc-800">
-        <img src={expenseImg} alt="Expense" className="aspect-square w-xs" />
-        <p className="font-semibold uppercase">Pengeluaran</p>
-      </Link>
-      <Link
-        to={"/admin/transaction/form/transfer"}
-        className="flex flex-col items-center gap-2 shadow-lg hover:shadow-2xl transition-all rounded-2xl border p-5 col-span-2 md:col-span-1 bg-white dark:bg-zinc-800">
-        <img src={transferImg} alt="Transfer" className="aspect-square w-xs" />
-        <p className="font-semibold uppercase">Pindah dana</p>
+        <img src={creditImg} alt="Expense" className="aspect-square w-xs" />
+        <p className="font-semibold uppercase">Piutang</p>
       </Link>
     </div>
   );

@@ -3,17 +3,12 @@ import { useForm, type SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
+
 import Layout from "@/layouts/layout";
-import { SlashIcon, TagIcon } from "lucide-react";
+import { TagIcon } from "lucide-react";
 import ModalType from "../../components/modalType";
 import { TextField } from "@/components/textField";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
 
 const formSchema = z.object({
   name: z.string().nonempty("Nama Perencanaan wajib diisi"),
@@ -34,25 +29,18 @@ export default function GoalFormPage() {
     <Layout>
       <div className="w-full p-3 md:p-5 space-y-7">
         <div>
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem>
-                <BreadcrumbLink
-                  href="/admin/transaction"
-                  className="text-blue-700 text-lg">
-                  <h1 className="font-semibold text-lg">Data Transaksi</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator>
-                <SlashIcon />
-              </BreadcrumbSeparator>
-              <BreadcrumbItem>
-                <BreadcrumbLink className="text-lg">
-                  <h1 className="font-semibold text-lg">Tambah Data</h1>
-                </BreadcrumbLink>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <AppBreadcrumb
+            data={[
+              {
+                name: "Data Transaksi",
+                link: "/admin/transaction",
+              },
+              {
+                name: "Tambah Data",
+                link: "/admin/transaction?add=1",
+              },
+            ]}
+          />
         </div>
       </div>
 

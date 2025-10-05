@@ -38,6 +38,7 @@ import SettingUserFormPage from "./pages/setting/pages/user/form";
 import SettingOfficeFormPage from "./pages/setting/pages/office/form";
 import FinancialCategoryListPage from "./pages/financial/pages/category";
 import FinancialCategoryFormPage from "./pages/financial/pages/category/form";
+import DeptCreditCredit from "./pages/transaction/pages/dept";
 
 export const router: {
   name: string;
@@ -227,7 +228,7 @@ export const router: {
         // lazy: () => import('./pages/dashboard/index.tsx'),
         element: (
           <ProtectedRouter>
-            <TransactionPage />
+            <DeptCreditCredit />
           </ProtectedRouter>
         ),
         show: true,
