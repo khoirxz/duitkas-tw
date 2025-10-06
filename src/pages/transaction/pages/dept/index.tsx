@@ -48,11 +48,11 @@ export default function DeptCreditCredit() {
                 data={[
                   {
                     name: "Data Transaksi",
-                    link: "/admin/transaction",
+                    link: "/admin/transaction/dept-credit",
                   },
                   {
                     name: "Tambah Data",
-                    link: "/admin/transaction?add=1",
+                    link: "/admin/transaction/dept-credit?add=1",
                   },
                 ]}
               />
@@ -90,21 +90,19 @@ export default function DeptCreditCredit() {
           </Alert>
         )}
 
-        {transactions?.data.transaksi.length === 0 ? (
+        {transactions?.data.transaksi.length == 0 ? (
           <div className="text-center">
             <p className="text-sm">Belum ada transaksi saat ini.</p>
             <p className="font-semibold">
               Silahkan pilih jenis transaksi anda.
             </p>
           </div>
-        ) : (
-          pageState && (
-            <div className="text-center">
-              <p className="text-sm">Untuk menambahkan detail transaksi.</p>
-              <p className="font-semibold">Silahkan pilih jenis transaksi.</p>
-            </div>
-          )
-        )}
+        ) : pageState ? (
+          <div className="text-center">
+            <p className="text-sm">Untuk menambahkan detail transaksi.</p>
+            <p className="font-semibold">Silahkan pilih jenis transaksi.</p>
+          </div>
+        ) : null}
 
         {transactions?.data.transaksi &&
         transactions?.data.transaksi.length <= 0 &&
