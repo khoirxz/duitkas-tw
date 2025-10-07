@@ -2,11 +2,11 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   postTransaction,
   fetchAllTransaction,
-  type typeTransaction,
+  type typeUrl,
 } from "../services/transactionApi";
 
 type Props = {
-  type: typeTransaction["type"];
+  type: typeUrl["type"];
   options?: {
     onSuccess?: () => void;
     onError?: (error: Error) => void;

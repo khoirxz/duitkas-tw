@@ -2,29 +2,29 @@ import { useState } from "react";
 import { Link, useSearchParams, useLocation } from "react-router";
 
 import Layout from "@/layouts/layout";
-
-import { columns } from "./components/columns";
 import DataTable, {
   PaginationTable,
   TableFilter,
 } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
+import { FilterModal } from "@/components/filter-modal";
+import { XIcon, PlusCircleIcon } from "lucide-react";
 
-import { AddCircleSolidIcon } from "@/assets/icons/solid";
+import { columns } from "./components/columns";
+import { useFetchTransaction } from "./hooks/useTransaction";
+
 import incomeImg from "@/assets/transaction/pemasukan.png";
 import expenseImg from "@/assets/transaction/pengeluaran.png";
 import transferImg from "@/assets/transaction/pindahdana.png";
-
-import { useFetchTransaction } from "./hooks/useTransaction";
-import { AppBreadcrumb } from "@/components/app-breadcrumb";
-import { XIcon } from "lucide-react";
 
 export default function TransactionPage() {
   const [search, setSearch] = useState<string>("");
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
   const [alertVisible, setAlertVisible] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false); // For Filter Modal
 
   const location = useLocation();
   const state = location.state as { success?: boolean; message?: string };
@@ -69,7 +69,7 @@ export default function TransactionPage() {
               className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700 dark:text-white">
               <Link to={`/admin/transaction?add=1`}>
                 <span>
-                  <AddCircleSolidIcon color="white" />
+                  <PlusCircleIcon className="w-4 h-4 text-blue-700 fill-white" />
                 </span>
                 Tambah Transaksi
               </Link>
@@ -116,9 +116,11 @@ export default function TransactionPage() {
         ) : (
           <div className="mt-7 space-y-10">
             <TableFilter
+              placeholder="Cari di sini"
               setSearch={setSearch}
               setLimit={setLimit}
               limit={limit}
+              handleModal={() => setOpen(true)}
             />
 
             {isLoading ? (
@@ -143,6 +145,12 @@ export default function TransactionPage() {
           </div>
         )}
       </div>
+
+      <FilterModal open={open} setOpen={setOpen}>
+        <div className="p-5 bg-white dark:bg-zinc-800 rounded-b-2xl">
+          <p>Isi konten filter di sini.</p>
+        </div>
+      </FilterModal>
     </Layout>
   );
 }

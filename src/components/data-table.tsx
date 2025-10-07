@@ -137,6 +137,7 @@ interface TableFilterProps {
   handleModal?: () => void;
   setLimit?: (value: number) => void;
   limit?: number;
+  placeholder?: string;
 
   setSearch?: (value: string) => void;
 }
@@ -146,7 +147,7 @@ export const TableFilter: React.FC<TableFilterProps> = ({
   handleModal,
   setLimit,
   limit = 10,
-
+  placeholder = "cari nama disini",
   setSearch,
 }) => {
   const [open, setOpen] = useState<boolean>(false);
@@ -227,7 +228,7 @@ export const TableFilter: React.FC<TableFilterProps> = ({
             onChange={(e) => setSearch?.(e.target.value)}
             type="text"
             className="outline-none"
-            placeholder="cari nama disini"
+            placeholder={placeholder}
           />
         </div>
         <Button

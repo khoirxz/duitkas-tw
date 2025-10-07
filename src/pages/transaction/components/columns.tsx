@@ -1,10 +1,11 @@
 import { type ColumnDef } from "@tanstack/react-table";
 
 import { formatRupiah } from "@/lib/formatMoney";
-import { DeleteSolidIcon, EditSolidIcon } from "@/assets/icons/solid";
+
 import { SwapIcon } from "@/assets/icons/outline";
-import { Button } from "@/components/ui/button";
+
 import type { TransactionProps } from "../types/transaction";
+import { ActionCellWrapper } from "./ActionCellWrapper";
 
 export const columns: ColumnDef<TransactionProps["data"]["transaksi"]["0"]>[] =
   [
@@ -173,20 +174,7 @@ export const columns: ColumnDef<TransactionProps["data"]["transaksi"]["0"]>[] =
       },
       id: "actions",
       cell: () => {
-        return (
-          <div className="flex flex-row items-center w-full gap-2 justify-center">
-            <Button
-              size="icon"
-              className="bg-amber-400 hover:bg-amber-400/80 rounded-full">
-              <EditSolidIcon width={16} height={16} color="#fff" />
-            </Button>
-            <Button
-              size="icon"
-              className="bg-red-500 hover:bg-red-500/80 rounded-full">
-              <DeleteSolidIcon width={16} height={16} color="#fff" />
-            </Button>
-          </div>
-        );
+        return <ActionCellWrapper />;
       },
     },
   ];

@@ -6,7 +6,7 @@ export type typeCategory = {
   type: "pemasukan" | "pengeluaran" | null;
 };
 
-export type typeTransaction = {
+export type typeUrl = {
   type:
     | "pemasukan"
     | "pengeluaran"
@@ -36,7 +36,7 @@ export const fetchAllTransaction = async ({
 
 export const postTransaction = async (
   formData: FormData,
-  url: typeTransaction
+  url: typeUrl
 ): Promise<
   ResponseProps & {
     data: {
