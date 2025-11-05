@@ -19,8 +19,9 @@ import debtImg from "@/assets/transaction/hutang.png";
 import creditImg from "@/assets/transaction/piutang.png";
 
 import { useFetchTransaction } from "../../hooks/useTransaction";
-import { XIcon } from "lucide-react";
+import { BanknoteArrowDown, BanknoteArrowUp, XIcon } from "lucide-react";
 import { DebsData } from "../../data";
+import { cn } from "@/lib/utils";
 
 export default function DeptCreditCredit() {
   const [search, setSearch] = useState<string>("");
@@ -28,6 +29,7 @@ export default function DeptCreditCredit() {
   const [page, setPage] = useState<number>(1);
   const [alertVisible, setAlertVisible] = useState<boolean>(true);
   const [open, setOpen] = useState<boolean>(false); // Modal Filter
+  const [switchTable, setSwitchTable] = useState<boolean>(true);
 
   const location = useLocation();
   const state = location.state as { success?: boolean; message?: string };
@@ -65,19 +67,48 @@ export default function DeptCreditCredit() {
             <h1 className="font-bold text-xl">Hutang & Piutang</h1>
           )}
 
-          {transactions?.data.transaksi.length !== 0 && !pageState && (
-            <Button
-              asChild
-              variant="default"
-              className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700 dark:text-white">
-              <Link to={`/admin/transaction/debt-credit?add=1`}>
-                <span>
-                  <AddCircleSolidIcon color="white" />
-                </span>
-                Tambah Transaksi
-              </Link>
-            </Button>
-          )}
+          <div className="flex items-center">
+            <div className="flex rounded-full overflow-hidden border border-blue-700 mr-4">
+              <Button
+                onClick={() => setSwitchTable(true)}
+                className={
+                  cn(
+                    switchTable
+                      ? "bg-blue-700 dark:text-white"
+                      : "bg-transparent dark:text-white"
+                  ) + " rounded-full"
+                }>
+                <BanknoteArrowDown className="w-5 h-5 mr-2" />
+                Hutang
+              </Button>
+              <Button
+                onClick={() => setSwitchTable(false)}
+                className={
+                  cn(
+                    !switchTable
+                      ? "bg-blue-700 dark:text-white"
+                      : "bg-transparent dark:text-white"
+                  ) + " rounded-full"
+                }>
+                <BanknoteArrowUp className="w-5 h-5 mr-2" />
+                Piutang
+              </Button>
+            </div>
+
+            {transactions?.data.transaksi.length !== 0 && !pageState && (
+              <Button
+                asChild
+                variant="default"
+                className="rounded-full px-5 py-3 flex flex-row items-center gap-2 h-full w-full md:w-auto bg-blue-700 dark:text-white">
+                <Link to={`/admin/transaction/debt-credit?add=1`}>
+                  <span>
+                    <AddCircleSolidIcon color="white" />
+                  </span>
+                  Tambah Transaksi
+                </Link>
+              </Button>
+            )}
+          </div>
         </div>
 
         {state?.success && alertVisible && (
