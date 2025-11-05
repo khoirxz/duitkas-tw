@@ -4,8 +4,10 @@ import { formatRupiah } from "@/lib/formatMoney";
 
 import { SwapIcon } from "@/assets/icons/outline";
 
-import type { TransactionProps } from "../types/transaction";
+import type { TransactionProps, DebsProps } from "../types/transaction";
 import { ActionCellWrapper } from "./ActionCellWrapper";
+import { Button } from "@/components/ui/button";
+import { TrashIcon } from "lucide-react";
 
 export const columns: ColumnDef<TransactionProps["data"]["transaksi"]["0"]>[] =
   [
@@ -178,3 +180,137 @@ export const columns: ColumnDef<TransactionProps["data"]["transaksi"]["0"]>[] =
       },
     },
   ];
+
+function statusBadge(status: string) {
+  switch (status) {
+    case "lunas":
+      return (
+        <span className="px-3 py-1 rounded-full bg-green-100 text-[#317D2E] text-sm uppercase">
+          Lunas
+        </span>
+      );
+    case "berjalan":
+      return (
+        <span className="px-3 py-1 rounded-full bg-yellow-100 text-[#171717] text-sm uppercase">
+          Berjalan
+        </span>
+      );
+    case "jatuh tempo":
+      return (
+        <span className="px-3 py-1 rounded-full bg-red-100 text-[#7F0000] text-sm uppercase">
+          Jatuh Tempo
+        </span>
+      );
+    default:
+      return null;
+  }
+}
+
+function statusAction(amount: number, sisa: number) {
+  switch (true) {
+    case sisa === 0:
+      return <Button className="rounded-full text-white">Arsipkan</Button>;
+    case amount > sisa:
+      return (
+        <div className="flex items-center gap-3">
+          <Button className="bg-green-800 text-white rounded-full">
+            Bayar
+          </Button>
+          <Button variant="destructive" className="rounded-full">
+            <TrashIcon className="w-5 h-5" />
+          </Button>
+        </div>
+      );
+    default:
+      return null;
+  }
+}
+
+export const columnsDebs: ColumnDef<DebsProps>[] = [
+  {
+    header: "Tanggal Transaksi",
+    accessorKey: "tgl_transaksi",
+  },
+  {
+    header: "Jatuh Tempo",
+    accessorKey: "jatuh_tempo",
+  },
+  {
+    header: "Akun",
+    accessorKey: "akun",
+  },
+  {
+    header: "Mitra",
+    accessorKey: "mitra",
+  },
+  {
+    header: "Status",
+    accessorKey: "status",
+    cell: ({ row }) => {
+      const status = row.getValue<string>("status");
+      return (
+        <div className="flex items-center justify-center w-full">
+          {statusBadge(status)}
+        </div>
+      );
+    },
+  },
+  {
+    header: "Keterangan",
+    accessorKey: "keterangan",
+    cell: ({ row }) => {
+      const keterangan = row.getValue<string>("keterangan");
+      return (
+        <div className="flex items-center justify-center w-full">
+          {keterangan.slice(0, 15).trim() +
+            (keterangan.length > 15 ? "..." : "")}
+        </div>
+      );
+    },
+  },
+  {
+    header: "Bukti/Nota",
+    accessorKey: "bukti",
+    cell: ({ row }) => {
+      return (
+        <div className="flex justify-center w-full">
+          <a href={row.getValue("bukti")} className="underline text-indigo-800">
+            Lihat Bukti
+          </a>
+        </div>
+      );
+    },
+  },
+  {
+    header: "Jumlah",
+    accessorKey: "jumlah",
+    cell: ({ row }) => {
+      const amount = row.getValue<number>("jumlah");
+      const sisa = row.original.sisa;
+      return (
+        <div className="flex flex-col items-end justify-center w-full gap-2">
+          <p className="font-semibold">
+            {formatRupiah(Number(amount), { useDot: true })}
+          </p>
+          <span className="flex justify-between items-center w-full font-sm">
+            <p className="text-green-400 dark:text-green-700">Sisa</p>
+            <p>({formatRupiah(Number(sisa), { useDot: true })})</p>
+          </span>
+        </div>
+      );
+    },
+  },
+  {
+    header: "Aksi",
+    id: "actions",
+    cell: ({ row }) => {
+      const amount = row.getValue<number>("jumlah");
+      const sisa = row.original.sisa;
+      return (
+        <div className="flex items-center justify-center w-full">
+          {statusAction(amount, sisa)}
+        </div>
+      );
+    },
+  },
+];

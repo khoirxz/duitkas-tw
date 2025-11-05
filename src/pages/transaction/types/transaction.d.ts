@@ -32,6 +32,14 @@ export interface Kategori {
 }
 
 export interface DebsProps {
+  id: number;
   tgl_transaksi: string;
   jatuh_tempo: string;
+  akun: string;
+  mitra: string;
+  status: "lunas" | "berjalan" | "jatuh tempo";
+  keterangan: string;
+  bukti: string;
+  jumlah: number;
+  sisa: number;
 }

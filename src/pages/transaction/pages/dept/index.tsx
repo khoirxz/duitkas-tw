@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AppBreadcrumb } from "@/components/app-breadcrumb";
 
-import { columns } from "../../components/columns";
+import { columnsDebs } from "../../components/columns";
 import { ModalFilterDebt } from "../../components/modaFilter";
 
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
@@ -20,6 +20,7 @@ import creditImg from "@/assets/transaction/piutang.png";
 
 import { useFetchTransaction } from "../../hooks/useTransaction";
 import { XIcon } from "lucide-react";
+import { DebsData } from "../../data";
 
 export default function DeptCreditCredit() {
   const [search, setSearch] = useState<string>("");
@@ -130,8 +131,8 @@ export default function DeptCreditCredit() {
               <DataTable
                 pageSize={limit}
                 border={false}
-                columns={columns}
-                data={transactions?.data.transaksi || []}
+                columns={columnsDebs}
+                data={DebsData}
               />
             )}
 
