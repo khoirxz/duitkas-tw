@@ -178,7 +178,7 @@ export default function CashflowFormPage() {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col px-5 md:px-12 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white dark:bg-zinc-800 mx-5 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
-          <ModalType />
+          <ModalType typeForm={1} />
 
           <div className="flex flex-col flex-1 space-y-7 pt-4">
             <div className="relative w-full">

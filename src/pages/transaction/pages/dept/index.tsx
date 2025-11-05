@@ -3,20 +3,22 @@ import { Link, useSearchParams, useLocation } from "react-router";
 
 import Layout from "@/layouts/layout";
 
-import { columns } from "../../components/columns";
 import DataTable, {
   PaginationTable,
   TableFilter,
 } from "@/components/data-table";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AppBreadcrumb } from "@/components/app-breadcrumb";
+
+import { columns } from "../../components/columns";
+import { ModalFilterDebt } from "../../components/modaFilter";
 
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
 import debtImg from "@/assets/transaction/hutang.png";
 import creditImg from "@/assets/transaction/piutang.png";
 
 import { useFetchTransaction } from "../../hooks/useTransaction";
-import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { XIcon } from "lucide-react";
 
 export default function DeptCreditCredit() {
@@ -24,6 +26,7 @@ export default function DeptCreditCredit() {
   const [limit, setLimit] = useState<number>(10);
   const [page, setPage] = useState<number>(1);
   const [alertVisible, setAlertVisible] = useState<boolean>(true);
+  const [open, setOpen] = useState<boolean>(false); // Modal Filter
 
   const location = useLocation();
   const state = location.state as { success?: boolean; message?: string };
@@ -116,6 +119,7 @@ export default function DeptCreditCredit() {
               setSearch={setSearch}
               setLimit={setLimit}
               limit={limit}
+              handleModal={() => setOpen(true)}
             />
 
             {isLoading ? (
@@ -140,6 +144,7 @@ export default function DeptCreditCredit() {
           </div>
         )}
       </div>
+      <ModalFilterDebt open={open} setOpen={setOpen} />
     </Layout>
   );
 }

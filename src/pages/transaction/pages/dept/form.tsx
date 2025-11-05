@@ -147,7 +147,7 @@ export default function DebtFormPage() {
         onSubmit={handleSubmit(onSubmit)}
         className="flex flex-col px-6 py-8 shadow-[0px_2px_4px_0px_#0000001A] border rounded-3xl bg-white dark:bg-zinc-800 mx-5 mb-5 space-y-10">
         <div className="flex flex-col md:flex-row gap-14 md:gap-10">
-          <ModalType />
+          <ModalType typeForm={2} />
 
           <div className="flex flex-col flex-1 space-y-7 pt-4">
             <div className="grid md:grid-cols-2 gap-6">

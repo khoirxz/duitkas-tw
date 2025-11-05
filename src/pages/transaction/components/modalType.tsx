@@ -22,6 +22,7 @@ import debtImg from "@/assets/transaction/hutang.png";
 type TypeFormProps = {
   value: "transfer" | "income" | "expense" | "debt" | "credit" | "";
   label: string;
+  type: 1 | 2;
   img: string;
 };
 
@@ -29,31 +30,36 @@ const TYPE_FORM: TypeFormProps[] = [
   {
     value: "transfer",
     label: "Pindah Dana",
+    type: 1,
     img: transferImg,
   },
   {
     value: "income",
     label: "Pemasukan",
+    type: 1,
     img: incomeImg,
   },
   {
     value: "expense",
     label: "Pengeluaran",
+    type: 1,
     img: expenseImg,
   },
   {
     value: "debt",
     label: "Hutang",
+    type: 2,
     img: debtImg,
   },
   {
     value: "credit",
     label: "Piutang",
+    type: 2,
     img: creditImg,
   },
 ];
 
-export default function ModalType() {
+export default function ModalType({ typeForm }: { typeForm: number }) {
   const [open, setOpen] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -107,28 +113,30 @@ export default function ModalType() {
           </DialogHeader>
           <div className="bg-white dark:bg-zinc-800 rounded-b-2xl p-5 space-y-5">
             <div className="grid gird-cols-2 md:grid-cols-3 gap-2 overflow-auto max-h-80 md:max-h-full">
-              {TYPE_FORM.map((type) => (
-                <button
-                  key={type.value}
-                  onClick={() => handleClick(`/${type.value}`)}
-                  className="flex flex-col w-full items-center gap-3 cursor-pointer shadow hover:shadow-lg transition-shadow rounded-2xl px-5 pt-12 pb-5 border relative dark:bg-zinc-700">
-                  {currentPath === type.value && (
-                    <span className="absolute font-public top-4 px-3 py-2 bg-green-500/20 text-green-800 dark:bg-green-600 dark:text-green-100 text-xs rounded-full">
-                      Tujuan saat ini
-                    </span>
-                  )}
-                  <img
-                    src={type.img}
-                    alt={type.label}
-                    className="object-contain aspect-square w-20 h-20 md:w-30 md:h-30"
-                  />
-                  <div className="flex flex-col items-center text-center font-public">
-                    <span className="font-semibold uppercase">
-                      {type.label}
-                    </span>
-                  </div>
-                </button>
-              ))}
+              {TYPE_FORM.filter((type) => type.type === typeForm).map(
+                (type) => (
+                  <button
+                    key={type.value}
+                    onClick={() => handleClick(`/${type.value}`)}
+                    className="flex flex-col w-full items-center gap-3 cursor-pointer shadow hover:shadow-lg transition-shadow rounded-2xl px-5 pt-12 pb-5 border relative dark:bg-zinc-700">
+                    {currentPath === type.value && (
+                      <span className="absolute font-public top-4 px-3 py-2 bg-green-500/20 text-green-800 dark:bg-green-600 dark:text-green-100 text-xs rounded-full">
+                        Tujuan saat ini
+                      </span>
+                    )}
+                    <img
+                      src={type.img}
+                      alt={type.label}
+                      className="object-contain aspect-square w-20 h-20 md:w-30 md:h-30"
+                    />
+                    <div className="flex flex-col items-center text-center font-public">
+                      <span className="font-semibold uppercase">
+                        {type.label}
+                      </span>
+                    </div>
+                  </button>
+                )
+              )}
             </div>
           </div>
         </DialogContent>

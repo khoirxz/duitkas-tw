@@ -30,3 +30,8 @@ export interface Kategori {
   nama_kategori: string;
   warna: string;
 }
+
+export interface DebsProps {
+  tgl_transaksi: string;
+  jatuh_tempo: string;
+}

@@ -9,10 +9,10 @@ import DataTable, {
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AppBreadcrumb } from "@/components/app-breadcrumb";
-import { FilterModal } from "@/components/filter-modal";
 import { XIcon, PlusCircleIcon } from "lucide-react";
 
 import { columns } from "./components/columns";
+import { ModalFilter } from "./components/modaFilter";
 import { useFetchTransaction } from "./hooks/useTransaction";
 
 import incomeImg from "@/assets/transaction/pemasukan.png";
@@ -146,11 +146,7 @@ export default function TransactionPage() {
         )}
       </div>
 
-      <FilterModal open={open} setOpen={setOpen}>
-        <div className="p-5 bg-white dark:bg-zinc-800 rounded-b-2xl">
-          <p>Isi konten filter di sini.</p>
-        </div>
-      </FilterModal>
+      <ModalFilter open={open} setOpen={setOpen} />
     </Layout>
   );
 }
