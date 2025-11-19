@@ -3,19 +3,25 @@ import AccountPage from "@/pages/account";
 import AccountFormPage from "@/pages/account/form";
 // financial pages
 import FinancialPage from "@/pages/financial";
-import BudgetFormPage from "@/pages/financial/pages/budget/form";
-import GoalFormPage from "@/pages/financial/pages/goal/form";
+import BudgetFormPage from "@/pages/financial/financial.budget.form";
+import GoalFormPage from "@/pages/financial/financial.goal.form";
+import FinancialCategoryListPage from "@/pages/financial/financial.category.index";
+import FinancialCategoryFormPage from "@/pages/financial/financial.category.form";
 // transaction pages
 import TransactionPage from "@/pages/transaction";
-import TransferFormPage from "@/pages/transaction/pages/transfer/form";
-import DebtFormPage from "@/pages/transaction/pages/dept/form";
-import CashflowFormPage from "@/pages/transaction/pages/cashflow/form";
+import TransferFormPage from "@/pages/transaction/transaction.transfer.form";
+import DebtFormPage from "@/pages/transaction/transaction.dept.form";
+import DeptCreditCredit from "@/pages/transaction/transaction.dept.index";
+import CashflowFormPage from "@/pages/transaction/transaction.cashglow.form";
+
 // report pages
 import ReportPage from "@/pages/report";
-import ReportTransactionPage from "@/pages/report/pages/transaction";
+import ReportTransactionPage from "@/pages/report/report.transaction.index";
 // setting pages
 import SettingPage from "@/pages/setting";
-import SettingGeneralPage from "./pages/setting/pages/general";
+import SettingGeneralPage from "@/pages/setting/setting.general.index";
+import SettingUserFormPage from "@/pages/setting/setting.user.form";
+import SettingOfficeFormPage from "@/pages/setting/setting.office.form";
 
 import LoginPage from "@/pages/auth/login";
 import SignUpPage from "@/pages/auth/signup";
@@ -34,11 +40,7 @@ import {
   CalendarSolidIcon,
 } from "./assets/icons/solid";
 import { ProtectedRouter } from "./components/protected-router";
-import SettingUserFormPage from "./pages/setting/pages/user/form";
-import SettingOfficeFormPage from "./pages/setting/pages/office/form";
-import FinancialCategoryListPage from "./pages/financial/pages/category";
-import FinancialCategoryFormPage from "./pages/financial/pages/category/form";
-import DeptCreditCredit from "./pages/transaction/pages/dept";
+
 
 export const router: {
   name: string;

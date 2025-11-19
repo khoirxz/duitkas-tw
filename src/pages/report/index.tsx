@@ -8,13 +8,13 @@ import DataTable, {
 import { Button } from "@/components/ui/button";
 import { PrinterIcon } from "lucide-react";
 
-import { columns } from "./components/columns";
-import ModalFilter from "./components/modalFilter";
-import { useFetchReport } from "./hooks/useReport";
+import { columns } from "@/features/report/components/columns";
+import ModalFilter from "@/features/report/components/modalFilter";
+import { useFetchReport } from "@/features/report/hooks/useReport";
 
-import TransactionChart from "../dashboard/components/transactionChart";
-import { useDashboard } from "../dashboard/hooks/useDashboard";
-import type { DashboardProps } from "../dashboard/types/dashboard";
+import TransactionChart from "@/features/dashboard/components/transactionChart";
+import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
+import type { DashboardProps } from "@/features/dashboard/types/dashboard";
 
 export default function ReportPage() {
   const [search, setSearch] = useState<string>("");

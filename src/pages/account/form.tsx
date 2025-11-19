@@ -27,7 +27,7 @@ import {
   useFetchDetailAccount,
   useCreateAccount,
   useUpdateAccount,
-} from "./hooks/useAccount";
+} from "@/features/account/hooks/useAccount";
 import type { ResponseProps } from "@/types/response";
 
 const formSchema = z.object({

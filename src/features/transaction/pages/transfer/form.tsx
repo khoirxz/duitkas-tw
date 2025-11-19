@@ -31,7 +31,7 @@ import Layout from "@/layouts/layout";
 import ModalType from "../../components/modalType";
 import { useCategory } from "../../hooks/useCategory";
 import { useCreateTransaction } from "../../hooks/useTransaction";
-import { useFetchAccount } from "@/pages/account/hooks/useAccount";
+import { useFetchAccount } from "@/features/account/hooks/useAccount";
 import { FormErrorSummary } from "@/components/FormErrorSummary";
 import { TextField } from "@/components/textField";
 

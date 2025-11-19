@@ -11,9 +11,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AppBreadcrumb } from "@/components/app-breadcrumb";
 import { XIcon, PlusCircleIcon } from "lucide-react";
 
-import { columns } from "./components/columns";
-import { ModalFilter } from "./components/modaFilter";
-import { useFetchTransaction } from "./hooks/useTransaction";
+import { columns } from "@/features/transaction/components/columns";
+import { ModalFilter } from "@/features/transaction/components/modaFilter";
+import { useFetchTransaction } from "@/features/transaction/hooks/useTransaction";
 
 import incomeImg from "@/assets/transaction/pemasukan.png";
 import expenseImg from "@/assets/transaction/pengeluaran.png";

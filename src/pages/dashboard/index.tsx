@@ -3,15 +3,15 @@ import Layout from "@/layouts/layout";
 
 import { ChevronDown, CalendarIcon } from "lucide-react";
 
-import ActualBalance from "./components/actualBalance";
-import DebsBalance from "./components/debsBalance";
-import Account from "./components/account";
-import SummaryChart from "./components/summaryChart";
-import TransactionChart from "./components/transactionChart";
+import ActualBalance from "@/features/dashboard/components/actualBalance";
+import DebsBalance from "@/features/dashboard/components/debsBalance";
+import Account from "@/features/dashboard/components/account";
+import SummaryChart from "@/features/dashboard/components/summaryChart";
+import TransactionChart from "@/features/dashboard/components/transactionChart";
 
 import { DatePicker } from "@/components/date-selector";
-import { useDashboard } from "./hooks/useDashboard";
-import type { DashboardProps } from "./types/dashboard";
+import { useDashboard } from "@/features/dashboard/hooks/useDashboard";
+import type { DashboardProps } from "@/features/dashboard/types/dashboard";
 
 export default function DashboardPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());

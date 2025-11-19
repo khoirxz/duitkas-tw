@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Layout from "@/layouts/layout";
 
 import DataTable from "@/components/data-table";
-import { columnsFinancial } from "./components/columns";
+import { columnsFinancial } from "@/features/financial/components/columns";
 // import { useDataFinance } from "./hooks/useDataFinance";
 import { data } from "./data";
 import { PlusCircleIcon } from "lucide-react";

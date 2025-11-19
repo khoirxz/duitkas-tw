@@ -21,7 +21,7 @@ import {
   useSetting,
   useCheckIdentity,
   useUpdateSetting,
-} from "./hooks/useSetting";
+} from "@/features/setting/hooks/useSetting";
 import type { AxiosError } from "axios";
 import type { ResponseProps } from "@/types/response";
 

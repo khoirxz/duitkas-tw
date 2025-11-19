@@ -9,10 +9,10 @@ import DataTable, {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { XIcon } from "lucide-react";
 import Layout from "@/layouts/layout";
-import { columns } from "./components/columns";
+import { columns } from "@/features/account/components/columns";
 
 import { AddCircleSolidIcon } from "@/assets/icons/solid";
-import { useFetchAccount } from "./hooks/useAccount";
+import { useFetchAccount } from "@/features/account/hooks/useAccount";
 
 export default function AccountPage() {
   // alert state management
