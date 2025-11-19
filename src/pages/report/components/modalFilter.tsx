@@ -38,7 +38,7 @@ const formSchema = z.object({
 });
 
 export default function ModalFilter({ open, setOpen }: ModalFilterProps) {
-  const { register, control } = useForm<z.infer<typeof formSchema>>({
+  const { control } = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       startDate: "",
